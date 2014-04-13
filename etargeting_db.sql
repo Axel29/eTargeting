@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Dim 13 Avril 2014 à 16:48
+-- Généré le: Dim 13 Avril 2014 à 18:54
 -- Version du serveur: 5.5.29
 -- Version de PHP: 5.4.10
 
@@ -40,8 +40,10 @@ CREATE TABLE `campaigns` (
 CREATE TABLE `lists` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `user_ids` text NOT NULL,
-  PRIMARY KEY (`id`)
+  `subscriber_ids` text NOT NULL,
+  `owner` int(5) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner` (`owner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -53,11 +55,11 @@ CREATE TABLE `lists` (
 CREATE TABLE `reports` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `campaign` int(5) NOT NULL,
-  `user_id` int(5) NOT NULL,
+  `subscriber_id` int(5) NOT NULL,
   `opened` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `campaign` (`campaign`,`user_id`),
-  KEY `user_id` (`user_id`)
+  KEY `campaign` (`campaign`,`subscriber_id`),
+  KEY `user_id` (`subscriber_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -76,6 +78,22 @@ CREATE TABLE `subscribers` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 --
 -- Contraintes pour les tables exportées
 --
@@ -87,8 +105,14 @@ ALTER TABLE `campaigns`
   ADD CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`);
 
 --
+-- Contraintes pour la table `lists`
+--
+ALTER TABLE `lists`
+  ADD CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Contraintes pour la table `reports`
 --
 ALTER TABLE `reports`
-  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `subscribers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`campaign`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
