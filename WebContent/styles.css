@@ -1,0 +1,72 @@
+ 
+body.connexion,
+body.inscription{
+	background: url(img/flouter.jpg);
+ 	background-size: cover;
+}
+ .background{
+    border-radius: 4px;
+    clear: both;
+    margin: 100px auto 0;
+    padding: 10px 20px;
+    text-align: left;
+    width: 35%;
+  }
+  .title{
+  	color: #FFF;
+  	font-size: 1.125em;
+    line-height: 1.66667em;
+    margin-bottom: 0.333333em;
+    font-weight: bold;
+    font-family: Lucida Console;
+    text-shadow: 1px 1px 2px #555555;
+  }
+  .infos{
+  	color: #FFF;
+  	font-family: Lucida Console;
+    font-size: 13px;
+    line-height: 1.6em;
+    margin-bottom: 0.8em;
+    max-width: 550px;
+    text-shadow: 1px 1px 2px #555555;
+  }
+  .form-control {
+    background:#fff;
+    border: 1px solid #FFF;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #595959;
+    display: block;
+    font-size: 14px;
+    height: 35px;
+    line-height: 1.42857;
+    margin-bottom: 15px;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s;
+    width: 100%;
+}
+.align {
+    display: inline-block;
+}
+
+.button {
+    background-color: #428BCA;
+    border-color: #357EBD;
+    color: #FFFFFF;
+     -moz-user-select: none;
+    background-image: none;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+
+}
+

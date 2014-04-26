@@ -29,7 +29,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
+		request.getServletContext().getRequestDispatcher( "/login.jsp" ).forward( request, response );
 	}
 
 	/**
@@ -37,48 +37,24 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String inscrire = request.getParameter("sinscrire");
-		String connexion = request.getParameter("connexion");
-		System.out.println(inscrire);
-		if(connexion.equalsIgnoreCase("Connexion")){
-			String login = request.getParameter("email");
-			String mdp = request.getParameter("mdp");
-			
-			boolean verifLogin = DbConnect.verifLogin(login,mdp);
-			
-			if(verifLogin){
-				sauveSessionLogin(request,login);
-				response.sendRedirect("/eTargeting/Admin");
-			}else{
-				response.sendRedirect("/eTargeting/Login");
-			}
-			
-		}else if(inscrire.equalsIgnoreCase("Sinscrire")){
-			System.out.println("sinscrire");
-			String email = request.getParameter("iEmail");
-			String password = request.getParameter("iMdp");
-			String last_name = request.getParameter("last_name");
-			String first_name = request.getParameter("first_name");
-			
-			if(!email.isEmpty() || !password.isEmpty() || !last_name.isEmpty() || !first_name.isEmpty()){
-				System.out.println("isenmpty");
-				try {
-					DbConnect.addUser(email, password, first_name, last_name);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				String login = request.getParameter("user_login");
+				String mdp = request.getParameter("user_password");
+				
+				boolean verifLogin = DbConnect.verifLogin(login,mdp);
+				
+				if(verifLogin){
+					sauveSessionLogin(request,login);
+					response.sendRedirect("/eTargeting/Dashboard");
+				}else{
+					response.sendRedirect("/eTargeting/Login");
 				}
-				sauveSessionLogin(request,email);
-				response.sendRedirect("/eTargeting/Admin");
-			}else{
-				response.sendRedirect("/eTargeting/Login");
 			}
-		}
-	}
-	
-	public void sauveSessionLogin(HttpServletRequest request,String login){
-		HttpSession session = request.getSession();
-    	session.setAttribute("login", login);
-	}
+			
+			public void sauveSessionLogin(HttpServletRequest request,String login){
+				HttpSession session = request.getSession();
+		    	session.setAttribute("login", login);
+			}
+
 
 }
