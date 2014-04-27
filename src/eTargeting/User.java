@@ -2,39 +2,38 @@ package eTargeting;
 
 public class User {
 	private String email;
-	private String motDePasse;
-	private String nom;
-	private String prenom;
+	private String password;
+	private String lastName;
+	private String firstName;
 	
+	public User(String email, String password, String lastName, String firstName) {
+		this.email     = email;
+		this.password  = password;
+		this.lastName  = lastName;
+		this.firstName = firstName;
+	}
 	public String getEmail() {
 		return email;
 	}
-	
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public String getMotDePasse() {
-		return motDePasse;
+	public String getPassword() {
+		return password;
 	}
-	
-	public void setMotDePasse(String motDePasse) {
-		this.motDePasse = motDePasse;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	
-	public String getNom() {
-		return nom;
+	public String getLastName() {
+		return lastName;
 	}
-	
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-	
-	public String getPrenom() {
-		return prenom;
+	public String getFirstName() {
+		return firstName;
 	}
-	
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}	
 }

@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class Registration
- */
 @WebServlet("/Registration")
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -21,14 +18,12 @@ public class Registration extends HttpServlet {
      */
     public Registration() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		request.getServletContext().getRequestDispatcher( "/registration.jsp" ).forward( request, response );
 	}
 
@@ -36,30 +31,34 @@ public class Registration extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("sinscrire");
-		String email = request.getParameter("user_login");
-		String password = request.getParameter("user_password");
-		String last_name = request.getParameter("nom");
-		String first_name = request.getParameter("prenom");
+		String email     = request.getParameter("user_login");
+		String password  = MD5.getMD5(request.getParameter("user_password"));
+		String lastName  = request.getParameter("lastName");
+		String firstName = request.getParameter("firstName");
 		
-		if(!email.isEmpty() || !password.isEmpty() || !last_name.isEmpty() || !first_name.isEmpty()){
-			System.out.println("isenmpty");
+		if(!email.isEmpty() && !password.isEmpty() && !lastName.isEmpty() && !firstName.isEmpty()){
 			try {
-				DbConnect.addUser(email, password, first_name, last_name);
+				// Insert user into database
+				User user           = new User(email, password, lastName, firstName);
+				UserModel userModel = new UserModel();
+				// Redirect the user to the registration page if the email already exists
+				if(userModel.checkUserExists(email)){
+					response.sendRedirect("/eTargeting/Registration");
+				}
+				int userId          = userModel.insertUser(user);
+				saveUserSession(request, userId, email);
+				response.sendRedirect("/eTargeting/Dashboard");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			sauveSessionLogin(request,email);
-			response.sendRedirect("/eTargeting/Admin");
 		}else{
-			response.sendRedirect("/eTargeting/Login");
+			response.sendRedirect("/eTargeting/Registration");
 		}
 		
 	}
-	public void sauveSessionLogin(HttpServletRequest request,String login){
+	public void saveUserSession(HttpServletRequest request, int userId, String login){
 		HttpSession session = request.getSession();
+		session.setAttribute("userId", userId);
     	session.setAttribute("login", login);
 	}
 

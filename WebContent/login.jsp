@@ -11,13 +11,10 @@
     <h1 class="title">Connexion</h1>
     <p class="infos">Se connecter : </p>
     <form action="Login" method="post">
-        <input class="form-control" type="text" name="user_login" id="user_login" placeholder="Login"> 
-
-        <input class="form-control" type="password" name="user_password" id="user_password" placeholder="Votre mot de passe">
-
+        <input class="form-control" type="text" id="user_email" name="user_email" placeholder="Email"> 
+        <input class="form-control" type="password" name="user_password" id="user_password" placeholder="Mot de passe">
         <input class="align" type="checkbox" name="remember" id="remember" value="1">
         <label for="remember" class="align title">Se souvenir de moi</label>
-
         <input class="button" type="submit" name="connexion" value="Connexion">
     </form>
 </div>

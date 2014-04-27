@@ -1,6 +1,9 @@
 package eTargeting;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,13 +34,12 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String login      = request.getParameter("user_login");
-		String password   = request.getParameter("user_password");
-		
-		int userId = DbConnect.verifLogin(login, password);
-		
+		String email      = request.getParameter("user_email");
+		String password   = MD5.getMD5(request.getParameter("user_password"));
+		int userId        = UserModel.login(email, password);
+
 		if(userId != 0){
-			sauveSessionLogin(request,login, userId);
+			sauveSessionLogin(request, email, userId);
 			response.sendRedirect("/eTargeting/Dashboard");
 		}else{
 			response.sendRedirect("/eTargeting/Login");

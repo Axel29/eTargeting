@@ -105,7 +105,7 @@ public class Model {
 		return null;
 	}
 	
-	protected void insert(String table, String[] aKeys, String[] aValues) {
+	protected int insert(String table, String[] aKeys, String[] aValues) {
 		try
 		{
 			String keys = "";
@@ -134,11 +134,21 @@ public class Model {
 			String request = "INSERT INTO " + table + " (" + keys + ") VALUES (" + values + ");";
 			System.out.println("INSERT query: " + request);
 			statement.executeUpdate(request);
+			
+			PreparedStatement lastInsertId = connection.prepareStatement("SELECT LAST_INSERT_ID()");
+			ResultSet rs = lastInsertId.executeQuery();
+			int insertedId = 0;
+			if (rs.next())  
+			{  
+				insertedId = rs.getInt("last_insert_id()");
+			}  
 			connection.close();
+			return insertedId;
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		return 0;
 	}
 }
