@@ -56,18 +56,17 @@ public class DbConnect {
 		
 	}
 	
-	public static boolean verifLogin(String login, String mdp){
-		boolean bOk = false;
+	public static int verifLogin(String login, String mdp){
+		int userId = 0;
 		try {
 			createDbConnect();
-			String countPersonne = "Select count(*) from users where email='"+login+"' and password='"+mdp+"'";
-			System.out.println(countPersonne);
-			ResultSet resultPersonne = statement.executeQuery(countPersonne);
+			String request = "SELECT * FROM users WHERE email = '" + login + "' AND password = '" + mdp + "'";
+			ResultSet result = statement.executeQuery(request);
 			
-			while(resultPersonne.next())
+			while(result.next())
 			{
-				if("1".equals(resultPersonne.getString(1))){
-					bOk = true;
+				if("1".equals(result.getString(1))){
+					userId = result.getInt(1);
 				}
 			}
 		} catch (Exception e) {
@@ -76,7 +75,7 @@ public class DbConnect {
 			e.printStackTrace();
 		}
 		
-		return bOk;
+		return userId;
 		
 	}
 

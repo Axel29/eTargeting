@@ -15,9 +15,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav side-nav">
-            <li class="active"><a href="index.php"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
-            <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Templates</a></li>
-            <li><a href="bootstrap-elements.html"><span class="fa fa-list"></span> Lists</a></li>
+            <li class="active"><a href="dashboard.jps"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="/index.jsp"><i class="fa fa-desktop"></i> Templates</a></li>
+            <li><a href="lists.jsp"><span class="fa fa-list"></span> Lists</a></li>
             <li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> Reports</a></li>
             <li><a href="bootstrap-elements.html"><i class="fa fa-search"></i> Recherche</a></li>
             <li><a href="blank-page.php"><i class="fa fa-info"></i> page blanche</a></li>

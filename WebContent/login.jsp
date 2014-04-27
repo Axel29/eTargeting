@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eTargeting ESGI - Connection</title>
+<title>eTargeting - Connection</title>
 <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body class="connexion">

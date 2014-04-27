@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eTargeting ESGI - Tableau de bord</title>
+<title>eTargeting - Tableau de bord</title>
 <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
 
