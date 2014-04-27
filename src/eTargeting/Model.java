@@ -17,8 +17,7 @@ public class Model {
 		getConnection();
 	}
 	
-	private void getConnection()
-	{
+	private void getConnection() {
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
@@ -34,7 +33,79 @@ public class Model {
 		}
 	}
 	
-	protected void insert(String table, String[] aKeys, String[] aValues){
+	protected ResultSet select(String table, String[] aFields, String[] aWhere, String[] aJoin, String[] aOrder, int limit) {
+		try
+		{
+			String query = "SELECT ";
+			// Fields to select
+			if (aFields == null || aFields.length == 0) {
+				query += "*";
+			}
+			for (int i=0; i<aFields.length; i++){
+				if (aFields[i] != null && !aFields[i].isEmpty()) {
+					if (i+1 != aFields.length) {
+						query += aFields[i] + ", ";
+					} else {
+						query += aFields[i];
+					}
+				}
+			}
+			
+			// From table
+			query += " FROM " + table + " ";
+			
+			// Join tables
+			for (int i=0; i<aJoin.length; i++){
+				if (aJoin[i] != null && !aJoin[i].isEmpty()) {
+					query += " INNER JOIN " + aJoin[i] + " ";
+				}
+			}
+			
+			// Where clause
+			if (aWhere!= null && aWhere.length > 0) {
+				query += " WHERE ";
+			}
+			for (int i=0; i<aWhere.length; i++){
+				if (aWhere[i] != null && !aWhere[i].isEmpty()) {
+					if (i+1 != aWhere.length) {
+						query += aWhere[i] + " AND ";
+					} else {
+						query += aWhere[i];
+					}
+				}
+			}
+			
+			// Order clause
+			if (aOrder != null && aOrder.length > 0) {
+				query += " ORDER BY ";
+			}
+			for (int i=0; i<aOrder.length; i++){
+				if (aOrder[i] != null && !aOrder[i].isEmpty()) {
+					if (i == 0) {
+						query += aOrder[i];
+					} else {
+						query += ", " + aOrder[i];
+					}
+				}
+			}
+			
+			// Limit clause
+			query += limit != 0 ? " LIMIT " + limit : "";
+			
+			query += ";";
+			
+			System.out.println("SELECT query: " + query);
+			resultSet = statement.executeQuery(query);
+			return resultSet;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	protected void insert(String table, String[] aKeys, String[] aValues) {
 		try
 		{
 			String keys = "";
@@ -61,9 +132,8 @@ public class Model {
 			}
 			
 			String request = "INSERT INTO " + table + " (" + keys + ") VALUES (" + values + ");";
-			System.out.println("request: " + request);
+			System.out.println("INSERT query: " + request);
 			statement.executeUpdate(request);
-			System.out.println("Insert OK");
 			connection.close();
 		}
 		catch(Exception e)

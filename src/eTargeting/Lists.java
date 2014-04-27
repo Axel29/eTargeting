@@ -26,21 +26,35 @@ public class Lists extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.getServletContext().getRequestDispatcher( "/lists.jsp" ).forward( request, response );
+		HttpSession session = request.getSession();
+		if ((Integer)session.getAttribute("userId") == null) {
+			this.getServletContext().getRequestDispatcher("/Login").forward(request, response);
+		} else {
+			int userId = (Integer)session.getAttribute("userId");
+			ListModel listModel = new ListModel();
+			ListClass[] lists = listModel.selectLists(userId);
+			
+			
+			for (int i = 0; i < lists.length; i++) {
+				request.setAttribute("list-" + i, lists[i]);
+				//System.out.println("List name: " + lists[i].getName() + " - list owner: " + lists[i].getOwner());
+			}
+			
+			this.getServletContext().getRequestDispatcher("/lists.jsp").forward(request, response);
+		}
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("doPost()");
 		if(request.getParameter("name") != null){
 			HttpSession session = request.getSession();
 			// Insert list into database
 			ListModel listModel = new ListModel();
-			ListClass list = new ListClass(request.getParameter("name"), "", (Integer)session.getAttribute("userId"));
+			ListClass list = new ListClass(0, request.getParameter("name"), "", (Integer)session.getAttribute("userId"));
 			listModel.insertList(list);
 		}
-		getServletContext().getRequestDispatcher("/lists.jsp").forward(request, response);
+		response.sendRedirect("/eTargeting/Lists");
 	}
 }

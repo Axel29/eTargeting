@@ -1,3 +1,4 @@
+<%@page import="eTargeting.ListClass"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -15,26 +16,38 @@
     <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
 </head>
 <body>
-
     <div id="wrapper">
 
-     <%@ include file="/menu.jsp"%>
+     	<%@ include file="/menu.jsp"%>
 
-      <div id="page-wrapper">
-
-        <div class="row">
-          <div class="col-lg-12">
-            <h1>Listes</h1>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-12">
-            <a href="addList.jsp">Ajouter une liste</a>
-        </div>
-      </div>
-
-    </div>
+		<div id="page-wrapper">
+	
+			<div class="row">
+				<div class="col-lg-12">
+					<h1>Listes</h1>
+				</div>
+			</div>
+	
+			<div class="row">
+				<div class="col-lg-12">
+					<a href="addList.jsp">Ajouter une liste</a>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<%
+					int i = 0;
+					while(request.getAttribute("list-" + i) != null) {
+						ListClass list = (ListClass)request.getAttribute("list-" + i);
+						out.println(list.getName());
+						i++;
+					}
+					%>
+				</div>
+			</div>
+		</div>
+	</div>
 
     <!-- JavaScript -->
     <script src="js/jquery-1.10.2.js"></script>
