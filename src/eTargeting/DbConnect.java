@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 
 public class DbConnect {
-	private static String url  = "jdbc:mysql://localhost:8889/eTargeting";
+	private static String url  = "jdbc:mysql://localhost/eTargeting";
 	private static String user = "root";
 	private static String pass = "root";
 	private static Connection conn;
