@@ -11,6 +11,7 @@ public class Model {
 	private static Connection connection = null;
 	private static Statement statement = null;
 	private static ResultSet resultSet = null;
+	@SuppressWarnings("unused")
 	private static PreparedStatement preparedStatement = null;
 	
 	public Model() {

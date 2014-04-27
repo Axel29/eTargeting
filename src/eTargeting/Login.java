@@ -1,9 +1,6 @@
 package eTargeting;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +24,12 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getServletContext().getRequestDispatcher( "/login.jsp" ).forward( request, response );
+		HttpSession session = request.getSession();
+		if ((Integer)session.getAttribute("userId") != null) {
+			response.sendRedirect("/eTargeting/Dashboard");
+		} else {
+			request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+		}
 	}
 
 	/**
@@ -36,19 +38,21 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email      = request.getParameter("user_email");
 		String password   = MD5.getMD5(request.getParameter("user_password"));
-		int userId        = UserModel.login(email, password);
+		UserClass user    = UserModel.login(email, password);
 
-		if(userId != 0){
-			sauveSessionLogin(request, email, userId);
+		if(user.getUserId() != 0){
+			saveUserSession(request, user);
 			response.sendRedirect("/eTargeting/Dashboard");
 		}else{
 			response.sendRedirect("/eTargeting/Login");
 		}
 	}
 			
-	public void sauveSessionLogin(HttpServletRequest request, String login, int userId){
+	public void saveUserSession(HttpServletRequest request, UserClass user){
 		HttpSession session = request.getSession();
-		session.setAttribute("login", login);
-		session.setAttribute("userId", userId);
+		session.setAttribute("userId", user.getUserId());
+		session.setAttribute("email", user.getEmail());
+		session.setAttribute("last_name", user.getLastName());
+		session.setAttribute("first_name", user.getFirstName());
 	}
 }

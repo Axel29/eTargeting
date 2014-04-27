@@ -1,17 +1,36 @@
 package eTargeting;
 
-public class User {
+public class UserClass {
+	private int userId;
 	private String email;
 	private String password;
 	private String lastName;
 	private String firstName;
 	
-	public User(String email, String password, String lastName, String firstName) {
+	public UserClass() {
+		this.userId    = 0;
+		this.email     = new String();
+		this.password  = new String();
+		this.lastName  = new String();
+		this.firstName = new String();
+	}
+	
+	public UserClass(int userId, String email, String password, String lastName, String firstName) {
+		this.userId    = userId;
 		this.email     = email;
 		this.password  = password;
 		this.lastName  = lastName;
 		this.firstName = firstName;
 	}
+	
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	public String getEmail() {
 		return email;
 	}

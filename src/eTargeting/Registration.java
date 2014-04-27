@@ -24,7 +24,12 @@ public class Registration extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getServletContext().getRequestDispatcher( "/registration.jsp" ).forward( request, response );
+		HttpSession session = request.getSession();
+		if ((Integer)session.getAttribute("userId") != null) {
+			response.sendRedirect("/eTargeting/Dashboard");
+		} else {
+			request.getServletContext().getRequestDispatcher("/registration.jsp").forward(request, response);
+		}
 	}
 
 	/**
@@ -39,14 +44,15 @@ public class Registration extends HttpServlet {
 		if(!email.isEmpty() && !password.isEmpty() && !lastName.isEmpty() && !firstName.isEmpty()){
 			try {
 				// Insert user into database
-				User user           = new User(email, password, lastName, firstName);
+				UserClass user      = new UserClass(0, email, password, lastName, firstName);
 				UserModel userModel = new UserModel();
 				// Redirect the user to the registration page if the email already exists
 				if(userModel.checkUserExists(email)){
 					response.sendRedirect("/eTargeting/Registration");
 				}
-				int userId          = userModel.insertUser(user);
-				saveUserSession(request, userId, email);
+				int userId = userModel.insertUser(user);
+				user = UserModel.getUser(userId);
+				saveUserSession(request, user);
 				response.sendRedirect("/eTargeting/Dashboard");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -56,10 +62,12 @@ public class Registration extends HttpServlet {
 		}
 		
 	}
-	public void saveUserSession(HttpServletRequest request, int userId, String login){
+	public void saveUserSession(HttpServletRequest request, UserClass user){
 		HttpSession session = request.getSession();
-		session.setAttribute("userId", userId);
-    	session.setAttribute("login", login);
+		session.setAttribute("userId", user.getUserId());
+		session.setAttribute("email", user.getEmail());
+		session.setAttribute("last_name", user.getLastName());
+		session.setAttribute("first_name", user.getFirstName());
 	}
 
 }

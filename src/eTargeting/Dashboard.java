@@ -1,11 +1,13 @@
 package eTargeting;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/Dashboard")
 public class Dashboard extends HttpServlet {
@@ -22,7 +24,12 @@ public class Dashboard extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getServletContext().getRequestDispatcher( "/dashboard.jsp" ).forward( request, response );
+		HttpSession session = request.getSession();
+		if ((Integer)session.getAttribute("userId") == null) {
+			this.getServletContext().getRequestDispatcher("/Login").forward(request, response);
+		} else {
+			request.getServletContext().getRequestDispatcher( "/dashboard.jsp" ).forward( request, response );
+		}
 	}
 
 	/**
