@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 
 @WebServlet("/Registration")
@@ -25,8 +26,8 @@ public class Registration extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		if ((Integer)session.getAttribute("userId") != null) {
+		// Checking that the user is logged in
+		if (UserClass.getLoggedUserId(request) != 0) {
 			response.sendRedirect("/eTargeting/Dashboard");
 		} else {
 			request.getServletContext().getRequestDispatcher("/registration.jsp").forward(request, response);

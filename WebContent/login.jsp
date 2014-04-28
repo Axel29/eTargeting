@@ -1,3 +1,4 @@
+<%@ page import="eTargeting.UserClass" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <html>
@@ -9,7 +10,7 @@
 </head>
 <body class="connexion">
 	<%
-	if(session.getAttribute("userId") != null)
+	if(UserClass.getLoggedUserId(request) != 0)
 	{
 		response.sendRedirect("/eTargeting/Dashboard");
 	}
@@ -27,7 +28,7 @@
 			</div>
 			<div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
-					<% if (session.getAttribute("userId") == null) { %>
+					<% if (UserClass.getLoggedUserId(request) == 0) { %>
 						<li><a href="Login">Connexion</a></li>
 						<li><a href="Registration">Inscription</a></li>
 					<% } else { %>
@@ -42,9 +43,9 @@
 		<p class="infos">Se connecter : </p>
 		<form action="Login" method="post">
 			<input class="form-control" type="text" id="user_email" name="user_email" placeholder="Email"> 
-			<input class="form-control" type="password" name="user_password" id="user_password" placeholder="Mot de passe">
-			<input class="align" type="checkbox" name="remember" id="remember" value="1">
-			<label for="remember" class="align title">Se souvenir de moi</label>
+			<input class="form-control" type="password" id="user_password" name="user_password" placeholder="Mot de passe">
+			<input class="align" type="checkbox" id="remember_me" name="remember_me">
+			<label for="remember_me" class="align title">Se souvenir de moi</label>
 			<input class="button" type="submit" name="connexion" value="Connexion">
 		</form>
 	</div>

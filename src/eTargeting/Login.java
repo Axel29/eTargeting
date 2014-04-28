@@ -1,15 +1,22 @@
 package eTargeting;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -42,15 +49,42 @@ public class Login extends HttpServlet {
 		String password   = MD5.getMD5(StringEscapeUtils.escapeHtml4(request.getParameter("user_password")));
 		UserClass user    = UserModel.login(email, password);
 
+		// If the login succeeded, we insert the user into session or cookies and redirect him to Dashboard
 		if(user.getUserId() != 0){
-			saveUserSession(request, user);
+			// Create cookie if "remember me" checkbox is checked
+			if (request.getParameter("remember_me") != null) {
+				saveUserCookies(response, user);
+			}
+			// Or insert the user into session if not checked
+			else {
+				saveUserSession(request, user);
+			}
 			response.sendRedirect("/eTargeting/Dashboard");
-		}else{
+		}
+		// Otherwise we redirect him back to login's page
+		else {
 			response.sendRedirect("/eTargeting/Login");
 		}
 	}
-			
-	public void saveUserSession(HttpServletRequest request, UserClass user){
+	
+	
+	public void saveUserCookies(HttpServletResponse response, UserClass user) {
+		
+		try {
+			// Creating a CSV from user's values in order to put it in one cookie
+			StringWriter stringWriter = new StringWriter();
+			CSVWriter csvWriter       = new CSVWriter(stringWriter);
+			String[] userValues       = {Integer.toString(user.getUserId()), user.getEmail(), user.getLastName(), user.getFirstName()};
+			// Writing into the string writer
+			csvWriter.writeNext(userValues);
+			csvWriter.close();
+			Cookie cookie = new Cookie("user", stringWriter.toString());
+			response.addCookie(cookie);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void saveUserSession(HttpServletRequest request, UserClass user) {
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", user.getUserId());
 		session.setAttribute("email", user.getEmail());
