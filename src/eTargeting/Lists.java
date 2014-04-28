@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import eTargeting.ListModel;
 
 @WebServlet("/Lists")
@@ -52,7 +54,7 @@ public class Lists extends HttpServlet {
 			HttpSession session = request.getSession();
 			// Insert list into database
 			ListModel listModel = new ListModel();
-			ListClass list = new ListClass(0, request.getParameter("name"), "", (Integer)session.getAttribute("userId"));
+			ListClass list = new ListClass(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), "", (Integer)session.getAttribute("userId"));
 			listModel.insertList(list);
 		}
 		response.sendRedirect("/eTargeting/Lists");

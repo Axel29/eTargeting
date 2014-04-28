@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 @WebServlet("/Registration")
 public class Registration extends HttpServlet {
@@ -37,9 +38,9 @@ public class Registration extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email     = request.getParameter("user_login");
-		String password  = MD5.getMD5(request.getParameter("user_password"));
-		String lastName  = request.getParameter("lastName");
-		String firstName = request.getParameter("firstName");
+		String password  = MD5.getMD5(StringEscapeUtils.escapeHtml4(request.getParameter("user_password")));
+		String lastName  = StringEscapeUtils.escapeHtml4(request.getParameter("lastName"));
+		String firstName = StringEscapeUtils.escapeHtml4(request.getParameter("firstName"));
 		
 		if(!email.isEmpty() && !password.isEmpty() && !lastName.isEmpty() && !firstName.isEmpty()){
 			try {
