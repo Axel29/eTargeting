@@ -47,13 +47,14 @@ public class Registration extends HttpServlet {
 				UserClass user      = new UserClass(0, email, password, lastName, firstName);
 				UserModel userModel = new UserModel();
 				// Redirect the user to the registration page if the email already exists
-				if(userModel.checkUserExists(email)){
+				if (userModel.checkUserExists(email)) {
 					response.sendRedirect("/eTargeting/Registration");
+				} else {
+					int userId = userModel.insertUser(user);
+					user = UserModel.getUser(userId);
+					saveUserSession(request, user);
+					response.sendRedirect("/eTargeting/Dashboard");
 				}
-				int userId = userModel.insertUser(user);
-				user = UserModel.getUser(userId);
-				saveUserSession(request, user);
-				response.sendRedirect("/eTargeting/Dashboard");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
