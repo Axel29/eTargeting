@@ -46,7 +46,7 @@
 						<hr class="intro-divider">
 						<ul class="list-inline intro-social-buttons">
 							<li>
-								<a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg">
+								<a href="#" class="btn btn-default btn-lg">
 									<i class="fa fa-twitter fa-fw"></i> 
 									<span class="network-name">Twitter</span>
 								</a>
