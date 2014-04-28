@@ -7,6 +7,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>eTargeting</title>
 	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/landing-page.css" rel="stylesheet">
 	<link href="css/sb-admin.css" rel="stylesheet">
 	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
