@@ -1,4 +1,4 @@
-<%@ page import="eTargeting.UserClass" %>
+<%@ page import="eTargeting.UserModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -27,8 +27,8 @@
 			<div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
 					<%
-					UserClass user = (UserClass)request.getAttribute("user");
-					if (user.getLoggedUser(request).getUserId() == 0) {
+						UserModel user = (UserModel)request.getAttribute("user");
+								if (user.getLoggedUser(request).getUserId() == 0) {
 					%>
 						<li><a href="Login">Connexion</a></li>
 						<li><a href="Registration">Inscription</a></li>

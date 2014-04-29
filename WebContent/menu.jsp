@@ -1,4 +1,4 @@
- <%@ page import="eTargeting.UserClass" %>
+ <%@ page import="eTargeting.UserModel" %>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -9,16 +9,18 @@
 		</button>
 		<a class="navbar-brand" href="index.html">
 			<%
-			UserClass user = (UserClass)request.getAttribute("user");
-			out.println(user.getLoggedUser(request).getFirstName() + " " + user.getLoggedUser(request).getLastName()); %>
+				UserModel user = (UserModel)request.getAttribute("user");
+				out.println(user.getLoggedUser(request).getFirstName() + " " + user.getLoggedUser(request).getLastName());
+			%>
 		</a>
 	</div>
 	<div class="collapse navbar-collapse navbar-ex1-collapse">
 		<ul class="nav navbar-nav side-nav">
 			<li class="active"><a href="dashboard.jps"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
 			<li><a href="/index.jsp"><i class="fa fa-desktop"></i> Templates</a></li>
-			<li><a href="Lists"><span class="fa fa-list"></span> Lists</a></li>
-			<li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> Reports</a></li>
+			<li><a href="Lists"><span class="fa fa-list"></span> Listes</a></li>
+			<li><a href="Subscribers"><span class="fa fa-list"></span> Inscrits</a></li>
+			<li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> Rapports</a></li>
 			<li><a href="bootstrap-elements.html"><i class="fa fa-search"></i> Recherche</a></li>
 			<li><a href="blank-page.php"><i class="fa fa-info"></i> page blanche</a></li>
 		</ul>

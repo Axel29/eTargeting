@@ -1,5 +1,5 @@
-<%@ page import="eTargeting.ListClass" %>
-<%@ page import="eTargeting.UserClass" %>
+<%@ page import="eTargeting.ListsModel" %>
+<%@ page import="eTargeting.UserModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,10 +12,10 @@
 </head>
 <body class="inscription">
 	<%
-	UserClass user = (UserClass)request.getAttribute("user");
-	if (user.getLoggedUser(request).getUserId() != 0) {
-		response.sendRedirect("/eTargeting/Dashboard");
-	}
+		UserModel user = (UserModel)request.getAttribute("user");
+		if (user.getLoggedUser(request).getUserId() != 0) {
+			response.sendRedirect("/eTargeting/Dashboard");
+		}
 	%>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">

@@ -23,7 +23,7 @@ public class Index extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserClass user = new UserClass();
+		UserModel user = new UserModel();
 		request.setAttribute("user", user.getLoggedUser(request));
 		request.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
 	}

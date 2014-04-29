@@ -26,7 +26,7 @@ public class AddList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Checking that the user is logged in
-		UserClass user = new UserClass();
+		UserModel user = new UserModel();
 		if (user.getLoggedUser(request).getUserId() == 0) {
 			this.getServletContext().getRequestDispatcher("/Login").forward(request, response);
 		} else {
@@ -40,11 +40,11 @@ public class AddList extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("name") != null){
-			UserClass user = new UserClass();
+			UserModel user = new UserModel();
 			// Insert list into database
-			ListModel listModel = new ListModel();
-			ListClass list = new ListClass(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), "", user.getLoggedUser(request).getUserId());
-			listModel.insertList(list);
+			//ListModel listModel = new ListModel();
+			ListsModel list = new ListsModel(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), "", user.getLoggedUser(request).getUserId());
+			list.insertList();
 		}
 		response.sendRedirect("/eTargeting/Lists");
 	}

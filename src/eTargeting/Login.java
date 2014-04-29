@@ -32,11 +32,11 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// If the user tries to lougout
 		if (request.getParameter("logout") != null) {
-			UserClass.logout(request, response);
+			UserModel.logout(request, response);
 		    response.sendRedirect("/eTargeting/Index");
 		    return;
 		} else {
-			UserClass user = new UserClass();
+			UserModel user = new UserModel();
 			if (user.getLoggedUser(request).getUserId() != 0) {
 				response.sendRedirect("/eTargeting/Dashboard");
 			} else {
@@ -52,7 +52,7 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email      = StringEscapeUtils.escapeHtml4(request.getParameter("user_email"));
 		String password   = MD5.getMD5(StringEscapeUtils.escapeHtml4(request.getParameter("user_password")));
-		UserClass user    = UserModel.login(email, password);
+		UserModel user    = UserModel.login(email, password);
 
 		// If the login succeeded, we insert the user into session or cookies and redirect him to Dashboard
 		if(user.getUserId() != 0){
@@ -73,7 +73,7 @@ public class Login extends HttpServlet {
 	}
 	
 	
-	public void saveUserCookies(HttpServletResponse response, UserClass user) {
+	public void saveUserCookies(HttpServletResponse response, UserModel user) {
 		try {
 			// Creating a CSV from user's values in order to put it in one cookie
 			StringWriter stringWriter = new StringWriter();
@@ -91,7 +91,7 @@ public class Login extends HttpServlet {
 		}
 	}
 	
-	public void saveUserSession(HttpServletRequest request, UserClass user) {
+	public void saveUserSession(HttpServletRequest request, UserModel user) {
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", user.getUserId());
 		session.setAttribute("email", user.getEmail());

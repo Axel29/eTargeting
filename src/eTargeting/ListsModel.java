@@ -3,11 +3,27 @@ package eTargeting;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ListModel extends Model {	
-	public ListModel() {
+public class ListsModel extends Model {
+	private int id;
+	private String name;
+	private String subscriberIds;
+	private int owner;
+	
+	public ListsModel() {
+		this.id          = 0;
+		this.name        = new String();
+		this.subscriberIds = new String();
+		this.owner       = 0;
 	}
 	
-	public ListClass[] selectLists(int ownerId) {
+	public ListsModel(int id, String name, String subscribers, int owner){
+		this.id            = id;
+		this.name          = name;
+		this.subscriberIds = subscribers;
+		this.owner         = owner;
+	}
+	
+	public ListsModel[] selectLists(int ownerId) {
 		try {
 			String table = "lists L";
 			String[] where = {"L.owner = \"" + ownerId + "\""};
@@ -31,11 +47,11 @@ public class ListModel extends Model {
 			// And finally, we place the cursor back to the first position
 			result.beforeFirst();
 			
-			ListClass[] lists = new ListClass[resultLength];
+			ListsModel[] lists = new ListsModel[resultLength];
 			try {
 				int i = 0;
 				while (result.next()) {
-					lists[i] = new ListClass(result.getInt("id"), result.getString("name"), result.getString("subscriber_ids"), result.getInt("owner"));
+					lists[i] = new ListsModel(result.getInt("id"), result.getString("name"), result.getString("subscriber_ids"), result.getInt("owner"));
 					i++;
 				}
 				//System.out.println(lists[0]);
@@ -49,11 +65,43 @@ public class ListModel extends Model {
 		return null;
 	}
 	
-	public void insertList(ListClass list) {
+	public void insertList() {
 		String table    = "lists";
 		String keys[]   = {"name", "subscriber_ids", "owner"};
-		String values[] = {list.getName(), list.getSubscriberIds(), Integer.toString(list.getOwner())};
+		String values[] = {this.getName(), this.getSubscriberIds(), Integer.toString(this.getOwner())};
 		Model model = new Model();
 		model.insert(table, keys, values);
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName(){
+		return this.name;
+	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+
+	public String getSubscriberIds() {
+		return subscriberIds;
+	}
+
+	public void setSubscriberIds(String subscriberIds) {
+		this.subscriberIds = subscriberIds;
+	}
+
+	public int getOwner() {
+		return owner;
+	}
+
+	public void setOwner(int owner) {
+		this.owner = owner;
 	}
 }

@@ -27,7 +27,7 @@ public class Registration extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Checking that the user is logged in
-		UserClass user = new UserClass();
+		UserModel user = new UserModel();
 		if (user.getLoggedUser(request).getUserId() != 0) {
 			response.sendRedirect("/eTargeting/Dashboard");
 		} else {
@@ -48,13 +48,12 @@ public class Registration extends HttpServlet {
 		if(!email.isEmpty() && !password.isEmpty() && !lastName.isEmpty() && !firstName.isEmpty()){
 			try {
 				// Insert user into database
-				UserClass user      = new UserClass(0, email, password, lastName, firstName);
-				UserModel userModel = new UserModel();
+				UserModel user      = new UserModel(0, email, password, lastName, firstName);
 				// Redirect the user to the registration page if the email already exists
-				if (userModel.checkUserExists(email)) {
+				if (user.checkUserExists(email)) {
 					response.sendRedirect("/eTargeting/Registration");
 				} else {
-					int userId = userModel.insertUser(user);
+					int userId = user.insertUser();
 					user = UserModel.getUser(userId);
 					saveUserSession(request, user);
 					response.sendRedirect("/eTargeting/Dashboard");
@@ -67,7 +66,7 @@ public class Registration extends HttpServlet {
 		}
 		
 	}
-	public void saveUserSession(HttpServletRequest request, UserClass user){
+	public void saveUserSession(HttpServletRequest request, UserModel user){
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", user.getUserId());
 		session.setAttribute("email", user.getEmail());

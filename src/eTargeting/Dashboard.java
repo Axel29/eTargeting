@@ -24,7 +24,7 @@ public class Dashboard extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Checking that the user is logged in
-		UserClass user = new UserClass();
+		UserModel user = new UserModel();
 		if (user.getLoggedUser(request).getUserId() == 0) {
 			this.getServletContext().getRequestDispatcher("/Login").forward(request, response);
 		} else {

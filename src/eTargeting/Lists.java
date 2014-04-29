@@ -6,7 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import eTargeting.ListModel;
+import eTargeting.ListsModel;
 
 @WebServlet("/Lists")
 public class Lists extends HttpServlet {
@@ -24,12 +24,12 @@ public class Lists extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Checking that the user is logged in
-		UserClass user = new UserClass();
+		UserModel user = new UserModel();
 		if (user.getLoggedUser(request).getUserId() == 0) {
 			this.getServletContext().getRequestDispatcher("/Login").forward(request, response);
 		} else {
-			ListModel listModel = new ListModel();
-			ListClass[] lists = listModel.selectLists(user.getLoggedUser(request).getUserId());
+			ListsModel listsModel = new ListsModel();
+			ListsModel[] lists = listsModel.selectLists(user.getLoggedUser(request).getUserId());
 
 			for (int i = 0; i < lists.length; i++) {
 				request.setAttribute("list-" + i, lists[i]);

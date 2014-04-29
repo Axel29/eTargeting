@@ -1,4 +1,4 @@
-<%@ page import="eTargeting.UserClass" %>
+<%@ page import="eTargeting.UserModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <html>
@@ -10,11 +10,11 @@
 </head>
 <body class="connexion">
 	<%
-	UserClass user = (UserClass)request.getAttribute("user");
-	System.out.println("user.getLoggedUser(request).getUserId(): " + user.getLoggedUser(request).getUserId());
-	if (user.getLoggedUser(request).getUserId() != 0) {
-		response.sendRedirect("/eTargeting/Dashboard");
-	}
+		UserModel user = (UserModel)request.getAttribute("user");
+		System.out.println("user.getLoggedUser(request).getUserId(): " + user.getLoggedUser(request).getUserId());
+		if (user.getLoggedUser(request).getUserId() != 0) {
+			response.sendRedirect("/eTargeting/Dashboard");
+		}
 	%>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
