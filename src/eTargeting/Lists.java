@@ -1,19 +1,11 @@
 package eTargeting;
 
 import java.io.IOException;
-import java.io.StringReader;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-
-import au.com.bytecode.opencsv.CSVReader;
 import eTargeting.ListModel;
 
 @WebServlet("/Lists")
