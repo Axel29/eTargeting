@@ -47,7 +47,7 @@
 					<li><a href="#"><i class="fa fa-user"></i>Mon Compte</a></li>
 					<li><a href="#"><i class="fa fa-gear"></i>Réglages</a></li>
 					<li class="divider"></li>
-					<li><a href="#"><i class="fa fa-power-off"></i>Déconnexion</a></li>
+					<li><a href="Login?logout=1"><i class="fa fa-power-off"></i>Déconnexion</a></li>
 				</ul>
 			</li>
 		</ul>

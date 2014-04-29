@@ -1,10 +1,7 @@
 package eTargeting;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.UUID;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -12,10 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringEscapeUtils;
-
-import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
 @WebServlet("/Login")
@@ -34,10 +28,17 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if ((Integer)session.getAttribute("userId") != null) {
-			response.sendRedirect("/eTargeting/Dashboard");
+		// If the user tries to lougout
+		if (request.getParameter("logout") != null) {
+			UserClass.logout(request, response);
+		    response.sendRedirect("/eTargeting/Index");
+		    return;
 		} else {
-			request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+			if ((Integer)session.getAttribute("userId") != null) {
+				response.sendRedirect("/eTargeting/Dashboard");
+			} else {
+				request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+			}
 		}
 	}
 
@@ -69,7 +70,6 @@ public class Login extends HttpServlet {
 	
 	
 	public void saveUserCookies(HttpServletResponse response, UserClass user) {
-		
 		try {
 			// Creating a CSV from user's values in order to put it in one cookie
 			StringWriter stringWriter = new StringWriter();
@@ -79,11 +79,14 @@ public class Login extends HttpServlet {
 			csvWriter.writeNext(userValues);
 			csvWriter.close();
 			Cookie cookie = new Cookie("user", stringWriter.toString());
+			// Setting expire date for cookies to current day + 30 days
+			cookie.setMaxAge(60*60*24*30);
 			response.addCookie(cookie);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	public void saveUserSession(HttpServletRequest request, UserClass user) {
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", user.getUserId());

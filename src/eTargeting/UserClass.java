@@ -4,6 +4,7 @@ import java.io.StringReader;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -71,7 +72,6 @@ public class UserClass {
 			Cookie[] cookies = request.getCookies();
 			// Reading cookies to check if the user is logged in
 			if (cookies != null) {
-				System.out.println("COOKIES");
 				for(int i=0; i<cookies.length; i++)
 				{
 					if ("user".equals(cookies[i].getName())) {
@@ -84,21 +84,35 @@ public class UserClass {
 						cookieExists = true;
 					}
 				}
-				System.out.println("COOKIES EXISTS: " + cookieExists);
 			}
 			// Reading sessions to check if the user is logged in
 			if(!cookieExists){
-				System.out.println("SESSION");
 				HttpSession session = request.getSession();
 				if ((Integer)session.getAttribute("userId") != null) {
 					userId = (Integer)session.getAttribute("userId");
 				}
 			}
-			System.out.println("USERID: " + userId);
 			return userId;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return userId;
+	}
+	
+	public static void logout(HttpServletRequest request, HttpServletResponse response) {
+		// Destoy session
+		HttpSession session = request.getSession();
+		session.invalidate();
+		// Destroy user's cookie
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for(int i=0; i<cookies.length; i++)
+			{
+				if ("user".equals(cookies[i].getName())) {
+					cookies[i].setMaxAge(0);
+					response.addCookie(cookies[i]);
+				}
+			}
+		}
 	}
 }
