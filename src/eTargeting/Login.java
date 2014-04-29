@@ -1,19 +1,12 @@
 package eTargeting;
 
 import java.io.IOException;
-import java.io.StringWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringEscapeUtils;
-
-import au.com.bytecode.opencsv.CSVWriter;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -58,11 +51,11 @@ public class Login extends HttpServlet {
 		if(user.getUserId() != 0){
 			// Create cookie if "remember me" checkbox is checked
 			if (request.getParameter("remember_me") != null) {
-				saveUserCookies(response, user);
+				user.saveUserCookies(response);
 			}
 			// Or insert the user into session if not checked
 			else {
-				saveUserSession(request, user);
+				user.saveUserSession(request);
 			}
 			response.sendRedirect("/eTargeting/Dashboard");
 		}
@@ -70,32 +63,5 @@ public class Login extends HttpServlet {
 		else {
 			response.sendRedirect("/eTargeting/Login");
 		}
-	}
-	
-	
-	public void saveUserCookies(HttpServletResponse response, UserModel user) {
-		try {
-			// Creating a CSV from user's values in order to put it in one cookie
-			StringWriter stringWriter = new StringWriter();
-			CSVWriter csvWriter       = new CSVWriter(stringWriter);
-			String[] userValues       = {Integer.toString(user.getUserId()), user.getEmail(), user.getLastName(), user.getFirstName()};
-			// Writing into the string writer
-			csvWriter.writeNext(userValues);
-			csvWriter.close();
-			Cookie cookie = new Cookie("user", stringWriter.toString());
-			// Setting expire date for cookies to current day + 30 days
-			cookie.setMaxAge(60*60*24*30);
-			response.addCookie(cookie);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void saveUserSession(HttpServletRequest request, UserModel user) {
-		HttpSession session = request.getSession();
-		session.setAttribute("userId", user.getUserId());
-		session.setAttribute("email", user.getEmail());
-		session.setAttribute("last_name", user.getLastName());
-		session.setAttribute("first_name", user.getFirstName());
 	}
 }

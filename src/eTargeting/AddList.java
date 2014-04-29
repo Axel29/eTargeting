@@ -42,7 +42,6 @@ public class AddList extends HttpServlet {
 		if(request.getParameter("name") != null){
 			UserModel user = new UserModel();
 			// Insert list into database
-			//ListModel listModel = new ListModel();
 			ListsModel list = new ListsModel(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), "", user.getLoggedUser(request).getUserId());
 			list.insertList();
 		}

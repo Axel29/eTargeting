@@ -1,13 +1,11 @@
 package eTargeting;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -50,12 +48,12 @@ public class Registration extends HttpServlet {
 				// Insert user into database
 				UserModel user      = new UserModel(0, email, password, lastName, firstName);
 				// Redirect the user to the registration page if the email already exists
-				if (user.checkUserExists(email)) {
+				if (user.userExists(email)) {
 					response.sendRedirect("/eTargeting/Registration");
 				} else {
 					int userId = user.insertUser();
-					user = UserModel.getUser(userId);
-					saveUserSession(request, user);
+					user       = UserModel.getUserById(userId);
+					user.saveUserSession(request);
 					response.sendRedirect("/eTargeting/Dashboard");
 				}
 			} catch (Exception e) {
@@ -66,12 +64,4 @@ public class Registration extends HttpServlet {
 		}
 		
 	}
-	public void saveUserSession(HttpServletRequest request, UserModel user){
-		HttpSession session = request.getSession();
-		session.setAttribute("userId", user.getUserId());
-		session.setAttribute("email", user.getEmail());
-		session.setAttribute("last_name", user.getLastName());
-		session.setAttribute("first_name", user.getFirstName());
-	}
-
 }
