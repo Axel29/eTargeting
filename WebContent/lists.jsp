@@ -31,7 +31,7 @@
 
 			<div class="row">
 				<div class="col-lg-12">
-					<a href="addList.jsp">Ajouter une liste</a>
+					<a href="AddList">Ajouter une liste</a>
 				</div>
 			</div>
 

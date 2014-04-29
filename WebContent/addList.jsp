@@ -31,7 +31,7 @@
 	
 			<div class="row">
 				<div class="col-lg-12">
-					<form action="Lists" method="POST" class="form-horizontal">
+					<form action="AddList" method="POST" class="form-horizontal">
 						<fieldset>
 							<legend>Ajout d'une liste</legend>
 							
