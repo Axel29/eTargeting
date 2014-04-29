@@ -31,18 +31,18 @@ public class Lists extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int userId = UserClass.getLoggedUserId(request);
 		// Checking that the user is logged in
-		if (userId == 0) {
+		UserClass user = new UserClass();
+		if (user.getLoggedUser(request).getUserId() == 0) {
 			this.getServletContext().getRequestDispatcher("/Login").forward(request, response);
 		} else {
 			ListModel listModel = new ListModel();
-			ListClass[] lists = listModel.selectLists(userId);
+			ListClass[] lists = listModel.selectLists(user.getLoggedUser(request).getUserId());
 
 			for (int i = 0; i < lists.length; i++) {
 				request.setAttribute("list-" + i, lists[i]);
 			}
-			
+			request.setAttribute("user", user.getLoggedUser(request));
 			this.getServletContext().getRequestDispatcher("/lists.jsp").forward(request, response);
 		}
 	}
@@ -52,9 +52,10 @@ public class Lists extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("name") != null){
+			UserClass user = new UserClass();
 			// Insert list into database
 			ListModel listModel = new ListModel();
-			ListClass list = new ListClass(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), "", UserClass.getLoggedUserId(request));
+			ListClass list = new ListClass(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), "", user.getLoggedUser(request).getUserId());
 			listModel.insertList(list);
 		}
 		response.sendRedirect("/eTargeting/Lists");

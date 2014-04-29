@@ -27,9 +27,11 @@ public class Registration extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Checking that the user is logged in
-		if (UserClass.getLoggedUserId(request) != 0) {
+		UserClass user = new UserClass();
+		if (user.getLoggedUser(request).getUserId() != 0) {
 			response.sendRedirect("/eTargeting/Dashboard");
 		} else {
+			request.setAttribute("user", user.getLoggedUser(request));
 			request.getServletContext().getRequestDispatcher("/registration.jsp").forward(request, response);
 		}
 	}

@@ -26,7 +26,10 @@
 			</div>
 			<div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
-					<% if (UserClass.getLoggedUserId(request) == 0) { %>
+					<%
+					UserClass user = (UserClass)request.getAttribute("user");
+					if (user.getLoggedUser(request).getUserId() == 0) {
+					%>
 						<li><a href="Login">Connexion</a></li>
 						<li><a href="Registration">Inscription</a></li>
 					<% } else { %>

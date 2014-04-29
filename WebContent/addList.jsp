@@ -14,13 +14,13 @@
 </head>
 <body>
 	<%
-	if(UserClass.getLoggedUserId(request) == 0)
-	{
+	UserClass user = (UserClass)request.getAttribute("user");
+	if (user.getLoggedUser(request).getUserId() == 0) {
 		response.sendRedirect("/eTargeting/Login");
 	}
 	%>
     <div id="wrapper">
-     	<%@ include file="menu.jsp"%>
+     	<jsp:include page="/menu.jsp" />
 		<div id="page-wrapper">
 	
 			<div class="row">

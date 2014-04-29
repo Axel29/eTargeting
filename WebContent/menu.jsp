@@ -8,8 +8,9 @@
 			<span class="icon-bar"></span>
 		</button>
 		<a class="navbar-brand" href="index.html">
-			<% //out.println(session.getAttribute("first_name") + " " + session.getAttribute("last_name")); %>
-			Nom - Prénom
+			<%
+			UserClass user = (UserClass)request.getAttribute("user");
+			out.println(user.getLoggedUser(request).getFirstName() + " " + user.getLoggedUser(request).getLastName()); %>
 		</a>
 	</div>
 	<div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -39,8 +40,7 @@
 			<li class="dropdown user-dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 					<i class="fa fa-user"></i> 
-					<% //out.println(session.getAttribute("email")); %>
-					Email
+					<% out.println(user.getLoggedUser(request).getEmail()); %>
 					<b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu">

@@ -2,6 +2,7 @@ package eTargeting;
 
 import java.io.IOException;
 import java.io.StringWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringEscapeUtils;
+
 import au.com.bytecode.opencsv.CSVWriter;
 
 @WebServlet("/Login")
@@ -34,9 +37,11 @@ public class Login extends HttpServlet {
 		    response.sendRedirect("/eTargeting/Index");
 		    return;
 		} else {
-			if ((Integer)session.getAttribute("userId") != null) {
+			UserClass user = new UserClass();
+			if (user.getLoggedUser(request).getUserId() != 0) {
 				response.sendRedirect("/eTargeting/Dashboard");
 			} else {
+				request.setAttribute("user", user.getLoggedUser(request));
 				request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 			}
 		}

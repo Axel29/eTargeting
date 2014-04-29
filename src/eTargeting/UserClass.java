@@ -65,8 +65,7 @@ public class UserClass {
 		this.firstName = firstName;
 	}
 	
-	public static int getLoggedUserId(HttpServletRequest request) {
-		int userId           = 0;
+	public UserClass getLoggedUser(HttpServletRequest request) {
 		boolean cookieExists = false;
 		try {
 			Cookie[] cookies = request.getCookies();
@@ -79,7 +78,10 @@ public class UserClass {
 						StringReader stringReder = new StringReader(cookies[i].getValue());
 						CSVReader csvReader      = new CSVReader(stringReder);
 						String[] userValues      = csvReader.readNext();
-						userId = Integer.parseInt(userValues[0]);
+						this.userId    = Integer.parseInt(userValues[0]);
+						this.email     = userValues[1];
+						this.lastName  = userValues[2];
+						this.firstName = userValues[3];
 						csvReader.close();
 						cookieExists = true;
 					}
@@ -89,14 +91,17 @@ public class UserClass {
 			if(!cookieExists){
 				HttpSession session = request.getSession();
 				if ((Integer)session.getAttribute("userId") != null) {
-					userId = (Integer)session.getAttribute("userId");
+					this.userId = (Integer)session.getAttribute("userId");
+					this.email     = session.getAttribute("email").toString();
+					this.lastName  = session.getAttribute("last_name").toString();
+					this.firstName = session.getAttribute("first_name").toString();
 				}
 			}
-			return userId;
+			return this;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userId;
+		return this;
 	}
 	
 	public static void logout(HttpServletRequest request, HttpServletResponse response) {

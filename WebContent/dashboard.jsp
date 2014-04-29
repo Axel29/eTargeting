@@ -13,17 +13,17 @@
 </head>
 <body>
 	<%
-	if(UserClass.getLoggedUserId(request) == 0)
-	{
+	UserClass user = (UserClass)request.getAttribute("user");
+	if (user.getLoggedUser(request).getUserId() == 0) {
 		response.sendRedirect("/eTargeting/Login");
 	}
 	%>
     <div id="wrapper">
-     <%@ include file="menu.jsp"%>
+     <jsp:include page="/menu.jsp" />
 		<div id="page-wrapper">
 			<div class="row">
 				<div class="col-lg-12">
-					<h1>Tableau de bord - Statistique</h1>
+					<h1>Tableau de bord - Statistiques</h1>
 					<div class="alert alert-success alert-dismissable">
 						<p>Bienvenue dans l'espace d'administration</p>
 					</div>

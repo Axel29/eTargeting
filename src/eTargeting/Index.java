@@ -1,6 +1,7 @@
 package eTargeting;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +23,8 @@ public class Index extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UserClass user = new UserClass();
+		request.setAttribute("user", user.getLoggedUser(request));
 		request.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
 	}
 
