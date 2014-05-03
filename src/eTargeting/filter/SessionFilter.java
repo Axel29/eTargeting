@@ -52,7 +52,6 @@ public class SessionFilter implements Filter {
 		}
 		// Redirecting the user to the login page if he's not logged-in
 		else {
-			System.out.println("URL: " + url);
 			if (urlList != null) {
 				if (urlList.contains(url) || "".equals(url)) {
 					allowedRequest = true;
