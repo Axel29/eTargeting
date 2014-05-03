@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import eTargeting.model.UserModel;
 
 /**
  * Servlet Filter implementation class SessionFilter
@@ -21,12 +22,6 @@ import javax.servlet.http.HttpSession;
 public class SessionFilter implements Filter {
 	
 	private ArrayList<String> urlList;
-	
-    /**
-     * Default constructor. 
-     */
-    public SessionFilter() {
-    }
 
 	/**
 	 * @see Filter#destroy()
@@ -41,20 +36,40 @@ public class SessionFilter implements Filter {
 		HttpServletRequest req  = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String url              = req.getServletPath();
+		String uri              = req.getRequestURI();
 		boolean allowedRequest  = false;
+		UserModel user          = new UserModel();
 		
-		if (urlList.contains(url)) {
-			allowedRequest = true;
+		// Exclude css, javascript, images and fonts from redirecting.
+		if (uri.indexOf("css") > 0) {
+			chain.doFilter(request, response);
+		} else if (uri.indexOf("img") > 0) {
+			chain.doFilter(request, response);
+		} else if (uri.indexOf("js") > 0) {
+			chain.doFilter(request, response);
+		} else if (uri.indexOf("font-awesome") > 0) {
+			chain.doFilter(request, response);
 		}
-		
-		if (!allowedRequest) {
-			HttpSession session = req.getSession(false);
-			if (null == session) {
-				res.sendRedirect("index.jsp");
-				return;
+		// Redirecting the user to the login page if he's not logged-in
+		else {
+			System.out.println("URL: " + url);
+			if (urlList != null) {
+				if (urlList.contains(url) || "".equals(url)) {
+					allowedRequest = true;
+				}
+				
+				if (!allowedRequest) {
+					HttpSession session = req.getSession(false);
+					if (null == session || user.getLoggedUser(req).getUserId() == 0) {
+						res.sendRedirect("/eTargeting/Login");
+						return;
+					}
+				}
 			}
 		}
 		
+		// Setting the user's object to the request in order to use it's information in every JSP
+		request.setAttribute("user", user.getLoggedUser(req));
 		chain.doFilter(request,  response);
 	}
 
@@ -63,13 +78,13 @@ public class SessionFilter implements Filter {
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
 		String urls           = fConfig.getInitParameter("avoid-urls");
-		System.out.println("URLS BEFORE: " + urls);
-		StringTokenizer token = new StringTokenizer(urls, ",");
-		urlList               = new ArrayList<String>();
-		System.out.println("URLS AFTER: " + urls);
-		if (token != null) {
-			while (token.hasMoreTokens()) {
-				urlList.add(token.nextToken());
+		if (urls != null) {
+			StringTokenizer token = new StringTokenizer(urls, ",");
+			urlList               = new ArrayList<String>();
+			if (token != null) {
+				while (token.hasMoreTokens()) {
+					urlList.add(token.nextToken());
+				}
 			}
 		}
 	}

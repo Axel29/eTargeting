@@ -1,4 +1,3 @@
-<%@ page import="eTargeting.model.UserModel" %>
 <%@ page import="eTargeting.model.SubscribersModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>

@@ -28,14 +28,7 @@ public class AddList extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Checking that the user is logged in
-		UserModel user = new UserModel();
-		if (user.getLoggedUser(request).getUserId() == 0) {
-			this.getServletContext().getRequestDispatcher("/Login").forward(request, response);
-		} else {
-			request.setAttribute("user", user.getLoggedUser(request));
-			this.getServletContext().getRequestDispatcher("/WEB-INF/addList.jsp").forward(request, response);
-		}
+		this.getServletContext().getRequestDispatcher("/WEB-INF/addList.jsp").forward(request, response);
 	}
 
 	/**
