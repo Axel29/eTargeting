@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 02 Mai 2014 à 19:47
+-- Généré le: Dim 04 Mai 2014 à 19:40
 -- Version du serveur: 5.5.29
 -- Version de PHP: 5.4.10
 
@@ -44,14 +44,15 @@ CREATE TABLE `lists` (
   `owner` int(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Contenu de la table `lists`
 --
 
 INSERT INTO `lists` (`id`, `name`, `subscriber_ids`, `owner`) VALUES
-(1, 'Liste 1', NULL, 1);
+(1, 'Liste 1', NULL, 1),
+(2, 'Liste 2', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -77,11 +78,11 @@ CREATE TABLE `reports` (
 
 CREATE TABLE `subscribers` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `age` int(3) NOT NULL DEFAULT '0',
-  `gender` varchar(255) NOT NULL DEFAULT 'N/A',
+  `gender` varchar(255) DEFAULT NULL,
   `owner` int(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`)

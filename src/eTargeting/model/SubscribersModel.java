@@ -2,6 +2,7 @@ package eTargeting.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * <b>The SubscribersModel class represents a list of subscribers and allows the user to create new subscribers.</b>
@@ -22,7 +23,7 @@ import java.sql.SQLException;
  * @author Axel
  * @version 1.0
  */
-public class SubscribersModel extends Model {
+public class SubscribersModel {
 
 	/**
      * The susbscriber's ID. This ID can't be updated
@@ -121,10 +122,10 @@ public class SubscribersModel extends Model {
 	}
 	
 	/**
-	 * Returns array of ListsModel filled with ListsModel's objects
+	 * Returns array of SubscribersModel filled with SubscribersModel's objects
      * 
-     * @param ownerId List's owner's ID 
-     * @return ListsModel array.
+     * @param ownerId Subscriber's owner's ID 
+     * @return SubscribersModel array.
      */
 	public SubscribersModel[] selectSubscribers(int ownerId) {
 		try {
@@ -141,6 +142,7 @@ public class SubscribersModel extends Model {
 			// And finally, we place the cursor back to the first position
 			result.beforeFirst();
 			
+			// Filling SubscribersModel's array with SubscribersModel objects
 			SubscribersModel[] subscribers = new SubscribersModel[resultLength];
 			try {
 				int i = 0;
@@ -156,6 +158,8 @@ public class SubscribersModel extends Model {
 					subscribers[i] = new SubscribersModel(subscriberId, first_name, last_name, email, age, gender, owner);
 					i++;
 				}
+				// Closing connection
+				model.getConnection().close();
 				return subscribers;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -171,65 +175,156 @@ public class SubscribersModel extends Model {
      * Uses values from current object
      */
 	public void insertSubscriber() {
-		String table    = "subscribers";
-		String keys[]   = {"first_name", "last_name", "email", "age", "gender", "owner"};
-		String values[] = {this.getFirstName(), this.getLastName(), this.getEmail(), Integer.toString(this.getAge()), this.getGender(), Integer.toString(this.getOwnerId())};
-		Model model = new Model();
-		model.insert(table, keys, values);
+		// Adding every keys and their values into two lists if they have been sent.
+		ArrayList<String> keyList   = new ArrayList<String>();
+		ArrayList<String> valueList = new ArrayList<String>();		
+		if (this.getEmail() != null && !"".equals(this.getEmail())) {
+			keyList.add("email");
+			valueList.add(this.getEmail());
+		}
+		if (this.getFirstName() != null && !"".equals(this.getFirstName())) {
+			keyList.add("first_name");
+			valueList.add(this.getFirstName());
+		}
+		if (this.getLastName() != null && !"".equals(this.getLastName())) {
+			keyList.add("last_name");
+			valueList.add(this.getLastName());
+		}
+		if (this.getAge() != 0) {
+			keyList.add("age");
+			valueList.add(Integer.toString(this.getAge()));
+		}
+		if (this.getGender() != null && !"".equals(this.getGender())) {
+			keyList.add("gender");
+			valueList.add(this.getGender());
+		}
+		if (this.getOwnerId() != 0) {
+			keyList.add("owner");
+			valueList.add(Integer.toString(this.getOwnerId()));
+		}
+		
+		// Inserting values into database if some values have been sent
+		if (!keyList.isEmpty() && keyList.contains("email") && !valueList.isEmpty()) {
+			String table    = "subscribers";
+			String[] keys   = new String[keyList.size()];
+			String[] values = new String[valueList.size()];
+			// Converting the ArrayList into String Array
+			keyList.toArray(keys);
+			valueList.toArray(values);
+			
+			Model model = new Model();
+			model.insert(table, keys, values);
+		}
 	}
 
+	/**
+	 * Returns subscriber's ID.
+	 * 
+	 * @return subscriber's ID. 
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+     * @param id Subscriber's ID to set
+     */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * Returns subscriber's first name. If null, returns "N/A".
+	 * 
+	 * @return subscriber's first name. 
+	 */
 	public String getFirstName() {
-		return firstName;
+		return (firstName == null) ? "N/A" : firstName;
 	}
 
+	/**
+     * @param id Subscriber's first name to set
+     */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
+	/**
+	 * Returns subscriber's last name. If null, returns "N/A".
+	 * 
+	 * @return subscriber's last name. 
+	 */
 	public String getLastName() {
-		return lastName;
+		return (lastName == null) ? "N/A" : lastName;
 	}
 
+	/**
+     * @param id Subscriber's last name to set
+     */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
+	/**
+	 * Returns subscriber's email.
+	 * 
+	 * @return subscriber's email. 
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+     * @param id Subscriber's email to set
+     */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+	 * Returns subscriber's age.
+	 * 
+	 * @return subscriber's age. 
+	 */
 	public int getAge() {
 		return age;
 	}
 
+	/**
+     * @param id Subscriber's age to set
+     */
 	public void setAge(int age) {
 		this.age = age;
 	}
 
+	/**
+	 * Returns subscriber's gender. If null, returns "N/A".
+	 * 
+	 * @return subscriber's gender. 
+	 */
 	public String getGender() {
-		return gender;
+		return (gender == null) ? "N/A" : gender;
 	}
 
+	/**
+     * @param id Subscriber's gender to set
+     */
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
+	/**
+	 * Returns subscriber's owner ID.
+	 * 
+	 * @return subscriber's owner ID. 
+	 */
 	public int getOwnerId() {
 		return ownerId;
 	}
 
+	/**
+     * @param id Subscriber's owner ID to set
+     */
 	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;
 	}

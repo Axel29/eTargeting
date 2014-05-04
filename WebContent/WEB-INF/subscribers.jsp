@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
 </head>
-<body>
+<body class="subscribers">
     <div id="wrapper">
      	<jsp:include page="/WEB-INF/menu.jsp" />
 		<div id="page-wrapper">
@@ -22,7 +22,12 @@
 				</div>
 			</div>
 
-			<form action="AddSubscribers" method="POST" class="form-inline" role="form">
+			<form action="Subscribers" method="POST" id="add-subscriber" name="add-subscriber" class="add-subscriber form-inline" role="form">
+				<div class="form-group">
+					<label class="sr-only" for="email">Adresse email</label>
+					<input type="email" id="email" name="email" class="form-control" placeholder="Adress email">
+					<span class="required-entry">*</span>
+				</div>
 				<div class="form-group">
 					<label class="sr-only" for="last_name">Nom</label>
 					<input type="text" id="last_name" name="last_name" class="form-control" placeholder="Nom">
@@ -30,10 +35,6 @@
 				<div class="form-group">
 					<label class="sr-only" for="first_name">Prénom</label>
 					<input type="text" id="first_name" name="first_name" class="form-control" placeholder="Prénom">
-				</div>
-				<div class="form-group">
-					<label class="sr-only" for="email">Adresse email</label>
-					<input type="email" id="email" name="email" class="form-control" placeholder="Adress email">
 				</div>
 				<div class="form-group">
 					<label class="sr-only" for="age">Age</label>
@@ -61,7 +62,7 @@
 							<th>Sexe</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="subscribers-list">
 						<%
 						int i = 0;
 						while(request.getAttribute("subscriber-" + i) != null) {
@@ -71,7 +72,7 @@
 								out.println("<td>" + subscriber.getFirstName() + "</td>");
 								out.println("<td>" + subscriber.getLastName() + "</td>");
 								out.println("<td>" + subscriber.getEmail() + "</td>");
-								out.println("<td>" + subscriber.getAge() + "</td>");
+								out.println((subscriber.getAge() == 0) ? "<td>N/A</td>" : "<td>" + subscriber.getAge() + "</td>");
 								out.println("<td>" + subscriber.getGender() + "</td>");
 							out.println("</tr>");
 							i++;
@@ -90,5 +91,6 @@
 	<script src="js/morris/chart-data-morris.js"></script>
 	<script src="js/tablesorter/jquery.tablesorter.js"></script>
 	<script src="js/tablesorter/tables.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

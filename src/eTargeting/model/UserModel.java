@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -32,7 +29,7 @@ import au.com.bytecode.opencsv.CSVWriter;
  * @author Axel
  * @version 1.0
  */
-public class UserModel extends Model {
+public class UserModel {
 	/**
      * The user ID. This ID can't be updated
      * 
@@ -194,18 +191,15 @@ public class UserModel extends Model {
 			Model model      = new Model();
 			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
 			
-			try {
-				while (result.next()) {
-					user.setUserId(result.getInt("id"));
-					user.setEmail(result.getString("email"));
-					user.setLastName(result.getString("last_name"));
-					user.setFirstName(result.getString("first_name"));
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			while (result.next()) {
+				user.setUserId(result.getInt("id"));
+				user.setEmail(result.getString("email"));
+				user.setLastName(result.getString("last_name"));
+				user.setFirstName(result.getString("first_name"));
 			}
+			model.getConnection().close();
 		} catch (Exception e) {
-			System.out.println("Erreur lors de la vŽrification");
+			System.out.println("Erreur lors de la vï¿½rification");
 			e.printStackTrace();
 		}
 		return user;
@@ -272,15 +266,12 @@ public class UserModel extends Model {
 			Model model      = new Model();
 			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
 			
-			try {
-				if (result.next()) {
-					return true;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if (result.next()) {
+				model.getConnection().close();
+				return true;
 			}
 		} catch (Exception e) {
-			System.out.println("Erreur lors de la vŽrification");
+			System.out.println("Erreur lors de la vï¿½rification");
 			e.printStackTrace();
 		}
 		return false;
@@ -302,17 +293,14 @@ public class UserModel extends Model {
 			Model model      = new Model();
 			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
 			
-			try {
-				while (result.next()) {
-					user.setUserId(result.getInt("id"));
-					user.setEmail(email);
-					user.setLastName(result.getString("last_name"));
-					user.setFirstName(result.getString("first_name"));
-				}
-				return user;
-			} catch (SQLException e) {
-				e.printStackTrace();
+			while (result.next()) {
+				user.setUserId(result.getInt("id"));
+				user.setEmail(email);
+				user.setLastName(result.getString("last_name"));
+				user.setFirstName(result.getString("first_name"));
 			}
+			model.getConnection().close();
+			return user;
 		} catch (Exception e) {
 			System.out.println("Erreur lors de la connexion");
 			e.printStackTrace();

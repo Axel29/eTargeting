@@ -20,7 +20,7 @@ import java.sql.SQLException;
  * @author Axel
  * @version 1.0
  */
-public class ListsModel extends Model {
+public class ListsModel {
 	/**
      * The list's ID. This ID can't be updated
      * 
@@ -112,6 +112,7 @@ public class ListsModel extends Model {
 					lists[i] = new ListsModel(result.getInt("id"), result.getString("name"), result.getString("subscriber_ids"), result.getInt("owner"));
 					i++;
 				}
+				model.getConnection().close();
 				return lists;
 			} catch (SQLException e) {
 				e.printStackTrace();

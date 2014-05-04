@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * <b>The Model class is the core Model used for every model's implementation.</b>
  * <p>
@@ -35,29 +37,45 @@ public class Model {
 	/**
      * An object that represents a precompiled SQL statement.
      */
-	@SuppressWarnings("unused")
 	private static PreparedStatement preparedStatement = null;
 	
 	/**
-     * Model constructor.
+     * Model default constructor.
      * <p>
      * Set up a connection to database
      * </p>
      */
 	public Model() {
-		getConnection();
+		setDbConnection();
 	}
-	
+
+	/**
+	 * Returns Connection's object
+	 * 
+	 * @return subscriber's owner ID. 
+	 */
+	protected Connection getConnection() {
+		return connection;
+	}
+
+	/**
+     * @param connection Connection object
+     */
+	protected void setConnection(Connection connection) {
+		Model.connection = connection;
+	}
+
 	/**
 	 * Gets connection and set it to the Connection's object
 	 */
-	private void getConnection() {
+	private void setDbConnection() {
 		try {
+			DBConfig dbConfig = new DBConfig();
 			Class.forName("com.mysql.jdbc.Driver");
-			String url  = "jdbc:mysql://localhost/eTargeting";
-			String user = "root";
-			String pass = "root";
-			connection = DriverManager.getConnection(url, user, pass);
+			String url  = dbConfig.getUrl();
+			String user = dbConfig.getUser();
+			String pass = dbConfig.getPass();
+			setConnection(DriverManager.getConnection(url, user, pass));
 			statement = connection.createStatement();
 		} catch(SQLException se) {
 	      se.printStackTrace();
@@ -71,9 +89,9 @@ public class Model {
      * 
      * @param table Table name for select
      * @param aFields Array of string containing every field to select
-     * @param aWhere Array of string containg every where conditions
-     * @param aJoin Array of string containg every join conditions
-     * @param aOrder Array of string containg every order conditions
+     * @param aWhere Array of string containing every where conditions
+     * @param aJoin Array of string containing every join conditions
+     * @param aOrder Array of string containing every order conditions
      * @param limit Number of maximum results to get
      * @return ResultSet containing query's result.
      */
@@ -83,13 +101,14 @@ public class Model {
 			// Fields to select
 			if (aFields == null || aFields.length == 0) {
 				query += "*";
-			}
-			for (int i=0; i<aFields.length; i++){
-				if (aFields[i] != null && !aFields[i].isEmpty()) {
-					if (i+1 != aFields.length) {
-						query += aFields[i] + ", ";
-					} else {
-						query += aFields[i];
+			} else {
+				for (int i=0; i<aFields.length; i++){
+					if (aFields[i] != null && !aFields[i].isEmpty()) {
+						if (i+1 != aFields.length) {
+							query += aFields[i] + ", ";
+						} else {
+							query += aFields[i];
+						}
 					}
 				}
 			}
@@ -158,33 +177,39 @@ public class Model {
      */
 	protected int insert(String table, String[] aKeys, String[] aValues) {
 		try {
-			String keys = "";
+			// Concatenating every keys into a string
+			StringBuilder keys = new StringBuilder();
 			for (int i=0; i<aKeys.length; i++){
 				// If the value matching to this key is not empty, we insert it, otherwise it's useless
 				if (aValues[i] != null && !aValues[i].isEmpty()) {
 					if (i+1 != aKeys.length) {
-						keys += aKeys[i] + ", ";
+						keys.append(aKeys[i] + ", ");
 					} else {
-						keys += aKeys[i];
+						keys.append(aKeys[i]);
 					}
 				}
 			}
 			
-			String values = "";
-			for (int i=0; i<aValues.length; i++){
-				if (aValues[i] != null && !aValues[i].isEmpty()) {
-					if (i+1 != aValues.length) {
-						values += "\"" + aValues[i] + "\", ";
-					} else {
-						values += "\"" + aValues[i] + "\"";
-					}
+			// Creating the question marks for the prepared statement
+			StringBuilder values = new StringBuilder();
+			for (int i = 0; i < aValues.length; i++) {
+				if (i+1 != aValues.length) {
+					values.append("?, ");
+				} else {
+					values.append("?");
 				}				
 			}
 			
-			String request = "INSERT INTO " + table + " (" + keys + ") VALUES (" + values + ");";
-			//System.out.println("INSERT query: " + request);
-			statement.executeUpdate(request);
+			// Executing the INSERT request
+			String request = "INSERT INTO " + table + " (" + keys.toString() + ") VALUES (" + values.toString() + ");";
+			preparedStatement = connection.prepareStatement(request);
+			for (int i = 0; i < aValues.length; i++) {
+				preparedStatement.setObject(i+1, StringEscapeUtils.escapeHtml4(aValues[i]));
+			}
+			preparedStatement.executeUpdate();
 			
+			
+			// Getting last inserted id in order to return it
 			PreparedStatement lastInsertId = connection.prepareStatement("SELECT LAST_INSERT_ID()");
 			ResultSet rs                   = lastInsertId.executeQuery();
 			int insertedId = 0;
@@ -192,7 +217,10 @@ public class Model {
 			{  
 				insertedId = rs.getInt("last_insert_id()");
 			}  
+			
+			// Closing the connection
 			connection.close();
+			
 			return insertedId;
 		} catch (SQLException se) {
 			se.printStackTrace();
