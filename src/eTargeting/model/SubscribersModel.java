@@ -159,7 +159,7 @@ public class SubscribersModel {
 					i++;
 				}
 				// Closing connection
-				model.getConnection().close();
+				model.closeConnection();
 				return subscribers;
 			} catch (SQLException e) {
 				e.printStackTrace();

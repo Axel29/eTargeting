@@ -112,7 +112,7 @@ public class ListsModel {
 					lists[i] = new ListsModel(result.getInt("id"), result.getString("name"), result.getString("subscriber_ids"), result.getInt("owner"));
 					i++;
 				}
-				model.getConnection().close();
+				model.closeConnection();
 				return lists;
 			} catch (SQLException e) {
 				e.printStackTrace();

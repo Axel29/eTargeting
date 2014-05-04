@@ -48,11 +48,59 @@ public class Model {
 	public Model() {
 		setDbConnection();
 	}
+	
+	/**
+	 * Returns ResultSet's object
+	 * 
+	 * @return ResultSet's object. 
+	 */
+	protected ResultSet getResultSet() {
+		return resultSet;
+	}
+
+	/**
+     * @param resultSet ResultSet object
+     */
+	protected void setResultSet(ResultSet resultSet) {
+		Model.resultSet = resultSet;
+	}
+
+	/**
+	 * Returns Statement's object
+	 * 
+	 * @return Statement's object. 
+	 */
+	protected Statement getStatement() {
+		return statement;
+	}
+
+	/**
+     * @param statement Statement object
+     */
+	protected void setStatement(Statement statement) {
+		Model.statement = statement;
+	}
+
+	/**
+	 * Returns PreparedStatement's object
+	 * 
+	 * @return PreparedStatement's object. 
+	 */
+	protected PreparedStatement getPreparedStatement() {
+		return preparedStatement;
+	}
+
+	/**
+     * @param preparedStatement PreparedStatement object
+     */
+	protected void setPreparedStatement(PreparedStatement preparedStatement) {
+		Model.preparedStatement = preparedStatement;
+	}
 
 	/**
 	 * Returns Connection's object
 	 * 
-	 * @return subscriber's owner ID. 
+	 * @return Connection's object 
 	 */
 	protected Connection getConnection() {
 		return connection;
@@ -216,7 +264,9 @@ public class Model {
 			if (rs.next())  
 			{  
 				insertedId = rs.getInt("last_insert_id()");
-			}  
+			}
+			rs.close();
+			lastInsertId.close();
 			
 			// Closing the connection
 			connection.close();
@@ -228,5 +278,19 @@ public class Model {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	/**
+	 * Close ResultSet, Statement and Connection objects,  
+	 */
+	protected void closeConnection() {
+		try {
+			Model.resultSet.close();
+			Model.statement.close();
+			Model.preparedStatement.close();
+			Model.connection.close();
+		} catch (Exception e) {
+			// Ignored, just used to avoid null check on every object
+		}
 	}
 }

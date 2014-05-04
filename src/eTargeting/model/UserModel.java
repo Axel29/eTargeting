@@ -197,7 +197,7 @@ public class UserModel {
 				user.setLastName(result.getString("last_name"));
 				user.setFirstName(result.getString("first_name"));
 			}
-			model.getConnection().close();
+			model.closeConnection();
 		} catch (Exception e) {
 			System.out.println("Erreur lors de la v�rification");
 			e.printStackTrace();
@@ -267,7 +267,7 @@ public class UserModel {
 			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
 			
 			if (result.next()) {
-				model.getConnection().close();
+				model.closeConnection();
 				return true;
 			}
 		} catch (Exception e) {
@@ -299,7 +299,7 @@ public class UserModel {
 				user.setLastName(result.getString("last_name"));
 				user.setFirstName(result.getString("first_name"));
 			}
-			model.getConnection().close();
+			model.closeConnection();
 			return user;
 		} catch (Exception e) {
 			System.out.println("Erreur lors de la connexion");
