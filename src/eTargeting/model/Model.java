@@ -269,7 +269,7 @@ public class Model {
 			lastInsertId.close();
 			
 			// Closing the connection
-			connection.close();
+			this.closeConnection();
 			
 			return insertedId;
 		} catch (SQLException se) {
@@ -278,6 +278,31 @@ public class Model {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	
+	/**
+	 * Delete an entry from database
+	 * @param id The ID to delete
+	 */
+	public void delete(String table, int[] aIds) {
+		try {
+			// Executing the DELETE request for each ID
+			for (int i = 0; i<aIds.length; i++) {
+				try {
+					String request = "DELETE FROM " + table + " WHERE id = ?";
+					preparedStatement = connection.prepareStatement(request);
+					preparedStatement.setInt(1, aIds[i]);
+					preparedStatement.executeUpdate();
+				}  catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+			
+			// Closing the connection
+			this.closeConnection();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

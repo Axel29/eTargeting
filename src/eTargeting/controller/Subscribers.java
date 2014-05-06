@@ -42,6 +42,8 @@ public class Subscribers extends HttpServlet {
 		PrintWriter out   = response.getWriter();
 		// Getting form's values from AJAX request
 		UserModel user    = (UserModel)request.getAttribute("user");
+		String insertSubscriber = request.getParameter("insertSubscriber");
+		String deleteSubscriber = request.getParameter("confirm-deletion");
 		String email      = request.getParameter("email");
 		String last_name  = request.getParameter("last_name");
 		String first_name = request.getParameter("first_name");
@@ -51,26 +53,54 @@ public class Subscribers extends HttpServlet {
 		if ( request.getParameter("age") != null && !"".equals(request.getParameter("age")) ) {
 			age = Integer.parseInt(request.getParameter("age"));
 		}
+		String subscriberId  = "";
+		if ( request.getParameter("subscriberId") != null && !"".equals(request.getParameter("subscriberId")) ) {
+			subscriberId = request.getParameter("subscriberId");
+		}
 		
-		if (email != null) {
+		// Inserting new subscriber
+		if ("1".equals(insertSubscriber) && email != null) {
 			SubscribersModel subscribersModel = new SubscribersModel(0, first_name, last_name, email, age, gender, owner);
 			subscribersModel.insertSubscriber();
+			
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
-			SubscribersModel[] subscribers = subscribersModel.selectSubscribers(owner);
-
-			for (int i = 0; i < subscribers.length; i++) {
-				out.println("<tr>");
-					out.println("<td>" + subscribers[i].getId() + "</td>");
-					out.println("<td>" + subscribers[i].getFirstName() + "</td>");
-					out.println("<td>" + subscribers[i].getLastName() + "</td>");
-					out.println("<td>" + subscribers[i].getEmail() + "</td>");
-					out.println((subscribers[i].getAge() == 0) ? "<td>N/A</td>" : "<td>" + subscribers[i].getAge() + "</td>");
-					out.println("<td>" + subscribers[i].getGender() + "</td>");
-				out.println("</tr>");
+			out.println(this.getSubscriberListHtml(owner).toString());
+		} else if ("true".equals(deleteSubscriber) && !"".equals(subscriberId)) {
+			String[] splitIds                 = subscriberId.split(",");
+			int[] aIds                        = new int[splitIds.length];
+			SubscribersModel subscribersModel = new SubscribersModel();
+			
+			for (int i = 0; i < splitIds.length; i++) {
+				aIds[i] = Integer.parseInt(splitIds[i]);
 			}
+			subscribersModel.deleteSubscriber(aIds);
+			
+			response.setContentType("text/html;charset=UTF-8");
+			out.println(this.getSubscriberListHtml(owner));
 		} else {
 			response.setContentType("text/html;charset=UTF-8");
+			out.println("Erreur");
 		}
+	}
+	
+	public StringBuilder getSubscriberListHtml(int owner) {
+		// Adding subscriber's list to the response
+		SubscribersModel subscribersModel = new SubscribersModel();
+		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(owner);
+		StringBuilder html = new StringBuilder();
+		for (int i = 0; i < subscribers.length; i++) {
+			html.append("<tr>");
+				html.append("<td class=\"table_user_id\">" + subscribers[i].getId() + "</td>");
+				html.append("<td class=\"table_user_email\">" + subscribers[i].getEmail() + "</td>");
+				html.append("<td class=\"table_user_first_name\">" + subscribers[i].getFirstName() + "</td>");
+				html.append("<td class=\"table_user_last_name\">" + subscribers[i].getLastName() + "</td>");
+				html.append((subscribers[i].getAge() == 0) ? "<td class=\"table_user_age\">N/A</td>" : "<td class=\"table_user_age\">" + subscribers[i].getAge() + "</td>");
+				html.append("<td class=\"table_user_gender\">" + subscribers[i].getGender() + "</td>");
+				html.append("<td><p><button class=\"btn btn-primary btn-xs edit-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+				html.append("<td><p><button class=\"btn btn-danger btn-xs delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+			html.append("</tr>");
+		}
+		return html;
 	}
 }

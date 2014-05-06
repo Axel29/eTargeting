@@ -216,6 +216,15 @@ public class SubscribersModel {
 			model.insert(table, keys, values);
 		}
 	}
+	
+	/**
+	 * Delete subscriber from database, referenced by his ID
+	 * @param subscriberId Subscriber's ID to delete
+	 */
+	public void deleteSubscriber(int[] aIds) {
+		Model model = new Model();
+		model.delete("subscribers", aIds);		
+	}
 
 	/**
 	 * Returns subscriber's ID.
