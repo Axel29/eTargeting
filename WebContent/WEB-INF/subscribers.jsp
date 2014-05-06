@@ -50,7 +50,7 @@
 								<option value="F">F</option>
 							</select>
 						</div>
-						<button id="add" name="add" class="btn btn-primary" type="submit">Ajouter</button>
+						<button type="submit" id="add" name="add" class="btn btn-primary">Ajouter</button>
 					</form>
 				</div>
 			</div>
@@ -58,16 +58,18 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="table-responsive">
-						<table class="table table-striped table-bordered">
+						<table class="table table-striped table-bordered table-hover">
 							<thead>
-								<th>#</th>
-								<th>Email</th>
-								<th>Nom</th>
-								<th>Prénom</th>
-								<th>Age</th>
-								<th>Sexe</th>
-								<th>Editer</th>
-								<th>Supprimer</th>
+								<tr>
+									<th>#</th>
+									<th>Email</th>
+									<th>Prénom</th>
+									<th>Nom</th>
+									<th>Age</th>
+									<th>Sexe</th>
+									<th>Editer</th>
+									<th>Supprimer</th>
+								</tr>
 							</thead>
 							<tbody class="subscribers-list">
 								<%
@@ -76,14 +78,14 @@
 									SubscribersModel subscriber = (SubscribersModel)request.getAttribute("subscriber-" + i);
 									String age = (subscriber.getAge() == 0) ? "N/A" : Integer.toString(subscriber.getAge());
 									out.println("<tr>");
-										out.println("<td class=\"table_user_id\">" + subscriber.getId() + "</td>");
-										out.println("<td class=\"table_user_email\">" + subscriber.getEmail() + "</td>");
-										out.println("<td class=\"table_user_first_name\">" + subscriber.getFirstName() + "</td>");
-										out.println("<td class=\"table_user_last_name\">" + subscriber.getLastName() + "</td>");
-										out.println("<td class=\"table_user_age\">" + age + "</td>");
-										out.println("<td class=\"table_user_gender\">" + subscriber.getGender() + "</td>");
-										out.println("<td><p><button class=\"btn btn-primary btn-xs edit-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
-										out.println("<td><p><button class=\"btn btn-danger btn-xs delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+										out.println("<td class=\"col-md-1 table_user_id\">" + subscriber.getId() + "</td>");
+										out.println("<td class=\"col-md-4 table_user_email\">" + subscriber.getEmail() + "</td>");
+										out.println("<td class=\"col-md-2 table_user_first_name\">" + subscriber.getFirstName() + "</td>");
+										out.println("<td class=\"col-md-1 table_user_last_name\">" + subscriber.getLastName() + "</td>");
+										out.println("<td class=\"col-md-1 table_user_age\">" + age + "</td>");
+										out.println("<td class=\"col-md-1 table_user_gender\">" + subscriber.getGender() + "</td>");
+										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block edit-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 									out.println("</tr>");
 									i++;
 								}

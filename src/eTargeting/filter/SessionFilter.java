@@ -49,6 +49,8 @@ public class SessionFilter implements Filter {
 			chain.doFilter(request, response);
 		} else if (uri.indexOf("font-awesome") > 0) {
 			chain.doFilter(request, response);
+		} else if (uri.indexOf("fonts") > 0) {
+			chain.doFilter(request, response);
 		}
 		// Redirecting the user to the login page if he's not logged-in
 		else {
@@ -59,7 +61,7 @@ public class SessionFilter implements Filter {
 				
 				if (!allowedRequest) {
 					HttpSession session = req.getSession(false);
-					if (null == session || user.getLoggedUser(req).getUserId() == 0) {
+					if (null == session && user.getLoggedUser(req).getUserId() == 0) {
 						res.sendRedirect("/eTargeting/Login");
 						return;
 					}
