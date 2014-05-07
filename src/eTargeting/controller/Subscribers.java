@@ -74,9 +74,11 @@ public class Subscribers extends HttpServlet {
 			for (int i = 0; i < splitIds.length; i++) {
 				aIds[i] = Integer.parseInt(splitIds[i]);
 			}
-			subscribersModel.deleteSubscriber(aIds);
 			
 			response.setContentType("text/html;charset=UTF-8");
+			if (subscribersModel.deleteSubscriber(aIds, owner) == 0) {
+				out.println("Une erreur s'est produite. Veuillez réessayer.");
+			}
 			out.println(this.getSubscriberListHtml(owner));
 		} else {
 			response.setContentType("text/html;charset=UTF-8");

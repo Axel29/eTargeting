@@ -3,6 +3,7 @@ package eTargeting.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * <b>The SubscribersModel class represents a list of subscribers and allows the user to create new subscribers.</b>
@@ -221,9 +222,35 @@ public class SubscribersModel {
 	 * Delete subscriber from database, referenced by his ID
 	 * @param subscriberId Subscriber's ID to delete
 	 */
-	public void deleteSubscriber(int[] aIds) {
-		Model model = new Model();
-		model.delete("subscribers", aIds);		
+	public int deleteSubscriber(int[] aIds, int owner) {
+		// Checking that the subscriber is really possessed by the user
+		SubscribersModel[] subscribers = this.selectSubscribers(owner);
+		int[] allowedRequest = new int[aIds.length];
+		
+		for (int i = 0; i < aIds.length; i++) {
+			int allowedId = 0;
+			
+			for (int j = 0; j < subscribers.length; j++) {
+				if (subscribers[j].getId() == aIds[i]){
+					allowedId = 1;
+					System.out.println("subscribers[" + j + "].getId() = " + subscribers[j].getId());
+					System.out.println("aIds[" + i + "] = "  + aIds[i]);
+					System.out.println("aIds[" + i + "] = allowed");
+				}
+			}
+			
+			allowedRequest[i] = allowedId;
+		}
+		
+		// Delete the subscribers if it is allowed
+		System.out.println("Arrays.binarySearch(allowedRequest, 0): " + Arrays.binarySearch(allowedRequest, 0));
+		if (Arrays.binarySearch(allowedRequest, 0) < 0) {
+			Model model = new Model();
+			model.delete("subscribers", aIds);
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	/**
