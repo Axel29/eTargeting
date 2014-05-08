@@ -252,7 +252,7 @@ public class Model {
 				preparedStatement.setObject(i+1, StringEscapeUtils.escapeHtml4(aValues[i]));
 			}
 			
-			System.out.println(preparedStatement);
+			//System.out.println(preparedStatement);
 			// Execute the INSERT query
 			preparedStatement.executeUpdate();
 			

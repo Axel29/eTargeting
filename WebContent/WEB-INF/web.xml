@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>eTargeting</display-name>
-  <!--  Defining project root as Index servlet -->
   <servlet>
-  	<servlet-name>Index</servlet-name>
-  	<servlet-class>eTargeting.controller.Index</servlet-class>
+    <servlet-name>Index</servlet-name>
+    <servlet-class>eTargeting.controller.Index</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>Index</servlet-name>
-  	<url-pattern></url-pattern>
+    <servlet-name>Index</servlet-name>
+    <url-pattern></url-pattern>
   </servlet-mapping>
-  <!-- End of index servlet -->
-  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -20,26 +17,20 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
-  <!--  Error pages -->
   <error-page>
     <error-code>404</error-code>
     <location>/WEB-INF/404.jsp</location>
   </error-page>
-  <!-- End of error pages -->
-  
-  <!-- Filter (used to force login and set user to session) -->
   <filter>
-  	<filter-name>SessionFilter</filter-name>
-  	<filter-class>eTargeting.filter.SessionFilter</filter-class>
-  	<init-param>
-  		<param-name>avoid-urls</param-name>
-  		<param-value>,/Index,/Login,/Registration</param-value>
-  	</init-param>
+    <filter-name>SessionFilter</filter-name>
+    <filter-class>eTargeting.filter.SessionFilter</filter-class>
+    <init-param>
+      <param-name>avoid-urls</param-name>
+      <param-value>,/Index,/Login,/Registration</param-value>
+    </init-param>
   </filter>
   <filter-mapping>
-  	<filter-name>SessionFilter</filter-name>
-  	<url-pattern>/*</url-pattern>
+    <filter-name>SessionFilter</filter-name>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
-  <!-- End of filter -->
 </web-app>

@@ -119,7 +119,7 @@ public class Subscribers extends HttpServlet {
 		StringBuilder html = new StringBuilder();
 		for (int i = 0; i < subscribers.length; i++) {
 			html.append("<tr>");
-				html.append("<td class=\"col-md-1 table_user_id\">" + subscribers[i].getId() + "</td>");
+				html.append("<td class=\"col-md-1 table_user_id hidden\">" + subscribers[i].getId() + "</td>");
 				html.append("<td class=\"col-md-4 table_user_email\">" + subscribers[i].getEmail() + "</td>");
 				html.append("<td class=\"col-md-2 table_user_first_name\">" + subscribers[i].getFirstName() + "</td>");
 				html.append("<td class=\"col-md-1 table_user_last_name\">" + subscribers[i].getLastName() + "</td>");

@@ -86,6 +86,8 @@ table.tablesorter thead tr th:hover {
 .input-styleless {
 	border: 0;
 	background: transparent;
+	width: 100%;
+	height: 100%;
 }
 .remove-table-line {
 	display: block;

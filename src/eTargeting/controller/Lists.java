@@ -25,9 +25,9 @@ public class Lists extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserModel user = new UserModel();
+		UserModel user        = new UserModel();
 		ListsModel listsModel = new ListsModel();
-		ListsModel[] lists = listsModel.selectLists(user.getLoggedUser(request).getUserId());
+		ListsModel[] lists    = listsModel.selectLists(user.getLoggedUser(request).getUserId());
 
 		for (int i = 0; i < lists.length; i++) {
 			request.setAttribute("list-" + i, lists[i]);

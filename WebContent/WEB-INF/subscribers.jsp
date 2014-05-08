@@ -71,7 +71,7 @@
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
-									<th>#</th>
+									<th class="hidden">#</th>
 									<th>Email</th>
 									<th>Prénom</th>
 									<th>Nom</th>
@@ -88,10 +88,10 @@
 									SubscribersModel subscriber = (SubscribersModel)request.getAttribute("subscriber-" + i);
 									String age = (subscriber.getAge() == 0) ? "N/A" : Integer.toString(subscriber.getAge());
 									out.println("<tr>");
-										out.println("<td class=\"col-md-1 table_user_id\">" + subscriber.getId() + "</td>");
+										out.println("<td class=\"table_user_id hidden\">" + subscriber.getId() + "</td>");
 										out.println("<td class=\"col-md-4 table_user_email\">" + subscriber.getEmail() + "</td>");
 										out.println("<td class=\"col-md-2 table_user_first_name\">" + subscriber.getFirstName() + "</td>");
-										out.println("<td class=\"col-md-1 table_user_last_name\">" + subscriber.getLastName() + "</td>");
+										out.println("<td class=\"col-md-2 table_user_last_name\">" + subscriber.getLastName() + "</td>");
 										out.println("<td class=\"col-md-1 table_user_age\">" + age + "</td>");
 										out.println("<td class=\"col-md-1 table_user_gender\">" + subscriber.getGender() + "</td>");
 										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
