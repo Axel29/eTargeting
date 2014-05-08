@@ -177,9 +177,12 @@ jQuery(document).ready(function($){
 				$('.alert-error').css('visibility','visible').hide().fadeIn().removeClass('hidden');
 			})
 			.always(function() {
-				subscriberId = 0;
+				listId = 0;
 				$('#delete').modal('hide');
 			});
+		} else {
+			listId = 0;
+			$('#delete').modal('hide');
 		}
 		return false;
 	});
