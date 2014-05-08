@@ -22,6 +22,16 @@
 				</div>
 			</div>
 			
+			<div class="row alert-error hidden">
+				<div class="col-lg-12">
+					<div class="alert alert-danger fade in">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						<h4>Erreur</h4>
+						<p>Une erreur s'est produite. Veuillez réessayer.</p>
+				    </div>
+				</div>
+			</div>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<form action="Subscribers" method="POST" id="add-subscriber" name="add-subscriber" class="add-subscriber form-inline" role="form">
@@ -84,7 +94,7 @@
 										out.println("<td class=\"col-md-1 table_user_last_name\">" + subscriber.getLastName() + "</td>");
 										out.println("<td class=\"col-md-1 table_user_age\">" + age + "</td>");
 										out.println("<td class=\"col-md-1 table_user_gender\">" + subscriber.getGender() + "</td>");
-										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block edit-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
 										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 									out.println("</tr>");
 									i++;
@@ -106,36 +116,35 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 					<h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
 				</div>
-				<form action="Subscribers" method="post">
-					<div class="modal-body">	
-						<div class="form-group">
-							<input class="form-control" type="hidden" id="user_id" name="user_id" value=""">
-						</div>
+				<form action="Subscribers" method="post" id="update-subscriber">
+					<div class="modal-body">
+						<input type="hidden" id="updateSubscriber" name="updateSubscriber" value="1" />
+						<input type="hidden" id="subscriberId" name="subscriberId" value="">
 						<div class="form-group">
 							<label class="sr-only" for="user_email">Email</label>
-							<input class="form-control" type="text" id="user_email" name="user_email" placeholder="Email">
+							<input class="form-control" type="text" id="user_email" name="email" placeholder="Email">
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="user_first_name">Prénom</label>
-							<input class="form-control" type="text" id="user_first_name" name="user_first_name" placeholder="Prénom">
+							<input class="form-control" type="text" id="user_first_name" name="first_name" placeholder="Prénom">
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="user_last_name">Nom</label>
-							<input class="form-control" type="text" id="user_last_name" name="user_last_name" placeholder="Nom">
+							<input class="form-control" type="text" id="user_last_name" name="last_name" placeholder="Nom">
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="user_last_name">Age</label>
-							<input class="form-control" type="text" id="user_age" name="user_age" placeholder="Age">
+							<input class="form-control" type="text" id="user_age" name="age" placeholder="Age">
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="user_gender">Sexe</label>
-							<select id="user_gender" name="user_gender" class="form-control">
+							<select id="user_gender" name="gender" class="form-control">
 								<option value="M">M</option>
 								<option value="F">F</option>
 							</select>
 						</div>
 						<div class="modal-footer ">
-							<button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Mettre à jour</button>
+							<button type="button" id="confirm-update" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Mettre à jour</button>
 						</div>
 					</div>
 				</form>

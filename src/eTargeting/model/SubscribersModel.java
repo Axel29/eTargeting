@@ -172,7 +172,7 @@ public class SubscribersModel {
 	}
 
 	/**
-     * Inserts a new list into database.
+     * Inserts a new subscriber into database.
      * Uses values from current object
      */
 	public void insertSubscriber() {
@@ -219,6 +219,66 @@ public class SubscribersModel {
 	}
 	
 	/**
+     * Update a subscriber from database.
+     * Uses values from current object
+     */
+	public void updateSubscriber() {
+		// Adding every keys and their values into two lists if they have been sent.
+		ArrayList<String> keyList   = new ArrayList<String>();
+		ArrayList<String> valueList = new ArrayList<String>();
+		
+		if (this.getEmail() != null && !"".equals(this.getEmail())) {
+			keyList.add("email");
+			valueList.add(this.getEmail());
+		}
+		if (this.getFirstName() != null && !"".equals(this.getFirstName())) {
+			keyList.add("first_name");
+			valueList.add(this.getFirstName());
+		}
+		if (this.getLastName() != null && !"".equals(this.getLastName())) {
+			keyList.add("last_name");
+			valueList.add(this.getLastName());
+		}
+		if (this.getAge() != 0) {
+			keyList.add("age");
+			valueList.add(Integer.toString(this.getAge()));
+		}
+		if (this.getGender() != null && !"".equals(this.getGender())) {
+			keyList.add("gender");
+			valueList.add(this.getGender());
+		}
+		if (this.getOwnerId() != 0) {
+			keyList.add("owner");
+			valueList.add(Integer.toString(this.getOwnerId()));
+		}
+		
+		// Checking that the subscriber is really possessed by the user
+		SubscribersModel[] subscribers = this.selectSubscribers(this.getOwnerId());
+		boolean allowedRequest = false;
+		
+		for (int i = 0; i < subscribers.length; i++) {
+			if (subscribers[i].getId() == this.getOwnerId()){
+				allowedRequest = true;
+			}
+		}
+		
+		// Inserting values into database if some values have been sent
+		if (allowedRequest && !keyList.isEmpty() && keyList.contains("email") && !valueList.isEmpty()) {
+			String table    = "subscribers";
+			String[] keys   = new String[keyList.size()];
+			String[] values = new String[valueList.size()];
+			String[] where  = {"id = " + this.getId()};
+			
+			// Converting the ArrayList into String Array
+			keyList.toArray(keys);
+			valueList.toArray(values);
+			
+			Model model = new Model();
+			model.update(table, keys, values, where);
+		}
+	}
+	
+	/**
 	 * Delete subscriber from database, referenced by his ID
 	 * @param subscriberId Subscriber's ID to delete
 	 */
@@ -229,21 +289,15 @@ public class SubscribersModel {
 		
 		for (int i = 0; i < aIds.length; i++) {
 			int allowedId = 0;
-			
 			for (int j = 0; j < subscribers.length; j++) {
 				if (subscribers[j].getId() == aIds[i]){
 					allowedId = 1;
-					System.out.println("subscribers[" + j + "].getId() = " + subscribers[j].getId());
-					System.out.println("aIds[" + i + "] = "  + aIds[i]);
-					System.out.println("aIds[" + i + "] = allowed");
 				}
 			}
-			
 			allowedRequest[i] = allowedId;
 		}
 		
 		// Delete the subscribers if it is allowed
-		System.out.println("Arrays.binarySearch(allowedRequest, 0): " + Arrays.binarySearch(allowedRequest, 0));
 		if (Arrays.binarySearch(allowedRequest, 0) < 0) {
 			Model model = new Model();
 			model.delete("subscribers", aIds);

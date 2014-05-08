@@ -248,12 +248,14 @@ public class Model {
 				}				
 			}
 			
-			// Executing the INSERT request
+			// Bind every parameter
 			String request = "INSERT INTO " + table + " (" + keys.toString() + ") VALUES (" + values.toString() + ");";
 			preparedStatement = connection.prepareStatement(request);
 			for (int i = 0; i < aValues.length; i++) {
 				preparedStatement.setObject(i+1, StringEscapeUtils.escapeHtml4(aValues[i]));
 			}
+			
+			// Execute the INSERT query
 			preparedStatement.executeUpdate();
 			
 			
@@ -278,6 +280,50 @@ public class Model {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	
+	/**
+	 * Update an entry from database 
+     * 
+     * @param table Table name to update
+     * @param aKeys Array of string containing every field's name to insert
+     * @param aValues Array of string containing every field's values to insert
+     * @param aWhere Array of string containing every where clause
+     */
+	protected void update(String table, String[] aKeys, String[] aValues, String[] aWhere) {
+		try {						
+			// Prepare the request query
+			StringBuilder request = new StringBuilder();
+			request.append("UPDATE " + table + " SET ");
+			for (int i = 0; i < aKeys.length; i++) {
+				if (i+1 != aKeys.length) {
+					request.append(aKeys[i] + " = ?, ");
+				} else {
+					request.append(aKeys[i] + " = ?");
+				}
+			}
+			request.append(" WHERE " );
+			for (int i = 0; i < aWhere.length; i++) {
+				request.append(aWhere[i]);
+			}
+			
+			// Match every parameters
+			preparedStatement = connection.prepareStatement(request.toString());
+			for (int i = 0; i < aValues.length; i++) {
+				preparedStatement.setObject(i+1, StringEscapeUtils.escapeHtml4(aValues[i]));
+			}
+			//System.out.println("preparedStatement: " + preparedStatement);
+			
+			// Execute the query
+			preparedStatement.executeUpdate();
+			
+			// Closing the connection
+			this.closeConnection();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

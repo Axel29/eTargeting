@@ -39,10 +39,11 @@ public class Subscribers extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out   = response.getWriter();
+		PrintWriter out = response.getWriter();
+		UserModel user  = (UserModel)request.getAttribute("user");
 		// Getting form's values from AJAX request
-		UserModel user    = (UserModel)request.getAttribute("user");
 		String insertSubscriber = request.getParameter("insertSubscriber");
+		String updateSubscriber = request.getParameter("updateSubscriber");
 		String deleteSubscriber = request.getParameter("confirm-deletion");
 		String email      = request.getParameter("email");
 		String last_name  = request.getParameter("last_name");
@@ -58,7 +59,7 @@ public class Subscribers extends HttpServlet {
 			subscriberId = request.getParameter("subscriberId");
 		}
 		
-		// Inserting new subscriber
+		////// Insert new subscriber //////
 		if ("1".equals(insertSubscriber) && email != null) {
 			SubscribersModel subscribersModel = new SubscribersModel(0, first_name, last_name, email, age, gender, owner);
 			subscribersModel.insertSubscriber();
@@ -66,21 +67,41 @@ public class Subscribers extends HttpServlet {
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
 			out.println(this.getSubscriberListHtml(owner).toString());
-		} else if ("true".equals(deleteSubscriber) && !"".equals(subscriberId)) {
+		}
+		///// Edit subscriber //////
+		else if ("1".equals(updateSubscriber) && email != null && !"".equals(subscriberId)) {
+			SubscribersModel subscribersModel = new SubscribersModel(Integer.parseInt(subscriberId), first_name, last_name, email, age, gender, owner);
+			subscribersModel.updateSubscriber();
+			
+			response.setContentType("text/html;charset=UTF-8");
+			// Adding subscriber's list to the response
+			out.println(this.getSubscriberListHtml(owner).toString());
+		}
+		////// Delete subscriber //////
+		else if ("true".equals(deleteSubscriber) && !"".equals(subscriberId)) {
 			String[] splitIds                 = subscriberId.split(",");
 			int[] aIds                        = new int[splitIds.length];
 			SubscribersModel subscribersModel = new SubscribersModel();
 			
-			for (int i = 0; i < splitIds.length; i++) {
-				aIds[i] = Integer.parseInt(splitIds[i]);
+			try {
+				for (int i = 0; i < splitIds.length; i++) {
+					aIds[i] = Integer.parseInt(splitIds[i]);
+				}
+			} catch (NumberFormatException nbe) {
+				out.println("Erreur");
+			} catch (Exception e) {
+				out.println("Erreur");
 			}
 			
 			response.setContentType("text/html;charset=UTF-8");
 			if (subscribersModel.deleteSubscriber(aIds, owner) == 0) {
-				out.println("Une erreur s'est produite. Veuillez réessayer.");
+				out.println("Erreur");
+			} else {
+				out.println(this.getSubscriberListHtml(owner));
 			}
-			out.println(this.getSubscriberListHtml(owner));
-		} else {
+		}
+		////// Error /////
+		else {
 			response.setContentType("text/html;charset=UTF-8");
 			out.println("Erreur");
 		}
@@ -93,14 +114,14 @@ public class Subscribers extends HttpServlet {
 		StringBuilder html = new StringBuilder();
 		for (int i = 0; i < subscribers.length; i++) {
 			html.append("<tr>");
-				html.append("<td class=\"table_user_id\">" + subscribers[i].getId() + "</td>");
-				html.append("<td class=\"table_user_email\">" + subscribers[i].getEmail() + "</td>");
-				html.append("<td class=\"table_user_first_name\">" + subscribers[i].getFirstName() + "</td>");
-				html.append("<td class=\"table_user_last_name\">" + subscribers[i].getLastName() + "</td>");
-				html.append((subscribers[i].getAge() == 0) ? "<td class=\"table_user_age\">N/A</td>" : "<td class=\"table_user_age\">" + subscribers[i].getAge() + "</td>");
-				html.append("<td class=\"table_user_gender\">" + subscribers[i].getGender() + "</td>");
-				html.append("<td><p><button class=\"btn btn-primary btn-xs edit-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
-				html.append("<td><p><button class=\"btn btn-danger btn-xs delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+				html.append("<td class=\"col-md-1 table_user_id\">" + subscribers[i].getId() + "</td>");
+				html.append("<td class=\"col-md-4 table_user_email\">" + subscribers[i].getEmail() + "</td>");
+				html.append("<td class=\"col-md-2 table_user_first_name\">" + subscribers[i].getFirstName() + "</td>");
+				html.append("<td class=\"col-md-1 table_user_last_name\">" + subscribers[i].getLastName() + "</td>");
+				html.append((subscribers[i].getAge() == 0) ? "<td class=\"col-md-1 table_user_age\">N/A</td>" : "<td class=\"col-md-1 table_user_age\">" + subscribers[i].getAge() + "</td>");
+				html.append("<td class=\"col-md-1 table_user_gender\">" + subscribers[i].getGender() + "</td>");
+				html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+				html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 			html.append("</tr>");
 		}
 		return html;
