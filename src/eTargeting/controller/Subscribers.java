@@ -107,6 +107,11 @@ public class Subscribers extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Prepare HTML result for Ajax query
+	 * @param owner
+	 * @return html PrintWriter containing html result
+	 */
 	public StringBuilder getSubscriberListHtml(int owner) {
 		// Adding subscriber's list to the response
 		SubscribersModel subscribersModel = new SubscribersModel();
@@ -120,8 +125,8 @@ public class Subscribers extends HttpServlet {
 				html.append("<td class=\"col-md-1 table_user_last_name\">" + subscribers[i].getLastName() + "</td>");
 				html.append((subscribers[i].getAge() == 0) ? "<td class=\"col-md-1 table_user_age\">N/A</td>" : "<td class=\"col-md-1 table_user_age\">" + subscribers[i].getAge() + "</td>");
 				html.append("<td class=\"col-md-1 table_user_gender\">" + subscribers[i].getGender() + "</td>");
-				html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
-				html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+				html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+				html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 			html.append("</tr>");
 		}
 		return html;

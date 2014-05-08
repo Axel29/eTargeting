@@ -228,13 +228,10 @@ public class Model {
 			// Concatenating every keys into a string
 			StringBuilder keys = new StringBuilder();
 			for (int i=0; i<aKeys.length; i++){
-				// If the value matching to this key is not empty, we insert it, otherwise it's useless
-				if (aValues[i] != null && !aValues[i].isEmpty()) {
-					if (i+1 != aKeys.length) {
-						keys.append(aKeys[i] + ", ");
-					} else {
-						keys.append(aKeys[i]);
-					}
+				if (i+1 != aKeys.length) {
+					keys.append(aKeys[i] + ", ");
+				} else {
+					keys.append(aKeys[i]);
 				}
 			}
 			
@@ -255,6 +252,7 @@ public class Model {
 				preparedStatement.setObject(i+1, StringEscapeUtils.escapeHtml4(aValues[i]));
 			}
 			
+			System.out.println(preparedStatement);
 			// Execute the INSERT query
 			preparedStatement.executeUpdate();
 			

@@ -94,8 +94,8 @@
 										out.println("<td class=\"col-md-1 table_user_last_name\">" + subscriber.getLastName() + "</td>");
 										out.println("<td class=\"col-md-1 table_user_age\">" + age + "</td>");
 										out.println("<td class=\"col-md-1 table_user_gender\">" + subscriber.getGender() + "</td>");
-										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
-										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+										out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 									out.println("</tr>");
 									i++;
 								}
@@ -153,16 +153,16 @@
 	</div>
     
     <!-- Delete subscriber's form -->
-	<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+	<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
+					<h4 class="modal-title custom_align" id="Heading">Supprimer l'abonné</h4>
 				</div>
 				<div class="modal-body">
 					<div class="alert alert-warning">
-						<span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?
+						<span class="glyphicon glyphicon-warning-sign"></span> Etes-vous sûr de vouloir supprimer cet abonné?
 					</div>
 				</div>
 				<div class="modal-footer ">
