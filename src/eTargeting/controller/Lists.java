@@ -28,7 +28,7 @@ public class Lists extends HttpServlet {
 		UserModel user        = new UserModel();
 		ListsModel listsModel = new ListsModel();
 
-		// Set number of page and current page into request
+		// Set number of page, current page, previous and next page's links into request
 		int page = 1;
 		if (request.getParameter("page") != null) {
 			try {

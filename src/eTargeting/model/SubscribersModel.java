@@ -83,6 +83,21 @@ public class SubscribersModel {
 	private int ownerId;
 	
 	/**
+	 * Current page
+	 * 
+	 * @see ListsModel#ListsModel(int, String, String, int)
+	 * @see ListsModel#getPage()
+	 */
+	private int page;
+	
+	/**
+	 * Number of list to display per page
+	 * 
+	 * @see ListsModel#getLimit()
+	 */
+	private static double limit = 10;
+	
+	/**
      * SubscribersModel default constructor.
      * <p>
      * Set default values to the object with empty values except for the ID which is set to "0"
@@ -121,6 +136,173 @@ public class SubscribersModel {
 		this.gender    = gender;
 		this.ownerId   = ownerId;
 	}
+
+	/**
+	 * Returns subscriber's ID.
+	 * 
+	 * @return subscriber's ID. 
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+     * @param id Subscriber's ID to set
+     */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * Returns subscriber's first name. If null, returns "N/A".
+	 * 
+	 * @return subscriber's first name. 
+	 */
+	public String getFirstName() {
+		return (firstName == null) ? "N/A" : firstName;
+	}
+
+	/**
+     * @param id Subscriber's first name to set
+     */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	/**
+	 * Returns subscriber's last name. If null, returns "N/A".
+	 * 
+	 * @return subscriber's last name. 
+	 */
+	public String getLastName() {
+		return (lastName == null) ? "N/A" : lastName;
+	}
+
+	/**
+     * @param id Subscriber's last name to set
+     */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	/**
+	 * Returns subscriber's email.
+	 * 
+	 * @return subscriber's email. 
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+     * @param id Subscriber's email to set
+     */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * Returns subscriber's age.
+	 * 
+	 * @return subscriber's age. 
+	 */
+	public int getAge() {
+		return age;
+	}
+
+	/**
+     * @param id Subscriber's age to set
+     */
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	/**
+	 * Returns subscriber's gender. If null, returns "N/A".
+	 * 
+	 * @return subscriber's gender. 
+	 */
+	public String getGender() {
+		return (gender == null) ? "N/A" : gender;
+	}
+
+	/**
+     * @param id Subscriber's gender to set
+     */
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	/**
+	 * Returns subscriber's owner ID.
+	 * 
+	 * @return subscriber's owner ID. 
+	 */
+	public int getOwnerId() {
+		return ownerId;
+	}
+
+	/**
+     * @param id Subscriber's owner ID to set
+     */
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	/**
+	 * @return the page
+	 */
+	public int getPage() {
+		if (page == 0) {
+			return 1;
+		} else {
+			return page;
+		}		
+	}
+
+	/**
+	 * @param page the page to set
+	 */
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	/**
+	 * Number of lists to display per page
+	 * @return the limit
+	 */
+	public static double getLimit() {
+		return limit;
+	}
+
+	/**
+	 * @param limit the limit to set
+	 */
+	public static void setLimit(double limit) {
+		SubscribersModel.limit = limit;
+	}
+	
+	/**
+	 * Returns the number of subscribers belonging to the current user
+	 *
+	 * @param ownerId Subscriber's owner's ID
+	 * @return totalSubscribers Number of subscribers
+	 */
+	public int numberOfSubscribers(int ownerId) {
+		Model model      = new Model();
+		String table     = "subscribers S";
+		String[] where = {"S.owner = \"" + ownerId + "\""};
+		ResultSet count  = model.select(table, new String[] {"COUNT(*) as totalLists"}, where, new String[0], new String[0], new double[2]);
+		int totalSubscribers   = 0;
+		try {
+			while (count.next()) {
+				totalSubscribers    = count.getInt("totalLists");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return totalSubscribers;
+	}
 	
 	/**
 	 * Returns array of SubscribersModel filled with SubscribersModel's objects
@@ -128,12 +310,24 @@ public class SubscribersModel {
      * @param ownerId Subscriber's owner's ID 
      * @return SubscribersModel array.
      */
-	public SubscribersModel[] selectSubscribers(int ownerId) {
+	public SubscribersModel[] selectSubscribers(int ownerId, double page) {
 		try {
 			String table     = "subscribers S";
 			String[] where   = {"S.owner = \"" + ownerId + "\""};
 			Model model      = new Model();
-			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[2]);
+			ResultSet result;
+			if (page > 0) {
+				int rowCount = this.numberOfSubscribers(ownerId);
+				
+				double numberOfPages = Math.ceil(rowCount/SubscribersModel.limit);			 
+				if (page > numberOfPages) {
+					page = numberOfPages;
+				}
+				double firstEntry = (page - 1) * SubscribersModel.limit;
+				result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {firstEntry, SubscribersModel.limit});
+			} else {
+				result = model.select(table, new String[0], where, new String[0], new String[0], new double[2]);
+			}
 			
 			// Getting the resultSet's size:
 			// We place the cursor to the last element
@@ -253,7 +447,7 @@ public class SubscribersModel {
 		}
 		
 		// Checking that the subscriber is really possessed by the user
-		SubscribersModel[] subscribers = this.selectSubscribers(this.getOwnerId());
+		SubscribersModel[] subscribers = this.selectSubscribers(this.getOwnerId(), 0);
 		boolean allowedRequest = false;
 		
 		for (int i = 0; i < subscribers.length; i++) {
@@ -284,7 +478,7 @@ public class SubscribersModel {
 	 */
 	public int deleteSubscriber(int[] aIds, int owner) {
 		// Checking that the subscriber is really possessed by the user
-		SubscribersModel[] subscribers = this.selectSubscribers(owner);
+		SubscribersModel[] subscribers = this.selectSubscribers(owner, 0);
 		int[] allowedRequest = new int[aIds.length];
 		
 		for (int i = 0; i < aIds.length; i++) {
@@ -305,117 +499,5 @@ public class SubscribersModel {
 		} else {
 			return 0;
 		}
-	}
-
-	/**
-	 * Returns subscriber's ID.
-	 * 
-	 * @return subscriber's ID. 
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-     * @param id Subscriber's ID to set
-     */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/**
-	 * Returns subscriber's first name. If null, returns "N/A".
-	 * 
-	 * @return subscriber's first name. 
-	 */
-	public String getFirstName() {
-		return (firstName == null) ? "N/A" : firstName;
-	}
-
-	/**
-     * @param id Subscriber's first name to set
-     */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	/**
-	 * Returns subscriber's last name. If null, returns "N/A".
-	 * 
-	 * @return subscriber's last name. 
-	 */
-	public String getLastName() {
-		return (lastName == null) ? "N/A" : lastName;
-	}
-
-	/**
-     * @param id Subscriber's last name to set
-     */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	/**
-	 * Returns subscriber's email.
-	 * 
-	 * @return subscriber's email. 
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-     * @param id Subscriber's email to set
-     */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * Returns subscriber's age.
-	 * 
-	 * @return subscriber's age. 
-	 */
-	public int getAge() {
-		return age;
-	}
-
-	/**
-     * @param id Subscriber's age to set
-     */
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	/**
-	 * Returns subscriber's gender. If null, returns "N/A".
-	 * 
-	 * @return subscriber's gender. 
-	 */
-	public String getGender() {
-		return (gender == null) ? "N/A" : gender;
-	}
-
-	/**
-     * @param id Subscriber's gender to set
-     */
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	/**
-	 * Returns subscriber's owner ID.
-	 * 
-	 * @return subscriber's owner ID. 
-	 */
-	public int getOwnerId() {
-		return ownerId;
-	}
-
-	/**
-     * @param id Subscriber's owner ID to set
-     */
-	public void setOwnerId(int ownerId) {
-		this.ownerId = ownerId;
 	}
 }

@@ -2,11 +2,14 @@ package eTargeting.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import eTargeting.model.ListsModel;
 import eTargeting.model.SubscribersModel;
 import eTargeting.model.UserModel;
 
@@ -27,11 +30,29 @@ public class Subscribers extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserModel user = new UserModel();
 		SubscribersModel subscribersModel = new SubscribersModel();
-		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId());
-
+		// Set number of page, current page, previous and next page's links into request
+		int page = 1;
+		if (request.getParameter("page") != null) {
+			try {
+				page = Integer.parseInt(request.getParameter("page"));
+			} catch (NumberFormatException nfe) {}
+		}
+		int numberOfLists    = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
+		double numberOfPages = Math.ceil(numberOfLists)/ListsModel.getLimit();
+		String nextPage      = (page != numberOfPages) ? "Subscribers?page=" + Integer.toString(page + 1) : "#";
+		String prevPage      = (page != 1) ? "Subscribers?page=" + Integer.toString(page - 1) : "#";
+		
+		request.setAttribute("numberOfPages", (int)numberOfPages);
+		request.setAttribute("currentPage", page);
+		request.setAttribute("prevPage", prevPage);
+		request.setAttribute("nextPage", nextPage);
+		
+		// Set every subscriber object into request
+		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), page);
 		for (int i = 0; i < subscribers.length; i++) {
 			request.setAttribute("subscriber-" + i, subscribers[i]);
 		}
+
 		this.getServletContext().getRequestDispatcher("/WEB-INF/subscribers.jsp").forward(request, response);
 	}
 
@@ -51,6 +72,15 @@ public class Subscribers extends HttpServlet {
 		String gender     = request.getParameter("gender");
 		int owner         = user.getUserId();
 		int age           = 0;
+		int page          = 0;
+		
+		if (request.getParameter("page") != null) {
+			try {
+				page = Integer.parseInt(request.getParameter("page"));
+			} catch (NumberFormatException nfe) {
+				out.println("Erreur");
+			}
+		}
 		if ( request.getParameter("age") != null && !"".equals(request.getParameter("age")) ) {
 			age = Integer.parseInt(request.getParameter("age"));
 		}
@@ -66,7 +96,7 @@ public class Subscribers extends HttpServlet {
 			
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
-			out.println(this.getSubscriberListHtml(owner).toString());
+			out.println(this.getSubscriberListHtml(owner, page).toString());
 		}
 		///// Edit subscriber //////
 		else if ("1".equals(updateSubscriber) && email != null && !"".equals(subscriberId)) {
@@ -75,7 +105,7 @@ public class Subscribers extends HttpServlet {
 			
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
-			out.println(this.getSubscriberListHtml(owner).toString());
+			out.println(this.getSubscriberListHtml(owner, page).toString());
 		}
 		////// Delete subscriber //////
 		else if ("true".equals(deleteSubscriber) && !"".equals(subscriberId)) {
@@ -97,7 +127,7 @@ public class Subscribers extends HttpServlet {
 			if (subscribersModel.deleteSubscriber(aIds, owner) == 0) {
 				out.println("Erreur");
 			} else {
-				out.println(this.getSubscriberListHtml(owner));
+				out.println(this.getSubscriberListHtml(owner, page));
 			}
 		}
 		////// Error /////
@@ -112,10 +142,10 @@ public class Subscribers extends HttpServlet {
 	 * @param owner
 	 * @return html PrintWriter containing html result
 	 */
-	public StringBuilder getSubscriberListHtml(int owner) {
+	public StringBuilder getSubscriberListHtml(int owner, int page) {
 		// Adding subscriber's list to the response
 		SubscribersModel subscribersModel = new SubscribersModel();
-		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(owner);
+		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(owner, page);
 		StringBuilder html = new StringBuilder();
 		for (int i = 0; i < subscribers.length; i++) {
 			html.append("<tr>");

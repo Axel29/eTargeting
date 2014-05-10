@@ -365,7 +365,7 @@ public class ListsModel {
 			
 			// Checking that the subscriber is really possessed by the user
 			SubscribersModel subscribersModel = new SubscribersModel();
-			SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(this.getOwner());
+			SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(this.getOwner(), 0);
 			boolean allowedRequest = false;
 			
 			for (int i = 0; i < subscribers.length; i++) {
@@ -427,7 +427,7 @@ public class ListsModel {
 	 */
 	private boolean checkSubscribersBelonging(int[] ids) {
 		SubscribersModel subscribersModel = new SubscribersModel();
-		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(this.getOwner());
+		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(this.getOwner(), 0);
 		
 		// Insert every subscribers belonging to the user into an int table
 		int[] userSubscribers = new int[subscribers.length];

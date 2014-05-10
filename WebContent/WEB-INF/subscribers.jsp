@@ -105,6 +105,25 @@
 					</div>
 				</div>
 			</div>
+			<!-- Pagination -->
+			<div class="row">
+				<div class="col-lg-12">
+					<%
+					int currentPage   = Integer.parseInt(request.getAttribute("currentPage").toString());
+					int numberOfPages = Integer.parseInt(request.getAttribute("numberOfPages").toString());
+					%>
+					<ul class="pagination">
+						<li class="<% out.print((currentPage == 1) ? "disabled" : ""); %>"><a href="<% out.print(request.getAttribute("prevPage")); %>">&laquo;</a></li>
+						<% for (int j = 1; j <= numberOfPages; j++) { %>
+							<%
+							String isActive = (currentPage == j) ? "active" : "" ;
+							%>
+							<li class="<% out.print(isActive); %>"><a href="Subscribers?page=<% out.print(j); %>"><% out.print(j); %> <span class="sr-only">(current)</span></a></li>
+						<% } %>
+						<li class="<% out.print((currentPage == numberOfPages) ? "disabled" : ""); %>"><a href="<% out.print(request.getAttribute("nextPage")); %>">&raquo;</a></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 	
