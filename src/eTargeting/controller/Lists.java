@@ -27,11 +27,30 @@ public class Lists extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserModel user        = new UserModel();
 		ListsModel listsModel = new ListsModel();
-		ListsModel[] lists    = listsModel.selectLists(user.getLoggedUser(request).getUserId());
 
+		// Set number of page and current page into request
+		int page = 1;
+		if (request.getParameter("page") != null) {
+			try {
+				page = Integer.parseInt(request.getParameter("page"));
+			} catch (NumberFormatException nfe) {}
+		}
+		int numberOfLists    = listsModel.numberOfLists(user.getLoggedUser(request).getUserId());
+		double numberOfPages = Math.ceil(numberOfLists)/ListsModel.getLimit();
+		String nextPage      = (page != numberOfPages) ? "Lists?page=" + Integer.toString(page + 1) : "#";
+		String prevPage      = (page != 1) ? "Lists?page=" + Integer.toString(page - 1) : "#";
+		
+		request.setAttribute("numberOfPages", (int)numberOfPages);
+		request.setAttribute("currentPage", page);
+		request.setAttribute("prevPage", prevPage);
+		request.setAttribute("nextPage", nextPage);
+		
+		// Set every list object into request
+		ListsModel[] lists    = listsModel.selectLists(user.getLoggedUser(request).getUserId(), page);
 		for (int i = 0; i < lists.length; i++) {
 			request.setAttribute("list-" + i, lists[i]);
 		}
+		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/lists.jsp").forward(request, response);
 	}
 
@@ -44,6 +63,15 @@ public class Lists extends HttpServlet {
 		String deleteList = request.getParameter("confirm-deletion");
 		String listId     = "";
 		int owner         = user.getUserId();
+		int page          = 0;
+		
+		if (request.getParameter("page") != null) {
+			try {
+				page = Integer.parseInt(request.getParameter("page"));
+			} catch (NumberFormatException nfe) {
+				out.println("Erreur");
+			}
+		}
 		
 		if ( request.getParameter("listId") != null && !"".equals(request.getParameter("listId")) ) {
 			listId = request.getParameter("listId");
@@ -63,7 +91,7 @@ public class Lists extends HttpServlet {
 			if (listModel.deleteList(aIds, owner) == 0) {
 				out.println("Erreur");
 			} else {
-				out.println(this.getListsListHtml(owner));
+				out.println(this.getListsListHtml(owner, page));
 			}
 		}
 	}
@@ -73,16 +101,16 @@ public class Lists extends HttpServlet {
 	 * @param owner
 	 * @return html PrintWriter containing html result
 	 */
-	public StringBuilder getListsListHtml(int owner) {
+	public StringBuilder getListsListHtml(int owner, int page) {
 		// Adding list's list to the response
 		ListsModel listsModel = new ListsModel();
-		ListsModel[] lists = listsModel.selectLists(owner);
+		ListsModel[] lists = listsModel.selectLists(owner, page);
 		StringBuilder html = new StringBuilder();
 		for (int i = 0; i < lists.length; i++) {
 			html.append("<tr>");
 			html.append("<td class=\"hidden table_list_id\">" + lists[i].getId() + "</td>");
 			html.append("<td class=\"col-md-10\">" + lists[i].getName() + "</td>");
-			html.append("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + lists[i].getId() + "\" class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
+			html.append("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + lists[i].getId() + "&page=" + page + "\" class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
 			html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 			html.append("</tr>");
 		}

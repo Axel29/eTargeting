@@ -189,7 +189,7 @@ public class UserModel {
 			String[] where   = {"U.id = \"" + userId + "\""};
 			
 			Model model      = new Model();
-			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
+			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {1,0});
 			
 			while (result.next()) {
 				user.setUserId(result.getInt("id"));
@@ -264,7 +264,7 @@ public class UserModel {
 			String[] where   = {"U.email = \"" + email + "\""};
 			
 			Model model      = new Model();
-			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
+			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {1,0});
 			
 			if (result.next()) {
 				model.closeConnection();
@@ -291,7 +291,7 @@ public class UserModel {
 			String[] where   = {"U.email = \"" + email + "\"", "U.password = \"" + password + "\""};
 			
 			Model model      = new Model();
-			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
+			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {1,0});
 			
 			while (result.next()) {
 				user.setUserId(result.getInt("id"));

@@ -80,7 +80,7 @@ public class EditList extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		
-		if (request.getParameter("name") != null) {
+		if (request.getParameter("name") != null) {			
 			String ids = null;
 			if (request.getParameter("subscriberIds") != null) {
 				ids = request.getParameter("subscriberIds");
@@ -97,8 +97,7 @@ public class EditList extends HttpServlet {
 				}
 			}
 			
-			System.out.println("ids: " + ids);
-			ListsModel listsModel = new ListsModel(id, request.getParameter("name"), ids, user.getUserId());
+			ListsModel listsModel = new ListsModel(id, request.getParameter("name"), ids, user.getUserId(), 1);
 			listsModel.updateList();
 			
 			response.setContentType("text/html;charset=UTF-8");

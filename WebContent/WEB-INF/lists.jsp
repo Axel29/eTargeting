@@ -34,7 +34,7 @@
 			if (request.getAttribute("list-" + 0) != null) {
 			%>
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-lg-12">
 						<div class="table-responsive">
 							<table id="subscribers-list" class="table table-striped table-bordered table-hover">
 								<thead>
@@ -65,6 +65,26 @@
 					</div>
 				</div>
 			<% } %>
+		
+			<!-- Pagination -->
+			<div class="row">
+				<div class="col-lg-12">
+					<%
+					int currentPage   = Integer.parseInt(request.getAttribute("currentPage").toString());
+					int numberOfPages = Integer.parseInt(request.getAttribute("numberOfPages").toString());
+					%>
+					<ul class="pagination">
+						<li class="<% out.print((currentPage == 1) ? "disabled" : ""); %>"><a href="<% out.print(request.getAttribute("prevPage")); %>">&laquo;</a></li>
+						<% for (int i = 1; i <= numberOfPages; i++) { %>
+							<%
+							String isActive = (currentPage == i) ? "active" : "" ;
+							%>
+							<li class="<% out.print(isActive); %>"><a href="Lists?page=<% out.print(i); %>"><% out.print(i); %> <span class="sr-only">(current)</span></a></li>
+						<% } %>
+						<li class="<% out.print((currentPage == numberOfPages) ? "disabled" : ""); %>"><a href="<% out.print(request.getAttribute("nextPage")); %>">&raquo;</a></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 		
 		<!-- Delete subscriber's form -->

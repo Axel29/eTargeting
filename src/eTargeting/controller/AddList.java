@@ -56,7 +56,7 @@ public class AddList extends HttpServlet {
 		if(request.getParameter("name") != null){
 			UserModel user = new UserModel();
 			// Insert list into database
-			ListsModel list = new ListsModel(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), subscribersIds.toString(), user.getLoggedUser(request).getUserId());
+			ListsModel list = new ListsModel(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), subscribersIds.toString(), user.getLoggedUser(request).getUserId(), 1);
 			list.insertList();
 		}
 		response.sendRedirect("/eTargeting/Lists");

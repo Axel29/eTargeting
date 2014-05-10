@@ -143,7 +143,7 @@ public class Model {
      * @param limit Number of maximum results to get
      * @return ResultSet containing query's result.
      */
-	protected ResultSet select(String table, String[] aFields, String[] aWhere, String[] aJoin, String[] aOrder, int limit) {
+	protected ResultSet select(String table, String[] aFields, String[] aWhere, String[] aJoin, String[] aOrder, double[] limit) {
 		try {
 			String query = "SELECT ";
 			// Fields to select
@@ -200,11 +200,14 @@ public class Model {
 			}
 			
 			// Limit clause
-			query += limit != 0 ? " LIMIT " + limit : "";
+			if ( ((int)limit[0] > 0 && (int)limit[1] > 0) || ((int)limit[0] == 0 && (int)limit[1] > 0) ) {
+				query += " LIMIT " + (int)limit[0] + ", " + (int)limit[1];
+			} else if ((int)limit[0] > 0 && (int)limit [1] <= 0) {
+				query += " LIMIT " + (int)limit[0];
+			}
 			
 			query += ";";
-			
-			//System.out.println("SELECT query: " + query);
+
 			resultSet = statement.executeQuery(query);
 			return resultSet;
 		} catch (SQLException se) {

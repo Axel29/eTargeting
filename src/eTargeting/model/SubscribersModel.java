@@ -133,7 +133,7 @@ public class SubscribersModel {
 			String table     = "subscribers S";
 			String[] where   = {"S.owner = \"" + ownerId + "\""};
 			Model model      = new Model();
-			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 0);
+			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[2]);
 			
 			// Getting the resultSet's size:
 			// We place the cursor to the last element

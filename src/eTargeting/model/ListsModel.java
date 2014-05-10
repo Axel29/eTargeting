@@ -14,6 +14,7 @@ import java.util.Arrays;
  * <li>A name.</li>
  * <li>A list of subscribers comma-separated.</li>
  * <li>The ID of the list's owner.</li>
+ * <li>The current page number</li>
  * </ul>
  * </p>
  * 
@@ -56,6 +57,21 @@ public class ListsModel {
 	private int owner;
 	
 	/**
+	 * Current page
+	 * 
+	 * @see ListsModel#ListsModel(int, String, String, int)
+	 * @see ListsModel#getPage()
+	 */
+	private int page;
+	
+	/**
+	 * Number of list to display per page
+	 * 
+	 * @see ListsModel#getLimit()
+	 */
+	private static double limit = 10;
+	
+	/**
      * ListsModel default constructor.
      * <p>
      * Set default values to the object with empty values except for the ID which is set to "0"
@@ -78,17 +94,19 @@ public class ListsModel {
      * @param name List's name.
      * @param subscribers Subscribers ids belonging to that list
      * @param owner List's owner ID
+     * @param page Current page
      * 
      * @see ListsModel#id
      * @see ListsModel#name
      * @see ListsModel#ubscribers
      * @see ListsModel#owner
      */
-	public ListsModel(int id, String name, String subscribers, int owner){
+	public ListsModel(int id, String name, String subscribers, int owner, int page){
 		this.id            = id;
 		this.name          = name;
 		this.subscriberIds = subscribers;
 		this.owner         = owner;
+		this.setPage(page); 
 	}
 	
 	/**
@@ -156,17 +174,83 @@ public class ListsModel {
 	}
 
 	/**
+	 * @return the page
+	 */
+	public int getPage() {
+		if (page == 0) {
+			return 1;
+		} else {
+			return page;
+		}		
+	}
+
+	/**
+	 * @param page the page to set
+	 */
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	/**
+	 * Number of lists to display per page
+	 * @return the limit
+	 */
+	public static double getLimit() {
+		return limit;
+	}
+
+	/**
+	 * @param limit the limit to set
+	 */
+	public static void setLimit(double limit) {
+		ListsModel.limit = limit;
+	}
+	
+	/**
+	 * Returns the number of lists belonging to the current user
+	 *
+	 * @param ownerId Lists' owner's ID
+	 * @return totalLists Number of lists
+	 */
+	public int numberOfLists(int ownerId) {
+		Model model      = new Model();
+		String[] where = {"L.owner = \"" + ownerId + "\""};
+		ResultSet count  = model.select("lists L", new String[] {"COUNT(*) as totalLists"}, where, new String[0], new String[0], new double[2]);
+		int totalLists   = 0;
+		try {
+			while (count.next()) {
+				totalLists    = count.getInt("totalLists");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return totalLists;
+	}
+
+	/**
 	 * Returns array of ListsModel filled with ListsModel's objects
      * 
-     * @param ownerId List's owner's ID 
+     * @param ownerId Lists' owner's ID 
      * @return ListsModel array.
      */
-	public ListsModel[] selectLists(int ownerId) {
+	public ListsModel[] selectLists(int ownerId, double page) {
 		try {
 			String table     = "lists L";
 			String[] where   = {"L.owner = \"" + ownerId + "\""};
 			Model model      = new Model();
-			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 0);
+			ResultSet result;
+			if (page > 0) {
+				int rowCount = this.numberOfLists(ownerId);
+				
+				double numberOfPages = Math.ceil(rowCount/ListsModel.limit);			 
+				if (page > numberOfPages) {
+					page = numberOfPages;
+				}
+				double firstEntry = (page - 1) * ListsModel.limit;
+				result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {firstEntry, ListsModel.limit});
+			} else {
+				result = model.select(table, new String[0], where, new String[0], new String[0], new double[2]);
+			}
 			
 			// Getting the resultSet's size:
 			// We place the cursor to the last element
@@ -180,7 +264,7 @@ public class ListsModel {
 			try {
 				int i = 0;
 				while (result.next()) {
-					lists[i] = new ListsModel(result.getInt("id"), result.getString("name"), result.getString("subscriber_ids"), result.getInt("owner"));
+					lists[i] = new ListsModel(result.getInt("id"), result.getString("name"), result.getString("subscriber_ids"), result.getInt("owner"), 1);
 					i++;
 				}
 				model.closeConnection();
@@ -199,7 +283,7 @@ public class ListsModel {
 			String table     = "lists L";
 			String[] where   = {"L.owner = \"" + owner + "\"", "L.id = " + id};
 			Model model      = new Model();
-			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], 1);
+			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {1,0});
 			
 			try {
 				while (result.next()) {
@@ -256,7 +340,7 @@ public class ListsModel {
      */
 	public void updateList() {
 		// Check that the list belongs to that user
-		ListsModel[] lists = this.selectLists(this.getOwner());
+		ListsModel[] lists = this.selectLists(this.getOwner(), 0);
 		boolean allowedList = false;
 		for (ListsModel list : lists) {
 			if (list.getId() == this.getId()) {
@@ -313,7 +397,7 @@ public class ListsModel {
 	 */
 	public int deleteList(int[] aIds, int owner) {
 		// Checking that the list is really possessed by the user
-		ListsModel[] lists   = this.selectLists(owner);
+		ListsModel[] lists   = this.selectLists(owner, 0);
 		int[] allowedRequest = new int[aIds.length];
 		
 		for (int i = 0; i < aIds.length; i++) {
