@@ -92,8 +92,7 @@ public class EditList extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		
+		PrintWriter out = response.getWriter();		
 		if (request.getParameter("name") != null) {			
 			String ids = null;
 			if (request.getParameter("subscriberIds") != null) {

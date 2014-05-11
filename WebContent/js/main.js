@@ -208,7 +208,7 @@ jQuery(document).ready(function($){
 		});
 	}
 	// Push every checkbox checked or remove them from the array on change
-	$("body.editList").on('change', '#subscribers-list input[type=checkbox]', function(e) {
+	$("body.editList, body.addList").on('change', '#subscribers-list input[type=checkbox]', function(e) {
 		var value = e.target.value;
 		if ($(e.target).is(":checked") && $(e.target).attr("id") != "checkall" ) {
 			subscriberIds.push(value);
@@ -253,7 +253,30 @@ jQuery(document).ready(function($){
 			} else {
 				$('.subscribers-list').html(data['list']);
 				$('.pagination').html(data['pagination']);
-				window.history.pushState(data, "Editer la liste " + listId, "EditList?id=" + listId + "&page=" + page);
+				window.history.pushState(data, "eTargeting - Editer la liste " + listId, "EditList?id=" + listId + "&page=" + page);
+			}
+		});
+		return false;
+	});
+	$('body.addList').on('click', '.page-link', function(e){
+		var page   = $(this).text();
+		// Prevent the form from reloading / changing the page
+		e.preventDefault();
+		// Insert new subscriber into database and refresh table's content
+		$.ajax({
+			url:      "ListsAjax",
+			type:     "POST",
+			dataType: "json",
+			data:     "page=" + page
+		})
+		.done(function(data) {
+			// Replace table's body with new values if there was no error
+			if (data['msg'] != "OK") {
+				$('.alert-error').css('visibility','visible').hide().fadeIn().removeClass('hidden');
+			} else {
+				$('.subscribers-list').html(data['list']);
+				$('.pagination').html(data['pagination']);
+				window.history.pushState(data, "eTargeting - Ajouter une liste", "AddList?page=" + page);
 			}
 		});
 		return false;
@@ -281,6 +304,36 @@ jQuery(document).ready(function($){
 				|| data.slice(0, data.indexOf("\r")) == "Erreur" 
 				|| data.slice(0, data.indexOf("\n")) == "Erreur" 
 				|| data.slice(0, data.indexOf("\r\r")) == "Erreur") {
+				$('.alert-error').css('visibility','visible').hide().fadeIn().removeClass('hidden');
+			} else {
+				$(location).attr('href', 'Lists');
+			}
+		})
+		.fail(function() {
+			$(location).attr('href', 'Lists');
+		});
+		return false;
+	});
+	$('body.addList').on('submit', '#add-list', function(e){
+		// Disable every checkbox to lighten form params
+		$('.checkthis').each(function(){
+			$(this).attr("disabled", "disabled");
+		});
+		
+		var form     = $('#add-list');
+		// Add subscriber ids checked in the form
+		var inputIds = $("<input>").attr("type", "hidden").attr("name", "subscriberIds").val(subscriberIds.toString());
+		form.append($(inputIds));
+		// Prevent the form from reloading / changing the page
+		e.preventDefault();
+		// Insert new subscriber into database and refresh table's content
+		$.ajax({
+			url:      form.attr('action'),
+			type:     form.attr('method'),
+			data:     form.serialize()
+		})
+		.done(function(data) {
+			if (data['msg'] != "OK") {
 				$('.alert-error').css('visibility','visible').hide().fadeIn().removeClass('hidden');
 			} else {
 				$(location).attr('href', 'Lists');

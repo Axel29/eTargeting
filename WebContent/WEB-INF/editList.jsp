@@ -69,7 +69,7 @@
 											<td class="col-md-4"><input type="text" name="email" class="input-styleless" value="<% out.print(subscriber.getEmail()); %>" disabled="disabled" /></td>
 											<td class="col-md-2"><input type="text" name="first_name" class="input-styleless" value="<% out.print(subscriber.getFirstName()); %>" disabled="disabled" /></td>
 											<td class="col-md-2"><input type="text" name="last_name" class="input-styleless" value="<% out.print(subscriber.getLastName()); %>" disabled="disabled" /></td>
-											<td class="col-md-1"><input type="text" name="age" class="input-styleless" value="<% out.print(subscriber.getAge()); %>" disabled="disabled" /></td>
+											<td class="col-md-1"><input type="text" name="age" class="input-styleless" value="<% out.print(age); %>" disabled="disabled" /></td>
 											<td class="col-md-2"><input type="text" name="email" class="input-styleless" value="<% out.print(subscriber.getGender()); %>" disabled="disabled" /></td>
 										</tr>
 										<%

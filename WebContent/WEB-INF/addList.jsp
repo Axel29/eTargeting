@@ -21,8 +21,7 @@
 					<h1>Ajout d'une liste</h1>
 				</div>
 			</div>
-	
-			<form action="AddList" method="POST" class="form-horizontal">
+			<form action="AddList" method="POST" id="add-list" name="add-list" class="form-horizontal">
 				<div class="row">
 					<div class="col-lg-12">
 						<fieldset>
@@ -32,12 +31,6 @@
 								<label class="control-label" for="name">Nom</label>
 								<div class="controls">
 									<input id="name" name="name" type="text" class="input-xlarge">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="add"></label>
-								<div class="controls">
-									<button id="add" name="add" class="btn btn-primary" type="submit">Créer</button>
 								</div>
 							</div>
 						</fieldset>
@@ -52,7 +45,7 @@
 								<thead>
 									<tr>
 										<th data-sorter="false"><input type="checkbox" id="checkall" /></th>
-										<th>#</th>
+										<th class="hidden">#</th>
 										<th>Email</th>
 										<th>Prénom</th>
 										<th>Nom</th>
@@ -66,15 +59,16 @@
 									while(request.getAttribute("subscriber-" + i) != null) {
 										SubscribersModel subscriber = (SubscribersModel)request.getAttribute("subscriber-" + i);
 										String age = (subscriber.getAge() == 0) ? "N/A" : Integer.toString(subscriber.getAge());
-										out.println("<tr>");
-											out.println("<td class=\"col-md-1\"><input type=\"checkbox\" name=\"subscribersChecked[]\" value=\"" + subscriber.getId() + "\" class=\"checkthis\" /></td>");
-											out.println("<td class=\"col-md-1 table_user_id\">" + subscriber.getId() + "</td>");
-											out.println("<td class=\"col-md-4 table_user_email\">" + subscriber.getEmail() + "</td>");
-											out.println("<td class=\"col-md-2 table_user_first_name\">" + subscriber.getFirstName() + "</td>");
-											out.println("<td class=\"col-md-2 table_user_last_name\">" + subscriber.getLastName() + "</td>");
-											out.println("<td class=\"col-md-1 table_user_age\">" + age + "</td>");
-											out.println("<td class=\"col-md-1 table_user_gender\">" + subscriber.getGender() + "</td>");
-										out.println("</tr>");
+										%>
+										<tr>
+											<td class="col-md-1"><input type="checkbox" name="subscribersChecked[]" value="<% out.print(subscriber.getId()); %>" class="checkthis" /></td>
+											<td class="col-md-4"><input type="text" name="email" class="input-styleless" value="<% out.print(subscriber.getEmail()); %>" disabled="disabled" /></td>
+											<td class="col-md-2"><input type="text" name="first_name" class="input-styleless" value="<% out.print(subscriber.getFirstName()); %>" disabled="disabled" /></td>
+											<td class="col-md-2"><input type="text" name="last_name" class="input-styleless" value="<% out.print(subscriber.getLastName()); %>" disabled="disabled" /></td>
+											<td class="col-md-1"><input type="text" name="age" class="input-styleless" value="<% out.print(age); %>" disabled="disabled" /></td>
+											<td class="col-md-2"><input type="text" name="email" class="input-styleless" value="<% out.print(subscriber.getGender()); %>" disabled="disabled" /></td>
+										</tr>
+										<%
 										i++;
 									}
 									%>
@@ -83,6 +77,38 @@
 						</div>
 					</div>
 				</div>
+				<!-- Pagination -->
+				<div class="row">
+					<div class="col-lg-12">
+						<%
+						int currentPage   = Integer.parseInt(request.getAttribute("currentPage").toString());
+						int numberOfPages = Integer.parseInt(request.getAttribute("numberOfPages").toString());
+						%>
+						<ul class="pagination pull-left">
+							<li class="<% out.print((currentPage == 1) ? "disabled" : ""); %>">
+								<a href="<% out.print(request.getAttribute("prevPage")); %>">&laquo;</a>
+							</li>
+							<% for (int j = 1; j <= numberOfPages; j++) { %>
+								<%
+								String isActive = (currentPage == j) ? "active" : "" ;
+								%>
+								<li class="<% out.print(isActive); %>">
+									<a href="AddList?page=<% out.print(j); %>" class="page-link"><% out.print(j); %></a>
+								</li>
+							<% } %>
+							<li class="<% out.print((currentPage == numberOfPages) ? "disabled" : ""); %>">
+								<a href="<% out.print(request.getAttribute("nextPage")); %>">&raquo;</a>
+							</li>
+						</ul>
+						<div class="control-group pull-right create-button">
+							<label class="control-label" for="add"></label>
+							<div class="controls">
+								<button id="add" name="add" class="btn btn-primary" type="submit">Créer</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End of pagination -->
 			</form>
 	    </div>
 	</div>

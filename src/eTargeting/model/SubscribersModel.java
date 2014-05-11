@@ -286,6 +286,7 @@ public class SubscribersModel {
 	 * Returns the number of subscribers belonging to the current user
 	 *
 	 * @param ownerId Subscriber's owner's ID
+	 * @param page Page of subscribers to get
 	 * @return totalSubscribers Number of subscribers
 	 */
 	public int numberOfSubscribers(int ownerId) {
