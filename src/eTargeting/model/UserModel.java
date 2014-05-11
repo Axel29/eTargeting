@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -371,10 +374,38 @@ public class UserModel {
      * Uses values from current object
      */
 	public int insertUser(){
-		String table    = "users";
-		String keys[]   = {"email", "first_name", "last_name"};
-		String values[] = {this.getEmail(), this.getFirstName(), this.getLastName()};
-		Model model = new Model();
-		return model.insert(table, keys, values);
+		// Adding every keys and their values into two lists if they have been sent.
+		ArrayList<String> keyList   = new ArrayList<String>();
+		ArrayList<String> valueList = new ArrayList<String>();		
+		if (this.getEmail() != null && !"".equals(this.getEmail())) {
+			keyList.add("email");
+			valueList.add(this.getEmail());
+		}		
+		if (this.getPassword() != null && !"".equals(this.getPassword())) {
+			keyList.add("password");
+			valueList.add(this.getPassword());
+		}
+		if (this.getFirstName() != null && !"".equals(this.getFirstName())) {
+			keyList.add("first_name");
+			valueList.add(this.getFirstName());
+		}
+		if (this.getLastName() != null && !"".equals(this.getLastName())) {
+			keyList.add("last_name");
+			valueList.add(this.getLastName());
+		}
+		
+		// Inserting values into database if some values have been sent
+		if (!keyList.isEmpty() && keyList.contains("email") && !valueList.isEmpty()) {
+			String table    = "users";
+			String[] keys   = new String[keyList.size()];
+			String[] values = new String[valueList.size()];
+			// Converting the ArrayList into String Array
+			keyList.toArray(keys);
+			valueList.toArray(values);
+			
+			Model model = new Model();
+			return model.insert(table, keys, values);
+		}
+		return 0;
 	}
 }
