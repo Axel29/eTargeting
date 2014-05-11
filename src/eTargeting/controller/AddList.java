@@ -29,7 +29,7 @@ public class AddList extends HttpServlet {
 		// Set subscriber's list to the request so that we can display it
 		UserModel user                    = new UserModel();
 		SubscribersModel subscribersModel = new SubscribersModel();
-		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId());
+		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), 1);
 
 		for (int i = 0; i < subscribers.length; i++) {
 			request.setAttribute("subscriber-" + i, subscribers[i]);

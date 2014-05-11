@@ -8,7 +8,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>eTargeting - Editer la liste <% out.println(list.getId()); %></title>
+	<title>eTargeting - Editer la liste <% out.print(list.getId()); %></title>
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/sb-admin.css" rel="stylesheet">
 	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
@@ -21,18 +21,18 @@
 	
 			<div class="row">
 				<div class="col-lg-12">
-					<h1>Editer la liste <% out.println(list.getId()); %></h1>
+					<h1>Editer la liste <% out.print(list.getId()); %></h1>
 				</div>
 			</div>
 	
 			<form action="EditList" method="POST" id="edit-list" name="edit-list" class="form-horizontal">
-				<input type="hidden" name="id" value="<% out.print(list.getId()); %>" />
+				<input type="hidden" name="id" class="listId" value="<% out.print(list.getId()); %>" />
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="control-group">
 							<label class="control-label" for="name">Nom</label>
 							<div class="controls">
-								<input id="name" name="name" type="text" class="input-xlarge" value="<% out.println(list.getName()); %>">
+								<input id="name" name="name" type="text" class="input-xlarge" value="<% out.print(list.getName()); %>">
 							</div>
 						</div>
 					</div>
@@ -79,6 +79,31 @@
 								</tbody>
 							</table>
 						</div>
+					</div>
+				</div>
+				<!-- Pagination -->
+				<div class="row">
+					<div class="col-lg-12">
+						<%
+						int currentPage   = Integer.parseInt(request.getAttribute("currentPage").toString());
+						int numberOfPages = Integer.parseInt(request.getAttribute("numberOfPages").toString());
+						%>
+						<ul class="pagination">
+							<li class="<% out.print((currentPage == 1) ? "disabled" : ""); %>">
+								<a href="<% out.print(request.getAttribute("prevPage")); %>">&laquo;</a>
+							</li>
+							<% for (int j = 1; j <= numberOfPages; j++) { %>
+								<%
+								String isActive = (currentPage == j) ? "active" : "" ;
+								%>
+								<li class="<% out.print(isActive); %>">
+									<a href="EditList?id=<% out.print(list.getId()); %>&page=<% out.print(j); %>" class="page-link"><% out.print(j); %></a>
+								</li>
+							<% } %>
+							<li class="<% out.print((currentPage == numberOfPages) ? "disabled" : ""); %>">
+								<a href="<% out.print(request.getAttribute("nextPage")); %>">&raquo;</a>
+							</li>
+						</ul>
 					</div>
 				</div>
 				

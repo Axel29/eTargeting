@@ -207,7 +207,7 @@ public class Model {
 			}
 			
 			query += ";";
-
+			//System.out.println("query: " + query);
 			resultSet = statement.executeQuery(query);
 			return resultSet;
 		} catch (SQLException se) {

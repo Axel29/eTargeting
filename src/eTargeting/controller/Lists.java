@@ -27,7 +27,7 @@ public class Lists extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserModel user        = new UserModel();
 		ListsModel listsModel = new ListsModel();
-
+		
 		// Set number of page, current page, previous and next page's links into request
 		int page = 1;
 		if (request.getParameter("page") != null) {
@@ -36,10 +36,10 @@ public class Lists extends HttpServlet {
 			} catch (NumberFormatException nfe) {}
 		}
 		int numberOfLists    = listsModel.numberOfLists(user.getLoggedUser(request).getUserId());
-		double numberOfPages = Math.ceil(numberOfLists)/ListsModel.getLimit();
+		double numberOfPages = Math.ceil(numberOfLists/ListsModel.getLimit());
 		String nextPage      = (page != numberOfPages) ? "Lists?page=" + Integer.toString(page + 1) : "#";
 		String prevPage      = (page != 1) ? "Lists?page=" + Integer.toString(page - 1) : "#";
-		
+
 		request.setAttribute("numberOfPages", (int)numberOfPages);
 		request.setAttribute("currentPage", page);
 		request.setAttribute("prevPage", prevPage);
@@ -69,7 +69,7 @@ public class Lists extends HttpServlet {
 			try {
 				page = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException nfe) {
-				out.println("Erreur");
+				out.print("Erreur");
 			}
 		}
 		
@@ -82,16 +82,16 @@ public class Lists extends HttpServlet {
 			try {
 				listIdInt = Integer.parseInt(listId);
 			} catch (NumberFormatException nfe) {
-				out.println("Erreur");
+				out.print("Erreur");
 			}
 			int[] aIds           = {listIdInt};
 			ListsModel listModel = new ListsModel();
 			
 			response.setContentType("text/html;charset=UTF-8");
 			if (listModel.deleteList(aIds, owner) == 0) {
-				out.println("Erreur");
+				out.print("Erreur");
 			} else {
-				out.println(this.getListsListHtml(owner, page));
+				out.print(this.getListsListHtml(owner, page));
 			}
 		}
 	}

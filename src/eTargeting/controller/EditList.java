@@ -34,37 +34,51 @@ public class EditList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserModel user        = new UserModel();
-		// Get the list chosen by it's ID
 		ListsModel listsModel = new ListsModel();
-		int id = 0;
+		int id                = 0;
+		
 		try {
-			// Set the ListsModel object to the request 
-			id              = Integer.parseInt(request.getParameter("id"));
-			ListsModel list = listsModel.selectListById(id, user.getLoggedUser(request).getUserId());
-			request.setAttribute("list", list);
-			
-			// Set an ArrayList of subscriber ids in order to pre-check every subscriber that belong to this list 
-			String[] subscriberIds     = list.getSubscriberIds().split(",");
-			Integer[] subscribersArray = new Integer[subscriberIds.length];
-			for (int i = 0; i< subscriberIds.length; i++) {
-				try {
-					subscribersArray[i] = Integer.parseInt(subscriberIds[i]);
-				} catch (NumberFormatException nfe) {}
-			}
-			ArrayList<Integer> idsList = new ArrayList<Integer>(Arrays.asList(subscribersArray));
-			request.setAttribute("listSubscribers", idsList);
+			id = Integer.parseInt(request.getParameter("id"));
 		} catch (NumberFormatException nfe) {
-			response.sendRedirect("/eTargeting/Lists");
-		} catch (Exception e) {
-			e.printStackTrace();
 			response.sendRedirect("/eTargeting/Lists");
 		}
 		
+		// Set number of page, current page, previous and next page's links into request
+		int page = 1;
+		if (request.getParameter("page") != null) {
+			try {
+				page = Integer.parseInt(request.getParameter("page"));
+			} catch (NumberFormatException nfe) {}
+		}
+		SubscribersModel subscribersModel = new SubscribersModel();
+		int numberOfSubscribers = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
+		double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
+		String nextPage      = (page != numberOfPages) ? "EditList?id=" + id + "&page=" + Integer.toString(page + 1) : "#";
+		String prevPage      = (page != 1) ? "EditList?id=" + id + "&page=" + Integer.toString(page - 1) : "#";
+		
+		request.setAttribute("numberOfPages", (int)numberOfPages);
+		request.setAttribute("currentPage", page);
+		request.setAttribute("prevPage", prevPage);
+		request.setAttribute("nextPage", nextPage);
+		
+		// Set the ListsModel object to the request
+		ListsModel list = listsModel.selectListById(id, user.getLoggedUser(request).getUserId());
+		request.setAttribute("list", list);
+		
+		// Set an ArrayList of subscriber ids in order to pre-check every subscriber that belong to this list 
+		String[] subscriberIds     = list.getSubscriberIds().split(",");
+		Integer[] subscribersArray = new Integer[subscriberIds.length];
+		for (int i = 0; i< subscriberIds.length; i++) {
+			try {
+				subscribersArray[i] = Integer.parseInt(subscriberIds[i]);
+			} catch (NumberFormatException nfe) {}
+		}
+		ArrayList<Integer> idsList = new ArrayList<Integer>(Arrays.asList(subscribersArray));
+		request.setAttribute("listSubscribers", idsList);
+		
 		// Get every subscriber
 		try {
-			SubscribersModel subscribersModel = new SubscribersModel();
-			SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId());
-
+			SubscribersModel[] subscribers = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), page);
 			for (int i = 0; i < subscribers.length; i++) {
 				request.setAttribute("subscriber-" + i, subscribers[i]);
 			}
@@ -102,7 +116,7 @@ public class EditList extends HttpServlet {
 			
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
-			out.println("OK");
+			out.print("OK");
 		}
 	}
 }

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import eTargeting.model.ListsModel;
 import eTargeting.model.SubscribersModel;
 import eTargeting.model.UserModel;
 
@@ -37,10 +36,10 @@ public class Subscribers extends HttpServlet {
 				page = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException nfe) {}
 		}
-		int numberOfLists    = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
-		double numberOfPages = Math.ceil(numberOfLists)/ListsModel.getLimit();
-		String nextPage      = (page != numberOfPages) ? "Subscribers?page=" + Integer.toString(page + 1) : "#";
-		String prevPage      = (page != 1) ? "Subscribers?page=" + Integer.toString(page - 1) : "#";
+		int numberOfSubscribers = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
+		double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
+		String nextPage         = (page != numberOfPages) ? "Subscribers?page=" + Integer.toString(page + 1) : "#";
+		String prevPage         = (page != 1) ? "Subscribers?page=" + Integer.toString(page - 1) : "#";
 		
 		request.setAttribute("numberOfPages", (int)numberOfPages);
 		request.setAttribute("currentPage", page);
@@ -78,7 +77,7 @@ public class Subscribers extends HttpServlet {
 			try {
 				page = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException nfe) {
-				out.println("Erreur");
+				out.print("Erreur");
 			}
 		}
 		if ( request.getParameter("age") != null && !"".equals(request.getParameter("age")) ) {
@@ -96,7 +95,7 @@ public class Subscribers extends HttpServlet {
 			
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
-			out.println(this.getSubscriberListHtml(owner, page).toString());
+			out.print(this.getSubscriberListHtml(owner, page).toString());
 		}
 		///// Edit subscriber //////
 		else if ("1".equals(updateSubscriber) && email != null && !"".equals(subscriberId)) {
@@ -105,7 +104,7 @@ public class Subscribers extends HttpServlet {
 			
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
-			out.println(this.getSubscriberListHtml(owner, page).toString());
+			out.print(this.getSubscriberListHtml(owner, page).toString());
 		}
 		////// Delete subscriber //////
 		else if ("true".equals(deleteSubscriber) && !"".equals(subscriberId)) {
@@ -118,35 +117,36 @@ public class Subscribers extends HttpServlet {
 					aIds[i] = Integer.parseInt(splitIds[i]);
 				}
 			} catch (NumberFormatException nbe) {
-				out.println("Erreur");
+				out.print("Erreur");
 			} catch (Exception e) {
-				out.println("Erreur");
+				out.print("Erreur");
 			}
 			
 			response.setContentType("text/html;charset=UTF-8");
 			if (subscribersModel.deleteSubscriber(aIds, owner) == 0) {
-				out.println("Erreur");
+				out.print("Erreur");
 			} else {
-				out.println(this.getSubscriberListHtml(owner, page));
+				out.print(this.getSubscriberListHtml(owner, page));
 			}
 		}
 		////// Error /////
 		else {
 			response.setContentType("text/html;charset=UTF-8");
-			out.println("Erreur");
+			out.print("Erreur");
 		}
 	}
 	
 	/**
 	 * Prepare HTML result for Ajax query
 	 * @param owner
+	 * @param page
 	 * @return html PrintWriter containing html result
 	 */
 	public StringBuilder getSubscriberListHtml(int owner, int page) {
 		// Adding subscriber's list to the response
 		SubscribersModel subscribersModel = new SubscribersModel();
-		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(owner, page);
-		StringBuilder html = new StringBuilder();
+		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(owner, page);
+		StringBuilder html                = new StringBuilder();
 		for (int i = 0; i < subscribers.length; i++) {
 			html.append("<tr>");
 				html.append("<td class=\"col-md-1 table_user_id hidden\">" + subscribers[i].getId() + "</td>");
