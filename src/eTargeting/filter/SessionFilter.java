@@ -71,7 +71,7 @@ public class SessionFilter implements Filter {
 		
 		// Setting the user's object to the request in order to use it's information in every JSP
 		request.setAttribute("user", user.getLoggedUser(req));
-		chain.doFilter(request,  response);
+		chain.doFilter(request, response);
 	}
 
 	/**

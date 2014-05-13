@@ -21,6 +21,13 @@
     <error-code>404</error-code>
     <location>/WEB-INF/404.jsp</location>
   </error-page>
+  <context-param>
+	<description>Location to store uploaded files</description>
+	<param-name>uploads-directory</param-name>
+	<param-value>
+		/Users/Axel/Desktop/eclipse/Juno/juno_workspace/uploads/
+	</param-value>
+  </context-param>
   <filter>
     <filter-name>SessionFilter</filter-name>
     <filter-class>eTargeting.filter.SessionFilter</filter-class>

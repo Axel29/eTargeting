@@ -39,53 +39,55 @@ public class EditList extends HttpServlet {
 		
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
+		
+			// Set number of page, current page, previous and next page's links into request
+			int page = 1;
+			if (request.getParameter("page") != null) {
+				try {
+					page = Integer.parseInt(request.getParameter("page"));
+				} catch (NumberFormatException nfe) {}
+			}
+			SubscribersModel subscribersModel = new SubscribersModel();
+			int numberOfSubscribers = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
+			double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
+			String nextPage      = (page != numberOfPages) ? "EditList?id=" + id + "&page=" + Integer.toString(page + 1) : "#";
+			String prevPage      = (page != 1) ? "EditList?id=" + id + "&page=" + Integer.toString(page - 1) : "#";
+			
+			request.setAttribute("numberOfPages", (int)numberOfPages);
+			request.setAttribute("currentPage", page);
+			request.setAttribute("prevPage", prevPage);
+			request.setAttribute("nextPage", nextPage);
+			
+			// Set the ListsModel object to the request
+			ListsModel list = listsModel.selectListById(id, user.getLoggedUser(request).getUserId());
+			request.setAttribute("list", list);
+			
+			// Set an ArrayList of subscriber ids in order to pre-check every subscriber that belong to this list 
+			String[] subscriberIds     = list.getSubscriberIds().split(",");
+			Integer[] subscribersArray = new Integer[subscriberIds.length];
+			for (int i = 0; i< subscriberIds.length; i++) {
+				try {
+					subscribersArray[i] = Integer.parseInt(subscriberIds[i]);
+				} catch (NumberFormatException nfe) {}
+			}
+			ArrayList<Integer> idsList = new ArrayList<Integer>(Arrays.asList(subscribersArray));
+			request.setAttribute("listSubscribers", idsList);
+			
+			// Get every subscriber
+			try {
+				SubscribersModel[] subscribers = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), page);
+				for (int i = 0; i < subscribers.length; i++) {
+					request.setAttribute("subscriber-" + i, subscribers[i]);
+				}
+			} catch (Exception e) {
+				
+			}
+			this.getServletContext().getRequestDispatcher("/WEB-INF/editList.jsp").forward(request, response);
 		} catch (NumberFormatException nfe) {
 			response.sendRedirect("/eTargeting/Lists");
-		}
-		
-		// Set number of page, current page, previous and next page's links into request
-		int page = 1;
-		if (request.getParameter("page") != null) {
-			try {
-				page = Integer.parseInt(request.getParameter("page"));
-			} catch (NumberFormatException nfe) {}
-		}
-		SubscribersModel subscribersModel = new SubscribersModel();
-		int numberOfSubscribers = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
-		double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
-		String nextPage      = (page != numberOfPages) ? "EditList?id=" + id + "&page=" + Integer.toString(page + 1) : "#";
-		String prevPage      = (page != 1) ? "EditList?id=" + id + "&page=" + Integer.toString(page - 1) : "#";
-		
-		request.setAttribute("numberOfPages", (int)numberOfPages);
-		request.setAttribute("currentPage", page);
-		request.setAttribute("prevPage", prevPage);
-		request.setAttribute("nextPage", nextPage);
-		
-		// Set the ListsModel object to the request
-		ListsModel list = listsModel.selectListById(id, user.getLoggedUser(request).getUserId());
-		request.setAttribute("list", list);
-		
-		// Set an ArrayList of subscriber ids in order to pre-check every subscriber that belong to this list 
-		String[] subscriberIds     = list.getSubscriberIds().split(",");
-		Integer[] subscribersArray = new Integer[subscriberIds.length];
-		for (int i = 0; i< subscriberIds.length; i++) {
-			try {
-				subscribersArray[i] = Integer.parseInt(subscriberIds[i]);
-			} catch (NumberFormatException nfe) {}
-		}
-		ArrayList<Integer> idsList = new ArrayList<Integer>(Arrays.asList(subscribersArray));
-		request.setAttribute("listSubscribers", idsList);
-		
-		// Get every subscriber
-		try {
-			SubscribersModel[] subscribers = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), page);
-			for (int i = 0; i < subscribers.length; i++) {
-				request.setAttribute("subscriber-" + i, subscribers[i]);
-			}
 		} catch (Exception e) {
 			response.sendRedirect("/eTargeting/Lists");
 		}
-		this.getServletContext().getRequestDispatcher("/WEB-INF/editList.jsp").forward(request, response);
 	}
 
 	/**

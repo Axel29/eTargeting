@@ -1,4 +1,73 @@
 jQuery(document).ready(function($){
+/* Panels */
+(function(){
+    'use strict';
+	var $ = jQuery;
+	$.fn.extend({
+		filterTable: function(){
+			return this.each(function(){
+				$(this).on('keyup', function(e){
+					$('.filterTable_no_results').remove();
+					var $this = $(this), 
+						search = $this.val().toLowerCase(), 
+						target = $this.attr('data-filters'), 
+						$target = $(target), 
+						$rows = $target.find('tbody tr');
+					if(search == '') {
+						$rows.show(); 
+					} else {
+						$rows.each(function(){
+							var $this = $(this);
+							var hide  = true;
+							// Check every td input values
+							$.each($this.find('input'), function(k, v) {
+								if (v.value.toLowerCase().indexOf(search) !== -1) {
+									hide = false;
+								}
+							});
+							
+							// Check td values
+							if ($this.text().toLowerCase().indexOf(search) !== -1) {
+								hide = false;
+							}
+							
+							// Display result if found
+							if (hide == false) {
+								$this.show();
+							} else {
+								$this.hide();
+							}
+						});
+						if($target.find('tbody tr:visible').size() === 0) {
+							var col_count = $target.find('thead tr').first().find('th:visible').size();
+							var no_results = $('<tr class="filterTable_no_results"><td colspan="'+col_count+'">No results found</td></tr>');
+							$target.find('tbody').append(no_results);
+						}
+					}
+				});
+			});
+		}
+	});
+	$('[data-action="filter"]').filterTable();
+})(jQuery);
+
+$(function(){
+    // attach table filter plugin to inputs
+	$('[data-action="filter"]').filterTable();
+	
+	$('#wrapper').on('click', '.panel-heading span.filter', function(e){
+		var $this = $(this), 
+			$panel = $this.parents('.panel');
+		
+		$panel.find('.panel-body').slideToggle();
+		if($this.css('display') != 'none') {
+			$panel.find('.panel-body input').focus();
+		}
+	});
+	$('[data-toggle="tooltip"]').tooltip();
+});
+/* End of panels */
+
 /********************************************************************************************************
  **************************************** SUBSCRIBERS ***************************************************
  ********************************************************************************************************/
@@ -124,6 +193,19 @@ jQuery(document).ready(function($){
  ******************************************** LISTS *****************************************************
  ********************************************************************************************************/
 	var listId = 0;
+	function getURLParameter(sParam)
+	{
+	    var sPageURL = window.location.search.substring(1);
+	    var sURLVariables = sPageURL.split('&');
+	    for (var i = 0; i < sURLVariables.length; i++) 
+	    {
+	        var sParameterName = sURLVariables[i].split('=');
+	        if (sParameterName[0] == sParam) 
+	        {
+	            return sParameterName[1];
+	        }
+	    }
+	}
 	// Disable sorting for the first header (checkbox "check all") to prevent it from blocking the click.
 	$("body.addList #subscribers-list, body.editList #subscribers-list").tablesorter({ 
         headers: {
@@ -219,7 +301,10 @@ jQuery(document).ready(function($){
 				$.unique(subscriberIds);
 			});
 		} else if ($(e.target).attr("id") == "checkall" && !$(e.target).is(":checked")) {
-			subscriberIds = [];
+			// Remove every ids of curret page from the array
+			$('.checkthis').each(function() {
+				subscriberIds.splice($.inArray($(this).val(), subscriberIds), 1);
+			});
 		} else {
 			if ($.inArray(value, subscriberIds) >= 0) {
 				subscriberIds.splice($.inArray(value, subscriberIds), 1);
@@ -236,6 +321,18 @@ jQuery(document).ready(function($){
 	});
 	$('body.editList').on('click', '.page-link', function(e){
 		var page   = $(this).text();
+		if (page == "«" || page == "»") {
+			if (getURLParameter("page") == undefined && page == "»") {
+				page = 2;
+			} else if (getURLParameter("page") == undefined && page == "«"){
+				page = 1;
+			} else if (page == "«") {
+				page = parseInt(getURLParameter("page")) - 1;
+			} else if (page == "»") {
+				page = parseInt(getURLParameter("page")) + 1;
+			}
+		}
+		
 		var listId = $('.listId').val();
 		// Prevent the form from reloading / changing the page
 		e.preventDefault();
@@ -252,6 +349,18 @@ jQuery(document).ready(function($){
 				$('.alert-error').css('visibility','visible').hide().fadeIn().removeClass('hidden');
 			} else {
 				$('.subscribers-list').html(data['list']);
+				var doCheckAll = true;
+				$('.subscribers-list').find('tr').each(function() {
+					if (!$(this).find('.checkthis').is(':checked')) {
+						doCheckAll = false;
+					}
+				});
+				if (doCheckAll) {
+					$('#checkall').prop('checked', true);
+				} else {
+					$('#checkall').prop('checked', false);
+				}
+				
 				$('.pagination').html(data['pagination']);
 				window.history.pushState(data, "eTargeting - Editer la liste " + listId, "EditList?id=" + listId + "&page=" + page);
 			}
@@ -281,6 +390,13 @@ jQuery(document).ready(function($){
 		});
 		return false;
 	});
+
+	// Import csv link
+	$('body.editList').on('click', '.import-csv-link', function(e) {
+		e.preventDefault();
+		$(location).attr('href', $(this).attr('href') + '?list=' + $('.listId').val() + '&name=' + $('input[name="name"]').val()); 
+	});
+	
 	$('body.editList').on('submit', '#edit-list', function(e){
 		// Disable every checkbox to lighten form params
 		$('.checkthis').each(function(){

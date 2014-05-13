@@ -9,7 +9,6 @@
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/sb-admin.css" rel="stylesheet">
 	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
 </head>
 <body class="lists">
     <div id="wrapper">
@@ -35,32 +34,45 @@
 			%>
 				<div class="row">
 					<div class="col-lg-12">
-						<div class="table-responsive">
-							<table id="subscribers-list" class="table table-striped table-bordered table-hover">
-								<thead>
-									<tr>
-										<th class="hidden">#</th>
-										<th>Nom</th>
-										<th>Editer</th>
-										<th>Supprimer</th>
-									</tr>
-								</thead>
-								<tbody class="lists-list">
-									<%
-									int i = 0;
-									while(request.getAttribute("list-" + i) != null) {
-										ListsModel list = (ListsModel)request.getAttribute("list-" + i);
-										out.println("<tr>");
-											out.println("<td class=\"hidden table_list_id\">" + list.getId() + "</td>");
-											out.println("<td class=\"col-md-10\">" + list.getName() + "</td>");
-											out.println("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + list.getId() + "\" class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
-											out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
-										out.println("</tr>");
-										i++;
-									}
-									%>
-								</tbody>
-							</table>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Listes</h3>
+								<div class="pull-right">
+									<span class="clickable filter" data-toggle="tooltip" title="Afficher le filtre de listes" data-container="body">
+										<i class="glyphicon glyphicon-filter"></i>
+									</span>
+								</div>
+							</div>
+							<div class="panel-body">
+								<input type="text" class="form-control" id="lists-table-filter" data-action="filter" data-filters="#lists-table" placeholder="Filtre listes" />
+							</div>
+							<div class="table-responsive">
+								<table id="lists-table" class="table table-striped table-bordered table-hover">
+									<thead>
+										<tr>
+											<th class="hidden">#</th>
+											<th>Nom</th>
+											<th>Editer</th>
+											<th>Supprimer</th>
+										</tr>
+									</thead>
+									<tbody class="lists-list">
+										<%
+										int i = 0;
+										while(request.getAttribute("list-" + i) != null) {
+											ListsModel list = (ListsModel)request.getAttribute("list-" + i);
+											out.println("<tr>");
+												out.println("<td class=\"hidden table_list_id\">" + list.getId() + "</td>");
+												out.println("<td class=\"col-md-10\">" + list.getName() + "</td>");
+												out.println("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + list.getId() + "\" class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
+												out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+											out.println("</tr>");
+											i++;
+										}
+										%>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>

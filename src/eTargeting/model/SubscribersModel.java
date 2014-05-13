@@ -370,10 +370,10 @@ public class SubscribersModel {
      * Inserts a new subscriber into database.
      * Uses values from current object
      */
-	public void insertSubscriber() {
+	public int insertSubscriber() {
 		// Adding every keys and their values into two lists if they have been sent.
 		ArrayList<String> keyList   = new ArrayList<String>();
-		ArrayList<String> valueList = new ArrayList<String>();		
+		ArrayList<String> valueList = new ArrayList<String>();
 		if (this.getEmail() != null && !"".equals(this.getEmail())) {
 			keyList.add("email");
 			valueList.add(this.getEmail());
@@ -409,8 +409,9 @@ public class SubscribersModel {
 			valueList.toArray(values);
 			
 			Model model = new Model();
-			model.insert(table, keys, values);
+			return model.insert(table, keys, values);
 		}
+		return 0;
 	}
 	
 	/**

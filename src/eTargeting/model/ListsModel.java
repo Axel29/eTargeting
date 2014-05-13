@@ -278,6 +278,13 @@ public class ListsModel {
 		return null;
 	}
 
+	/**
+	 * Get a list from database by it's id.
+	 * Return null if this list doesn't exist.
+	 * @param id
+	 * @param owner
+	 * @return ListModel if exists | null if not exists
+	 */
 	public ListsModel selectListById(int id, int owner) {
 		try {
 			String table     = "lists L";
@@ -307,7 +314,7 @@ public class ListsModel {
      * Inserts a new list into database.
      * Uses values from current object
      */
-	public void insertList() {
+	public int insertList() {
 		String table           = "lists";
 		String keys[]          = {"name", "subscriber_ids", "owner"};
 		String values[]        = {this.getName(), ("".equals(this.getSubscriberIds())) ? "NULL" : this.getSubscriberIds(), Integer.toString(this.getOwner())};
@@ -326,12 +333,13 @@ public class ListsModel {
 			// Insert the list if everything's correct 
 			if (checkSubscribersBelonging(idsArray)) {
 				Model model = new Model();
-				model.insert(table, keys, values);
+				return model.insert(table, keys, values);
 			}
 		} else {
 			Model model = new Model();
-			model.insert(table, keys, values);
+			return model.insert(table, keys, values);
 		}
+		return 0;
 	}
 	
 	/**

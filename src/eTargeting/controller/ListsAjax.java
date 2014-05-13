@@ -33,6 +33,9 @@ public class ListsAjax extends HttpServlet {
     }
 
 	/**
+	 * Ajax Request from Edit List page.
+	 * Get every subscribers that belong to the current list, set them in session and return them into JSON object.
+	 * Used to precheck every subscribers and to navigate through subscribers' pages. 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,6 +69,7 @@ public class ListsAjax extends HttpServlet {
 					out.print(json);
 				} else {
 					json.put("msg", "Erreur");
+					out.print(json);
 				}
 			}
 		} catch (JSONException jsonException) {
@@ -76,14 +80,17 @@ public class ListsAjax extends HttpServlet {
 	}
 
 	/**
+	 * Ajax Request from Edit and Add List pages.
+	 * Set every subscriber ids received from the Ajax query in session when the user arrives on the Edit list's page.
+	 * This is used to be able to precheck every subscribers belonging to the list.
+	 * Finally, this adds the subscribers list to the JSON object, in order to change the page's content
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserModel user        = new UserModel();
 		ListsModel listsModel = new ListsModel();
 		
-		// Set subscriberIds to session (from edit / add list's pages)
-		System.out.println("request.getParameter(\"subscriberIds\"): " + request.getParameter("subscriberIds"));
+		// If the user just arrived to the EditList page, we set subscriberIds to session
 		if (request.getParameter("subscriberIds") != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("listSubscriberIds", request.getParameter("subscriberIds"));
@@ -92,10 +99,11 @@ public class ListsAjax extends HttpServlet {
 		JSONObject json = new JSONObject();
 		PrintWriter out = response.getWriter();
 		int userId      = user.getLoggedUser(request).getUserId();
-		response.setContentType("application/json;charset=UTF-8");
 		int page        = 0;
+		response.setContentType("application/json;charset=UTF-8");
 
 		try {
+			// Check if the request comes from edit list page...
 			if (request.getParameter("page") != null && request.getParameter("listId") != null) {
 				int listId      = 0;
 				try {
@@ -111,35 +119,28 @@ public class ListsAjax extends HttpServlet {
 					double numberOfPages    = Math.ceil(numberOfSubscribers/ListsModel.getLimit());
 					
 					json.put("msg", "OK");
-					json.put("list", getSubscriberEditListHtml(user.getLoggedUser(request).getUserId(), page, request));
+					json.put("list", getSubscriberListHtml(user.getLoggedUser(request).getUserId(), page, request));
 					json.put("pagination", getPaginationHtml(listId, page, numberOfPages));
 				} else {
 					json.put("msg", "Erreur la liste n'appartient pas à cet utilisateur");
 				}
 				out.print(json.toString());
-			} else if (request.getParameter("page") != null && request.getParameter("listId") == null) {
+			}
+			// ... or if it comes from add list page 
+			else if (request.getParameter("page") != null && request.getParameter("listId") == null) {
 				try {
 					page = Integer.parseInt(request.getParameter("page"));
 				} catch (NumberFormatException nfe) {
 					nfe.printStackTrace();
 					json.put("msg", "Erreur");
 				}
-				
 
 				int numberOfSubscribers = listsModel.numberOfLists(user.getLoggedUser(request).getUserId());
 				double numberOfPages    = Math.ceil(numberOfSubscribers/ListsModel.getLimit());
 				
 				json.put("msg", "OK");
-				json.put("list", getSubscriberAddListHtml(user.getLoggedUser(request).getUserId(), page, request));
+				json.put("list", getSubscriberListHtml(user.getLoggedUser(request).getUserId(), page, request));
 				json.put("pagination", getPaginationAddHtml(page, numberOfPages));
-				
-				// Get every subscribers and put them into an ArrayList
-				SubscribersModel subscribersModel = new SubscribersModel();
-				SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(userId, page);
-				ArrayList<Integer> subscriberIds  = new ArrayList<Integer>();
-				for (int i = 0; i < subscribers.length; i++) {
-					subscriberIds.add(subscribers[i].getId());
-				}
 				out.print(json);
 			}
 		} catch (Exception e) {
@@ -147,6 +148,13 @@ public class ListsAjax extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Check that the list recieved from Ajax query really belongs to that user.
+	 * Prevent the user to hack other user's lists
+	 * @param listId
+	 * @param userId
+	 * @return true | false
+	 */
 	public boolean checkListBelonging(int listId, int userId) {
 		// Check that the list belongs to that user
 		ListsModel listsModel = new ListsModel();
@@ -165,7 +173,7 @@ public class ListsAjax extends HttpServlet {
 	 * @param page
 	 * @return html PrintWriter containing html result
 	 */
-	public StringBuilder getSubscriberEditListHtml(int owner, int page, HttpServletRequest request) {
+	public StringBuilder getSubscriberListHtml(int owner, int page, HttpServletRequest request) {
 		// Get every subscribers already checked from session in order to pre-check them if needed
 		HttpSession session        = request.getSession();
 		ArrayList<Integer> idsList = new ArrayList<Integer>();
@@ -173,7 +181,9 @@ public class ListsAjax extends HttpServlet {
 			String[] splitIds = ((String)session.getAttribute("listSubscriberIds")).split(",");
 			try {
 				for (int i = 0; i < splitIds.length; i++) {
-					idsList.add(Integer.parseInt(splitIds[i]));
+					if (!"".equals(splitIds[i])) {
+						idsList.add(Integer.parseInt(splitIds[i]));
+					}
 				}
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
@@ -198,48 +208,6 @@ public class ListsAjax extends HttpServlet {
 	}
 	
 	/**
-	 * Prepare HTML result for AddList's page Ajax query when getting subscriber's list
-	 * @param owner
-	 * @param page
-	 * @return html PrintWriter containing html result
-	 */
-	public StringBuilder getSubscriberAddListHtml(int owner, int page, HttpServletRequest request) {
-		// Get every subscribers already checked from session in order to pre-check them if needed
-		HttpSession session        = request.getSession();
-		ArrayList<Integer> idsList = new ArrayList<Integer>();
-		if (session.getAttribute("listSubscriberIds") != null) {
-			String[] splitIds = ((String)session.getAttribute("listSubscriberIds")).split(",");
-			try {
-				for (int i = 0; i < splitIds.length; i++) {
-					idsList.add(Integer.parseInt(splitIds[i]));
-				}
-			} catch (NumberFormatException nfe) {
-				nfe.printStackTrace();
-			}
-		}
-		
-		System.out.println("idsList: " + idsList.toString());
-		// Adding subscriber's list to the response
-		SubscribersModel subscribersModel = new SubscribersModel();
-		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(owner, page);
-		StringBuilder html                = new StringBuilder();
-		for (int i = 0; i < subscribers.length; i++) {
-			String checked  = (idsList.contains(subscribers[i].getId())) ? "checked=\"checked\"" : "" ;
-			String age = (subscribers[i].getAge() == 0) ? "N/A" : Integer.toString(subscribers[i].getAge());
-			html.append("<tr>");
-			html.append("<td class=\"col-md-1\"><input type=\"checkbox\" name=\"subscribersChecked[]\" value=\"" + subscribers[i].getId() + "\" class=\"checkthis\" " + checked + "/></td>");
-			html.append("<td class=\"col-md-1 table_user_id hidden\">" + subscribers[i].getId() + "</td>");
-			html.append("<td class=\"col-md-4 table_user_email\">" + subscribers[i].getEmail() + "</td>");
-			html.append("<td class=\"col-md-2 table_user_first_name\">" + subscribers[i].getFirstName() + "</td>");
-			html.append("<td class=\"col-md-2 table_user_last_name\">" + subscribers[i].getLastName() + "</td>");
-			html.append("<td class=\"col-md-1 table_user_age\">" + age + "</td>");
-			html.append("<td class=\"col-md-1 table_user_gender\">" + subscribers[i].getGender() + "</td>");
-			html.append("</tr>");
-		}
-		return html;
-	}
-	
-	/**
 	 * Prepare pagination HTML for EditList page's Ajax query when getting subscriber's list
 	 * @param currentPage
 	 * @param numberOfPages
@@ -252,7 +220,7 @@ public class ListsAjax extends HttpServlet {
 		StringBuilder html = new StringBuilder();
 		
 		html.append("<li class=\"" + ((currentPage == 1) ? "disabled" : "") + "\">");
-			html.append("<a href=\"" + prevPage + "\">&laquo;</a>");
+			html.append("<a href=\"" + prevPage + "\" class=\"page-link\">&laquo;</a>");
 		html.append("</li>");
 		
 		for (int i = 1; i <= (int)numberOfPages; i++) {
@@ -263,7 +231,7 @@ public class ListsAjax extends HttpServlet {
 		}
 		
 		html.append("<li class=\"" + ((currentPage == (int)numberOfPages) ? "disabled" : "") + "\">");
-			html.append("<a href=\"" + nextPage + "\">&raquo;</a>");
+			html.append("<a href=\"" + nextPage + "\" class=\"page-link\">&raquo;</a>");
 		html.append("</li>");
 		
 		return html;
