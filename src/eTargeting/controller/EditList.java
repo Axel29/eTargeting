@@ -33,7 +33,7 @@ public class EditList extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserModel user        = new UserModel();
+		int userId            = ((UserModel)request.getAttribute("user")).getUserId();
 		ListsModel listsModel = new ListsModel();
 		int id                = 0;
 		
@@ -48,7 +48,7 @@ public class EditList extends HttpServlet {
 				} catch (NumberFormatException nfe) {}
 			}
 			SubscribersModel subscribersModel = new SubscribersModel();
-			int numberOfSubscribers = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
+			int numberOfSubscribers = subscribersModel.numberOfSubscribers(userId);
 			double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
 			String nextPage      = (page != numberOfPages) ? "EditList?id=" + id + "&page=" + Integer.toString(page + 1) : "#";
 			String prevPage      = (page != 1) ? "EditList?id=" + id + "&page=" + Integer.toString(page - 1) : "#";
@@ -59,7 +59,7 @@ public class EditList extends HttpServlet {
 			request.setAttribute("nextPage", nextPage);
 			
 			// Set the ListsModel object to the request
-			ListsModel list = listsModel.selectListById(id, user.getLoggedUser(request).getUserId());
+			ListsModel list = listsModel.selectListById(id, userId);
 			request.setAttribute("list", list);
 			
 			// Set an ArrayList of subscriber ids in order to pre-check every subscriber that belong to this list 
@@ -75,7 +75,7 @@ public class EditList extends HttpServlet {
 			
 			// Get every subscriber
 			try {
-				SubscribersModel[] subscribers = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), page);
+				SubscribersModel[] subscribers = subscribersModel.selectSubscribers(userId, page);
 				for (int i = 0; i < subscribers.length; i++) {
 					request.setAttribute("subscriber-" + i, subscribers[i]);
 				}

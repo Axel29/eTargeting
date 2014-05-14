@@ -29,11 +29,10 @@ public class Registration extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Checking that the user is logged in
-		UserModel user = new UserModel();
-		if (user.getLoggedUser(request).getUserId() != 0) {
+		if (((UserModel)request.getAttribute("user")).getUserId() != 0) {
 			response.sendRedirect("/eTargeting/Dashboard");
 		} else {
-			request.setAttribute("user", user.getLoggedUser(request));
+			request.setAttribute("user", (UserModel)request.getAttribute("user"));
 			request.getServletContext().getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);
 		}
 	}

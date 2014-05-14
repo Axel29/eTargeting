@@ -27,7 +27,6 @@ public class Subscribers extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserModel user = new UserModel();
 		SubscribersModel subscribersModel = new SubscribersModel();
 		// Set number of page, current page, previous and next page's links into request
 		int page = 1;
@@ -36,7 +35,7 @@ public class Subscribers extends HttpServlet {
 				page = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException nfe) {}
 		}
-		int numberOfSubscribers = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
+		int numberOfSubscribers = subscribersModel.numberOfSubscribers(((UserModel)request.getAttribute("user")).getUserId());
 		double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
 		String nextPage         = (page != numberOfPages) ? "Subscribers?page=" + Integer.toString(page + 1) : "#";
 		String prevPage         = (page != 1) ? "Subscribers?page=" + Integer.toString(page - 1) : "#";
@@ -47,7 +46,7 @@ public class Subscribers extends HttpServlet {
 		request.setAttribute("nextPage", nextPage);
 		
 		// Set every subscriber object into request
-		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), page);
+		SubscribersModel[] subscribers = subscribersModel.selectSubscribers(((UserModel)request.getAttribute("user")).getUserId(), page);
 		for (int i = 0; i < subscribers.length; i++) {
 			request.setAttribute("subscriber-" + i, subscribers[i]);
 		}

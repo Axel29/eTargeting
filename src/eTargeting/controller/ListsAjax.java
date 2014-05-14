@@ -87,7 +87,6 @@ public class ListsAjax extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserModel user        = new UserModel();
 		ListsModel listsModel = new ListsModel();
 		
 		// If the user just arrived to the EditList page, we set subscriberIds to session
@@ -98,7 +97,7 @@ public class ListsAjax extends HttpServlet {
 
 		JSONObject json = new JSONObject();
 		PrintWriter out = response.getWriter();
-		int userId      = user.getLoggedUser(request).getUserId();
+		int userId      = ((UserModel)request.getAttribute("user")).getUserId();
 		int page        = 0;
 		response.setContentType("application/json;charset=UTF-8");
 
@@ -115,11 +114,11 @@ public class ListsAjax extends HttpServlet {
 				} 
 				
 				if (checkListBelonging(listId, userId)) {
-					int numberOfSubscribers = listsModel.numberOfLists(user.getLoggedUser(request).getUserId());
+					int numberOfSubscribers = listsModel.numberOfLists(userId);
 					double numberOfPages    = Math.ceil(numberOfSubscribers/ListsModel.getLimit());
 					
 					json.put("msg", "OK");
-					json.put("list", getSubscriberListHtml(user.getLoggedUser(request).getUserId(), page, request));
+					json.put("list", getSubscriberListHtml(userId, page, request));
 					json.put("pagination", getPaginationHtml(listId, page, numberOfPages));
 				} else {
 					json.put("msg", "Erreur la liste n'appartient pas à cet utilisateur");
@@ -135,11 +134,11 @@ public class ListsAjax extends HttpServlet {
 					json.put("msg", "Erreur");
 				}
 
-				int numberOfSubscribers = listsModel.numberOfLists(user.getLoggedUser(request).getUserId());
+				int numberOfSubscribers = listsModel.numberOfLists(userId);
 				double numberOfPages    = Math.ceil(numberOfSubscribers/ListsModel.getLimit());
 				
 				json.put("msg", "OK");
-				json.put("list", getSubscriberListHtml(user.getLoggedUser(request).getUserId(), page, request));
+				json.put("list", getSubscriberListHtml(userId, page, request));
 				json.put("pagination", getPaginationAddHtml(page, numberOfPages));
 				out.print(json);
 			}

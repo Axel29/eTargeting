@@ -136,6 +136,31 @@ public class SubscribersModel {
 		this.gender    = gender;
 		this.ownerId   = ownerId;
 	}
+	
+	/**
+     * SubscribersModel alternative to constructor to set every values
+     * <p>
+     * Add every values to the existing object
+     * </p>
+     * 
+     * @see SubscribersModel#id
+     * @see SubscribersModel#firstName
+     * @see SubscribersModel#lastName
+     * @see SubscribersModel#email
+     * @see SubscribersModel#age
+     * @see SubscribersModel#gender
+     * @see SubscribersModel#ownerId
+     */
+	public SubscribersModel setValues(int id, String firstName, String lastName, String email, int age, String gender, int ownerId) {
+		this.id        = id;
+		this.firstName = firstName;
+		this.lastName  = lastName;
+		this.email     = email;
+		this.age       = age;
+		this.gender    = gender;
+		this.ownerId   = ownerId;
+		return this;
+	}
 
 	/**
 	 * Returns subscriber's ID.

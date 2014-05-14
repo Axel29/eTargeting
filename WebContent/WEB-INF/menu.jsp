@@ -9,8 +9,7 @@
 		</button>
 		<a class="navbar-brand" href="index.html">
 			<%
-				UserModel user = (UserModel)request.getAttribute("user");
-				out.println(user.getLoggedUser(request).getFirstName() + " " + user.getLoggedUser(request).getLastName());
+				out.println(((UserModel)request.getAttribute("user")).getFirstName() + " " + ((UserModel)request.getAttribute("user")).getLastName());
 			%>
 		</a>
 	</div>
@@ -42,7 +41,7 @@
 			<li class="dropdown user-dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 					<i class="fa fa-user"></i> 
-					<% out.println(user.getLoggedUser(request).getEmail()); %>
+					<% out.println(((UserModel)request.getAttribute("user")).getEmail()); %>
 					<b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu">

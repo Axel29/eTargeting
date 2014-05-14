@@ -25,7 +25,6 @@ public class Lists extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserModel user        = new UserModel();
 		ListsModel listsModel = new ListsModel();
 		
 		// Set number of page, current page, previous and next page's links into request
@@ -35,7 +34,7 @@ public class Lists extends HttpServlet {
 				page = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException nfe) {}
 		}
-		int numberOfLists    = listsModel.numberOfLists(user.getLoggedUser(request).getUserId());
+		int numberOfLists    = listsModel.numberOfLists(((UserModel)request.getAttribute("user")).getUserId());
 		double numberOfPages = Math.ceil(numberOfLists/ListsModel.getLimit());
 		String nextPage      = (page != numberOfPages) ? "Lists?page=" + Integer.toString(page + 1) : "#";
 		String prevPage      = (page != 1) ? "Lists?page=" + Integer.toString(page - 1) : "#";
@@ -46,7 +45,7 @@ public class Lists extends HttpServlet {
 		request.setAttribute("nextPage", nextPage);
 		
 		// Set every list object into request
-		ListsModel[] lists    = listsModel.selectLists(user.getLoggedUser(request).getUserId(), page);
+		ListsModel[] lists    = listsModel.selectLists(((UserModel)request.getAttribute("user")).getUserId(), page);
 		for (int i = 0; i < lists.length; i++) {
 			request.setAttribute("list-" + i, lists[i]);
 		}

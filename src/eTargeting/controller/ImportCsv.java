@@ -57,11 +57,15 @@ public class ImportCsv extends HttpServlet {
 			ArrayList<String> warnings = new ArrayList<String>();
 			try {
 				try {
-					UserModel user        = new UserModel();
-					int userId            = user.getLoggedUser(request).getUserId();
+					int userId            = ((UserModel)request.getAttribute("user")).getUserId();
 					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 					Date date             = new Date();
 					String[] headers      = headersParam.split(",");
+					
+					// Select every subscribers belonging to the current user (in order to check if they exist later)
+					SubscribersModel subscribersModel = new SubscribersModel();
+	            	SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(userId, 0);
+					
 					// Parse the CSV file
 		            String [] line;
 		            String filePath     = getServletContext().getInitParameter("uploads-directory") + dateFormat.format(date) + "-" + fileName;
@@ -95,46 +99,44 @@ public class ImportCsv extends HttpServlet {
 		            	String gender     = (line.length > index_gender && line[index_gender] != null) ? line[index_gender] : "";
 
 		            	// Insert new subscriber into 'subscribers' table if he doesn't exist
-		            	SubscribersModel subscribersModel = new SubscribersModel(0, first_name, last_name, email, age, gender, userId);
-		            	SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(userId, 0);
-		            	int insertedId                    = 0;
-		            	boolean shouldContinue            = true;
+		            	subscribersModel = subscribersModel.setValues(0, first_name, last_name, email, age, gender, userId);
+		            	int insertedId   = 0;
 		            	for (int j=0; j<subscribers.length; j++) {
 		            		if (subscribers[j].getEmail().equals(email)) {
-		            			shouldContinue = false;
-		            			warnings.add("L'adresse email " + email + " est déjà présente dans votre liste d'abonnés.");
+		            			insertedId = subscribers[j].getId();
+		            			warnings.add("L'adresse email " + email + " est déjà présente dans votre liste d'abonnés. Elle n'a donc été importée que dans la liste.");
 		            		}
 		            	}
 
-		    			// Update list if we come from an existing list
-		            	if (shouldContinue) {
-		            		// Insert subscriber into database
+	            		// Insert subscriber into database if he doesn't exist
+		            	if (insertedId == 0) {
 		            		insertedId = subscribersModel.insertSubscriber();
-		            		
-		            		// Insert subscriber into the list
-			    			if ( (request.getParameter("list") != null && Integer.parseInt(request.getParameter("list")) != 0) || listId != 0 ) {
-			    				listId                = Integer.parseInt(request.getParameter("list"));
-			    				list                  = listsModel.selectListById(listId, user.getLoggedUser(request).getUserId());
-			    				String subscriberIds  = "";
-			    				if (list.getSubscriberIds() == null || "".equals(list.getSubscriberIds())) {
-			    					subscriberIds  = Integer.toString(insertedId);
-			    				} else {
-			    					subscriberIds  = list.getSubscriberIds() + "," + Integer.toString(insertedId);
-			    				}
-			    				
-								listsModel.setId(listId);
-
-								if (request.getParameter("name") != null) {
-									listsModel.setName(request.getParameter("name"));
-								} else {
-									listsModel.setName(list.getName());
-								}
-								
-								listsModel.setSubscriberIds(subscriberIds);
-								listsModel.setOwner(userId);
-								listsModel.updateList();
-			    			}
 		            	}
+		            		
+	            		// Insert subscriber into the list
+		    			if ( (request.getParameter("list") != null && Integer.parseInt(request.getParameter("list")) != 0) || listId != 0 ) {
+		    				listId                = Integer.parseInt(request.getParameter("list"));
+		    				list                  = listsModel.selectListById(listId, userId);
+		    				String subscriberIds  = "";
+		    				if (list.getSubscriberIds() == null || "".equals(list.getSubscriberIds())) {
+		    					subscriberIds  = Integer.toString(insertedId);
+		    				} else {
+		    					subscriberIds  = list.getSubscriberIds() + "," + Integer.toString(insertedId);
+		    				}
+		    				
+							listsModel.setId(listId);
+
+							if (request.getParameter("name") != null) {
+								listsModel.setName(request.getParameter("name"));
+							} else {
+								listsModel.setName(list.getName());
+							}
+							
+							listsModel.setSubscriberIds(subscriberIds);
+							listsModel.setOwner(userId);
+							listsModel.updateList();
+		    			}
+		    			
 		            	if (warnings.size() != 0) {
 		            		json.put("warning", warnings.toString());
 		            	}

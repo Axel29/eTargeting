@@ -33,7 +33,6 @@ public class AddList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Set subscriber's list to the request so that we can display it
-		UserModel user                    = new UserModel();
 		SubscribersModel subscribersModel = new SubscribersModel();
 		
 		// Set number of page, current page, previous and next page's links into request
@@ -43,7 +42,7 @@ public class AddList extends HttpServlet {
 				page = Integer.parseInt(request.getParameter("page"));
 			} catch (NumberFormatException nfe) {}
 		}
-		int numberOfSubscribers = subscribersModel.numberOfSubscribers(user.getLoggedUser(request).getUserId());
+		int numberOfSubscribers = subscribersModel.numberOfSubscribers(((UserModel)request.getAttribute("user")).getUserId());
 		double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
 		String nextPage         = (page != numberOfPages) ? "AddList?page=" + Integer.toString(page + 1) : "#";
 		String prevPage         = (page != 1) ? "AddList?page=" + Integer.toString(page - 1) : "#";
@@ -53,7 +52,7 @@ public class AddList extends HttpServlet {
 		request.setAttribute("prevPage", prevPage);
 		request.setAttribute("nextPage", nextPage);
 		
-		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(user.getLoggedUser(request).getUserId(), 1);
+		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(((UserModel)request.getAttribute("user")).getUserId(), 1);
 		for (int i = 0; i < subscribers.length; i++) {
 			request.setAttribute("subscriber-" + i, subscribers[i]);
 		}
@@ -74,8 +73,7 @@ public class AddList extends HttpServlet {
 					ids = request.getParameter("subscriberIds");
 				}
 				// Insert list into database
-				UserModel user  = new UserModel();
-				ListsModel list = new ListsModel(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), ids, user.getLoggedUser(request).getUserId(), 1);
+				ListsModel list = new ListsModel(0, StringEscapeUtils.escapeHtml4(request.getParameter("name")), ids, ((UserModel)request.getAttribute("user")).getUserId(), 1);
 				list.insertList();
 
 				json.put("msg", "OK");

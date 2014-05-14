@@ -228,6 +228,9 @@ public class UserModel {
 						CSVReader csvReader      = new CSVReader(stringReder);
 						String[] userValues      = csvReader.readNext();
 						// Setting user's values to the current object
+						for (String val : userValues) {
+							System.out.println("cookie: " + val);
+						}
 						this.userId    = Integer.parseInt(userValues[0]);
 						this.email     = userValues[1];
 						this.lastName  = userValues[2];
@@ -357,9 +360,11 @@ public class UserModel {
 			StringWriter stringWriter = new StringWriter();
 			CSVWriter csvWriter       = new CSVWriter(stringWriter);
 			String[] userValues       = {Integer.toString(this.getUserId()), this.getEmail(), this.getLastName(), this.getFirstName()};
+			System.out.println("email: " + this.getEmail() + "... - firstName: " + this.getFirstName() + "... - lastName: " + this.getLastName() + "...");
 			// Writing into the string writer
 			csvWriter.writeNext(userValues);
 			csvWriter.close();
+			System.out.println("stringWriter.toString(): " + stringWriter.toString() + "...");
 			Cookie cookie = new Cookie("user", stringWriter.toString());
 			// Setting expire date for cookies to current day + 30 days
 			cookie.setMaxAge(60*60*24*30);

@@ -34,11 +34,10 @@ public class Login extends HttpServlet {
 		    response.sendRedirect("/eTargeting/Index");
 		    return;
 		} else {
-			UserModel user = new UserModel();
-			if (user.getLoggedUser(request).getUserId() != 0) {
+			if (((UserModel)request.getAttribute("user")).getUserId() != 0) {
 				response.sendRedirect("/eTargeting/Dashboard");
 			} else {
-				request.setAttribute("user", user.getLoggedUser(request));
+				request.setAttribute("user", ((UserModel)request.getAttribute("user")));
 				request.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 			}
 		}
