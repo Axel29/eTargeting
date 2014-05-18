@@ -30,9 +30,9 @@
 				    </div>
 				</div>
 			</div>
-			
+			<!-- Add subscriber's form -->
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-lg-12">
 					<form action="Subscribers" method="POST" id="add-subscriber" name="add-subscriber" class="add-subscriber form-inline" role="form">
 						<input type="hidden" name="insertSubscriber" value="1" />
 						<div class="form-group">
@@ -63,9 +63,17 @@
 					</form>
 				</div>
 			</div>
+			<!-- Import CSV button -->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="create-button">
+						<a href="ImportCsv" class="import-csv-link btn btn-default">Importer depuis CSV</a>
+					</div>
+				</div>
+			</div>
 			<div class="clearfix"></div>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-lg-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="panel-title">Abonnés</h3>
@@ -100,13 +108,13 @@
 										String age = (subscriber.getAge() == 0) ? "N/A" : Integer.toString(subscriber.getAge());
 										out.println("<tr>");
 											out.println("<td class=\"table_user_id hidden\">" + subscriber.getId() + "</td>");
-											out.println("<td class=\"col-md-4 table_user_email\">" + subscriber.getEmail() + "</td>");
-											out.println("<td class=\"col-md-2 table_user_first_name\">" + subscriber.getFirstName() + "</td>");
-											out.println("<td class=\"col-md-2 table_user_last_name\">" + subscriber.getLastName() + "</td>");
-											out.println("<td class=\"col-md-1 table_user_age\">" + age + "</td>");
-											out.println("<td class=\"col-md-1 table_user_gender\">" + subscriber.getGender() + "</td>");
-											out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
-											out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+											out.println("<td class=\"col-lg-4 table_user_email\">" + subscriber.getEmail() + "</td>");
+											out.println("<td class=\"col-lg-2 table_user_first_name\">" + subscriber.getFirstName() + "</td>");
+											out.println("<td class=\"col-lg-2 table_user_last_name\">" + subscriber.getLastName() + "</td>");
+											out.println("<td class=\"col-lg-1 table_user_age\">" + age + "</td>");
+											out.println("<td class=\"col-lg-1 table_user_gender\">" + subscriber.getGender() + "</td>");
+											out.println("<td class=\"col-lg-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+											out.println("<td class=\"col-lg-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 										out.println("</tr>");
 										i++;
 									}
@@ -210,10 +218,10 @@
 		</div> 
 	</div>
 	
-	<script src="js/jquery-1.10.2.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<script src="js/tablesorter/jquery.tablesorter.js"></script>
-	<script src="js/tablesorter/tables.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/tablesorter/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="js/tablesorter/tables.js"></script>
+	<script type="text/javascript" type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

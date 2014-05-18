@@ -126,10 +126,10 @@
 	    </div>
 	</div>
 
-	<script src="js/jquery-1.10.2.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<script src="js/tablesorter/jquery.tablesorter.js"></script>
-	<script src="js/tablesorter/tables.js"></script>
-	<script src="js/main.js"></script>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/tablesorter/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="js/tablesorter/tables.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

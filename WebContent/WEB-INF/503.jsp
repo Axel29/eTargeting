@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>eTargeting - 403 Forbidden</title>
+	<title>eTargeting - 500 Internal server error</title>
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/landing-page.css" rel="stylesheet">
 	<link href="css/sb-admin.css" rel="stylesheet">
@@ -43,12 +43,10 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="intro-message">
-						<h1>Page introuvable</h1>
+						<h1>Erreur interne</h1>
 						<hr class="intro-divider">
 						<p>
-							Oops ! Une erreur s'est produite.
-							<br />
-							Il semblerait que la page à laquelle vous essayez d'accéder n'existe plus ou ait été déplacée.
+							Oops ! Une erreur est survenue. Veuillez réessayer ultérieurement.
 						</p>
 					</div>
 				</div>

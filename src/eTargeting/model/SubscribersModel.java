@@ -321,8 +321,10 @@ public class SubscribersModel {
 		ResultSet count  = model.select(table, new String[] {"COUNT(*) as totalLists"}, where, new String[0], new String[0], new double[2]);
 		int totalSubscribers   = 0;
 		try {
-			while (count.next()) {
-				totalSubscribers    = count.getInt("totalLists");
+			if (count != null) {
+				while (count.next()) {
+					totalSubscribers    = count.getInt("totalLists");
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

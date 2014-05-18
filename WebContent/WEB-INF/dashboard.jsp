@@ -104,12 +104,12 @@
 		</div>
 	</div>
 
-	<script src="js/jquery-1.10.2.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<script src="js/raphael-min.js"></script>
-	<script src="js/morris/morris-0.4.3.min.js"></script>
-	<script src="js/morris/chart-data-morris.js"></script>
-	<script src="js/tablesorter/jquery.tablesorter.js"></script>
-	<script src="js/tablesorter/tables.js"></script>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/raphael-min.js"></script>
+	<script type="text/javascript" src="js/morris/morris-0.4.3.min.js"></script>
+	<script type="text/javascript" src="js/morris/chart-data-morris.js"></script>
+	<script type="text/javascript" src="js/tablesorter/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="js/tablesorter/tables.js"></script>
 </body>
 </html>

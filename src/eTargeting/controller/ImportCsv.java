@@ -64,7 +64,6 @@ public class ImportCsv extends HttpServlet {
 					
 					// Select every subscribers belonging to the current user (in order to check if they exist later)
 					SubscribersModel subscribersModel = new SubscribersModel();
-	            	SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(userId, 0);
 					
 					// Parse the CSV file
 		            String [] line;
@@ -99,6 +98,7 @@ public class ImportCsv extends HttpServlet {
 		            	String gender     = (line.length > index_gender && line[index_gender] != null) ? line[index_gender] : "";
 
 		            	// Insert new subscriber into 'subscribers' table if he doesn't exist
+		            	SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(userId, 0);
 		            	subscribersModel = subscribersModel.setValues(0, first_name, last_name, email, age, gender, userId);
 		            	int insertedId   = 0;
 		            	for (int j=0; j<subscribers.length; j++) {

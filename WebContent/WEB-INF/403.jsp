@@ -43,12 +43,12 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="intro-message">
-						<h1>Page introuvable</h1>
+						<h1>Accès restreint</h1>
 						<hr class="intro-divider">
 						<p>
-							Oops ! Une erreur s'est produite.
+							Oops ! Il semblerait que vous essayez d'accéder à une page interdite.
 							<br />
-							Il semblerait que la page à laquelle vous essayez d'accéder n'existe plus ou ait été déplacée.
+							Si vous pensez qu'il s'agit d'une erreur, n'hésitez pas à nous contacter.
 						</p>
 					</div>
 				</div>

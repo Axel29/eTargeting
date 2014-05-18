@@ -228,9 +228,6 @@ public class UserModel {
 						CSVReader csvReader      = new CSVReader(stringReder);
 						String[] userValues      = csvReader.readNext();
 						// Setting user's values to the current object
-						for (String val : userValues) {
-							System.out.println("cookie: " + val);
-						}
 						this.userId    = Integer.parseInt(userValues[0]);
 						this.email     = userValues[1];
 						this.lastName  = userValues[2];
