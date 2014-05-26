@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3306
--- Généré le :  Dim 18 Mai 2014 à 17:56
+-- Généré le :  Lun 26 Mai 2014 à 21:42
 -- Version du serveur :  5.5.34
 -- Version de PHP :  5.5.10
 
@@ -32,10 +32,15 @@ DROP TABLE IF EXISTS `campaigns`;
 CREATE TABLE `campaigns` (
 `id` int(5) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `from_name` varchar(255) NOT NULL,
+  `from_email` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `content` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `scheduled_at` datetime DEFAULT NULL,
   `sent_on` datetime DEFAULT NULL,
-  `list` int(5) NOT NULL
+  `list` int(5) NOT NULL,
+  `owner` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -57,7 +62,7 @@ CREATE TABLE `lists` (
 --
 
 INSERT INTO `lists` (`id`, `name`, `subscriber_ids`, `owner`) VALUES
-(1, 'Liste 1', '1,11,3,10,15,30,13,17,4,2,5,31,20', 1),
+(1, 'Newsletter', '38,36,1', 1),
 (2, 'Liste 2', '1,2,3,4,5', 1),
 (3, 'Liste 3', '', 1),
 (4, 'Liste 4', '1,2,3,4,5', 1),
@@ -122,7 +127,7 @@ CREATE TABLE `subscribers` (
   `age` int(3) NOT NULL DEFAULT '0',
   `gender` varchar(255) DEFAULT NULL,
   `owner` int(5) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=36 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=39 ;
 
 --
 -- Contenu de la table `subscribers`
@@ -163,7 +168,10 @@ INSERT INTO `subscribers` (`id`, `first_name`, `last_name`, `email`, `age`, `gen
 (32, 'Branden', 'Stanton', 'Phasellus.fermentum.convallis@risusvarius.co.uk', 18, 'F', 1),
 (33, 'Julian', 'Roy', 'non.justo.Proin@maurissit.org', 20, 'M', 1),
 (34, 'Leah', 'Malone', 'tincidunt.tempus.risus@Cras.ca', 22, 'M', 1),
-(35, 'Stephanie', 'Monroe', 'orci.in.consequat@metusVivamuseuismod.ca', 24, 'F', 1);
+(35, 'Stephanie', 'Monroe', 'orci.in.consequat@metusVivamuseuismod.ca', 24, 'F', 1),
+(36, 'Axel', 'Bouaziz', 'axel.bouaziz@calliweb.fr', 22, 'M', 1),
+(37, 'Axel', 'Bouaziz', 'axelll.bouaziz@hotmail.fr', 22, 'M', 1),
+(38, 'Axel', 'Bouaziz', 'axel.bouaziz29@gmail.com', 22, 'M', 1);
 
 -- --------------------------------------------------------
 
@@ -198,7 +206,7 @@ INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`) VALUE
 -- Index pour la table `campaigns`
 --
 ALTER TABLE `campaigns`
- ADD PRIMARY KEY (`id`), ADD KEY `list` (`list`);
+ ADD PRIMARY KEY (`id`), ADD KEY `list` (`list`), ADD KEY `owner` (`owner`);
 
 --
 -- Index pour la table `lists`
@@ -247,7 +255,7 @@ MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT pour la table `subscribers`
 --
 ALTER TABLE `subscribers`
-MODIFY `id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
+MODIFY `id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT pour la table `users`
 --
@@ -261,7 +269,8 @@ MODIFY `id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- Contraintes pour la table `campaigns`
 --
 ALTER TABLE `campaigns`
-ADD CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`);
+ADD CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`),
+ADD CONSTRAINT `FK_USER_ID` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `lists`
