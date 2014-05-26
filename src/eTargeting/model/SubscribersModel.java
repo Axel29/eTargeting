@@ -394,49 +394,89 @@ public class SubscribersModel {
 	}
 
 	/**
+	 * Get a subscriber from database by it's id.
+	 * Return null if this subscriber doesn't exist.
+	 * @param id
+	 * @param owner
+	 * @return SubscribersModel if exists | null if not exists
+	 */
+	public SubscribersModel selectSubscriberById(int id, int owner) {
+		try {
+			String table     = "subscribers S";
+			String[] where   = {"S.owner = \"" + owner + "\"", "S.id = " + id};
+			Model model      = new Model();
+			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {1,0});
+			
+			try {
+				while (result.next()) {
+					this.setId(result.getInt("id"));
+					this.setFirstName(result.getString("first_name"));
+					this.setLastName(result.getString("last_name"));
+					this.setEmail(result.getString("email"));
+					this.setAge(result.getInt("age"));
+					this.setGender(result.getString("gender"));
+					this.setOwnerId(result.getInt("owner"));
+				}
+				model.closeConnection();
+				return this;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
      * Inserts a new subscriber into database.
      * Uses values from current object
      */
 	public int insertSubscriber() {
-		// Adding every keys and their values into two lists if they have been sent.
-		ArrayList<String> keyList   = new ArrayList<String>();
-		ArrayList<String> valueList = new ArrayList<String>();
-		if (this.getEmail() != null && !"".equals(this.getEmail())) {
-			keyList.add("email");
-			valueList.add(this.getEmail());
-		}
-		if (this.getFirstName() != null && !"".equals(this.getFirstName())) {
-			keyList.add("first_name");
-			valueList.add(this.getFirstName());
-		}
-		if (this.getLastName() != null && !"".equals(this.getLastName())) {
-			keyList.add("last_name");
-			valueList.add(this.getLastName());
-		}
-		if (this.getAge() != 0) {
-			keyList.add("age");
-			valueList.add(Integer.toString(this.getAge()));
-		}
-		if (this.getGender() != null && !"".equals(this.getGender())) {
-			keyList.add("gender");
-			valueList.add(this.getGender());
-		}
-		if (this.getOwnerId() != 0) {
-			keyList.add("owner");
-			valueList.add(Integer.toString(this.getOwnerId()));
-		}
-		
-		// Inserting values into database if some values have been sent
-		if (!keyList.isEmpty() && keyList.contains("email") && !valueList.isEmpty()) {
-			String table    = "subscribers";
-			String[] keys   = new String[keyList.size()];
-			String[] values = new String[valueList.size()];
-			// Converting the ArrayList into String Array
-			keyList.toArray(keys);
-			valueList.toArray(values);
+		// Check that the subscriber doesn't already exist
+		if (checkSubscriberExistance(this.getEmail(), this.getOwnerId()) == 0) {
+			// Adding every keys and their values into two lists if they have been sent.
+			ArrayList<String> keyList   = new ArrayList<String>();
+			ArrayList<String> valueList = new ArrayList<String>();
+			if (this.getEmail() != null && !"".equals(this.getEmail())) {
+				keyList.add("email");
+				valueList.add(this.getEmail());
+			}
+			if (this.getFirstName() != null && !"".equals(this.getFirstName())) {
+				keyList.add("first_name");
+				valueList.add(this.getFirstName());
+			}
+			if (this.getLastName() != null && !"".equals(this.getLastName())) {
+				keyList.add("last_name");
+				valueList.add(this.getLastName());
+			}
+			if (this.getAge() != 0) {
+				keyList.add("age");
+				valueList.add(Integer.toString(this.getAge()));
+			}
+			if (this.getGender() != null && !"".equals(this.getGender())) {
+				keyList.add("gender");
+				valueList.add(this.getGender());
+			}
+			if (this.getOwnerId() != 0) {
+				keyList.add("owner");
+				valueList.add(Integer.toString(this.getOwnerId()));
+			}
 			
-			Model model = new Model();
-			return model.insert(table, keys, values);
+			// Inserting values into database if some values have been sent
+			if (!keyList.isEmpty() && keyList.contains("email") && !valueList.isEmpty()) {
+				String table    = "subscribers";
+				String[] keys   = new String[keyList.size()];
+				String[] values = new String[valueList.size()];
+				// Converting the ArrayList into String Array
+				keyList.toArray(keys);
+				valueList.toArray(values);
+				
+				Model model = new Model();
+				return model.insert(table, keys, values);
+			}
+		} else {
+			return this.getId();
 		}
 		return 0;
 	}
@@ -528,5 +568,22 @@ public class SubscribersModel {
 		} else {
 			return 0;
 		}
+	}
+	
+	/**
+	 * Check that the subscriber doesn't alreay exist in database
+	 * @param id Subscriber's ID
+	 * @param owner Subscriber's owner ID
+	 * @return true | false
+	 */
+	public int checkSubscriberExistance(String email, int owner) {
+		SubscribersModel subscribersModel = new SubscribersModel();
+		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(owner, 0);
+		for (int i = 0; i < subscribers.length; i++) {
+			if (email.equals(subscribers[i].getEmail())) {
+				return subscribers[i].getId();
+			}
+		}
+		return 0;
 	}
 }

@@ -59,7 +59,7 @@ public class ListsModel {
 	/**
 	 * Current page
 	 * 
-	 * @see ListsModel#ListsModel(int, String, String, int)
+	 * @see ListsModel#ListsModel(int, String, String, int, int)
 	 * @see ListsModel#getPage()
 	 */
 	private int page;
@@ -98,8 +98,9 @@ public class ListsModel {
      * 
      * @see ListsModel#id
      * @see ListsModel#name
-     * @see ListsModel#ubscribers
+     * @see ListsModel#subscribers
      * @see ListsModel#owner
+     * @see ListsModel#page
      */
 	public ListsModel(int id, String name, String subscribers, int owner, int page){
 		this.id            = id;
@@ -177,7 +178,7 @@ public class ListsModel {
 	 * @return the page
 	 */
 	public int getPage() {
-		if (page == 0) {
+		if (page <= 0) {
 			return 1;
 		} else {
 			return page;
@@ -283,7 +284,7 @@ public class ListsModel {
 	 * Return null if this list doesn't exist.
 	 * @param id
 	 * @param owner
-	 * @return ListModel if exists | null if not exists
+	 * @return ListsModel if exists | null if not exists
 	 */
 	public ListsModel selectListById(int id, int owner) {
 		try {

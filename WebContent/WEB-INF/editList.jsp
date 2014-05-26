@@ -102,23 +102,27 @@
 						<%
 						int currentPage   = Integer.parseInt(request.getAttribute("currentPage").toString());
 						int numberOfPages = Integer.parseInt(request.getAttribute("numberOfPages").toString());
+						if (numberOfPages > 1) {
 						%>
-						<ul class="pagination">
-							<li class="<% out.print((currentPage == 1) ? "disabled" : ""); %>">
-								<a href="<% out.print(request.getAttribute("prevPage")); %>" class="page-link">&laquo;</a>
-							</li>
-							<% for (int j = 1; j <= numberOfPages; j++) { %>
-								<%
-								String isActive = (currentPage == j) ? "active" : "" ;
-								%>
-								<li class="<% out.print(isActive); %>">
-									<a href="EditList?id=<% out.print(list.getId()); %>&page=<% out.print(j); %>" class="page-link"><% out.print(j); %></a>
+							<ul class="pagination">
+								<li class="<% out.print((currentPage == 1) ? "disabled" : ""); %>">
+									<a href="<% out.print(request.getAttribute("prevPage")); %>" class="page-link">&laquo;</a>
 								</li>
-							<% } %>
-							<li class="<% out.print((currentPage == numberOfPages) ? "disabled" : ""); %>">
-								<a href="<% out.print(request.getAttribute("nextPage")); %>" class="page-link">&raquo;</a>
-							</li>
-						</ul>
+								<% for (int j = 1; j <= numberOfPages; j++) { %>
+									<%
+									String isActive = (currentPage == j) ? "active" : "" ;
+									%>
+									<li class="<% out.print(isActive); %>">
+										<a href="EditList?id=<% out.print(list.getId()); %>&page=<% out.print(j); %>" class="page-link"><% out.print(j); %></a>
+									</li>
+								<% } %>
+								<li class="<% out.print((currentPage == numberOfPages) ? "disabled" : ""); %>">
+									<a href="<% out.print(request.getAttribute("nextPage")); %>" class="page-link">&raquo;</a>
+								</li>
+							</ul>
+						<%
+						}
+						%>
 					</div>
 				</div>
 				

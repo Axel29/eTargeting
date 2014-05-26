@@ -33,9 +33,9 @@
     <location>/WEB-INF/503.jsp</location>
   </error-page>
   <context-param>
-	<description>Location to store uploaded files</description>
-	<param-name>uploads-directory</param-name>
-	<param-value>
+    <description>Location to store uploaded files</description>
+    <param-name>uploads-directory</param-name>
+    <param-value>
 		/Users/Axel/Desktop/eclipse/Juno/juno_workspace/uploads/
 	</param-value>
   </context-param>

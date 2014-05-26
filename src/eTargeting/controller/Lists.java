@@ -36,7 +36,7 @@ public class Lists extends HttpServlet {
 		}
 		int numberOfLists    = listsModel.numberOfLists(((UserModel)request.getAttribute("user")).getUserId());
 		double numberOfPages = Math.ceil(numberOfLists/ListsModel.getLimit());
-		String nextPage      = (page != numberOfPages) ? "Lists?page=" + Integer.toString(page + 1) : "#";
+		String nextPage      = (page < numberOfPages) ? "Lists?page=" + Integer.toString(page + 1) : "#";
 		String prevPage      = (page != 1) ? "Lists?page=" + Integer.toString(page - 1) : "#";
 
 		request.setAttribute("numberOfPages", (int)numberOfPages);

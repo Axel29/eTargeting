@@ -37,7 +37,7 @@ public class Subscribers extends HttpServlet {
 		}
 		int numberOfSubscribers = subscribersModel.numberOfSubscribers(((UserModel)request.getAttribute("user")).getUserId());
 		double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
-		String nextPage         = (page != numberOfPages) ? "Subscribers?page=" + Integer.toString(page + 1) : "#";
+		String nextPage         = (page < numberOfPages) ? "Subscribers?page=" + Integer.toString(page + 1) : "#";
 		String prevPage         = (page != 1) ? "Subscribers?page=" + Integer.toString(page - 1) : "#";
 		
 		request.setAttribute("numberOfPages", (int)numberOfPages);

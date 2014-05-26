@@ -207,13 +207,15 @@ $(function(){
 	    }
 	}
 	// Disable sorting for the first header (checkbox "check all") to prevent it from blocking the click.
-	$("body.addList #subscribers-list, body.editList #subscribers-list").tablesorter({ 
-        headers: {
-            0: {  
-                sorter: false 
-            }
-        } 
-    });
+	if ($("body.addList #subscribers-list, body.editList #subscribers-list").length > 0) {
+		$("body.addList #subscribers-list, body.editList #subscribers-list").tablesorter({ 
+	        headers: {
+	            0: {  
+	                sorter: false 
+	            }
+	        } 
+	    });
+	}
 	// Checking every checkbox
 	$('body.addList, body.editList').on('click', '#subscribers-list #checkall', function(e){
         if ($("#subscribers-list #checkall").is(':checked')) {
