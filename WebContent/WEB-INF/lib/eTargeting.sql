@@ -63,7 +63,7 @@ CREATE TABLE `lists` (
 --
 
 INSERT INTO `lists` (`id`, `name`, `subscriber_ids`, `owner`) VALUES
-(1, 'Newsletter', '38,36,1', 1),
+(1, 'Newsletter', '38,36', 1),
 (2, 'Liste 2', '1,2,3,4,5', 1),
 (3, 'Liste 3', '', 1),
 (4, 'Liste 4', '1,2,3,4,5', 1),
