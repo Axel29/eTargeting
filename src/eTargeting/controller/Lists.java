@@ -106,11 +106,11 @@ public class Lists extends HttpServlet {
 		ListsModel[] lists = listsModel.selectLists(owner, page);
 		StringBuilder html = new StringBuilder();
 		for (int i = 0; i < lists.length; i++) {
-			html.append("<tr>");
-			html.append("<td class=\"hidden table_list_id\">" + lists[i].getId() + "</td>");
-			html.append("<td class=\"col-md-10\">" + lists[i].getName() + "</td>");
-			html.append("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + lists[i].getId() + "&page=" + page + "\" class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
-			html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+			html.append("<tr class=\"tr-middle\">");
+				html.append("<td class=\"hidden table_list_id\">" + lists[i].getId() + "</td>");
+				html.append("<td class=\"col-md-10\">" + lists[i].getName() + "</td>");
+				html.append("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + lists[i].getId() + "&page=" + page + "\" class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
+				html.append("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 			html.append("</tr>");
 		}
 		return html;

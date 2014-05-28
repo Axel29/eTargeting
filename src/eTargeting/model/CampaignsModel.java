@@ -317,16 +317,21 @@ public class CampaignsModel {
 	 * @return totalLists Number of campaigns
 	 */
 	public int numberOfCampaigns(int ownerId) {
-		Model model        = new Model();
-		String[] where     = {"C.owner = \"" + ownerId + "\""};
-		ResultSet count    = model.select("campaigns C", new String[] {"COUNT(*) as totalCampaigns"}, where, new String[0], new String[0], new double[2]);
 		int totalCampaigns = 0;
+		Model model        = new Model();
 		try {
-			while (count.next()) {
-				totalCampaigns    = count.getInt("totalCampaigns");
+			String[] where     = {"C.owner = \"" + ownerId + "\""};
+			ResultSet count = model.select("campaigns C", new String[] {"COUNT(*) as totalCampaigns"}, where, new String[0], new String[0], new double[2]);
+			if (count != null) {
+				while (count.next()) {
+					totalCampaigns    = count.getInt("totalCampaigns");
+				}
+				count.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			model.closeConnection();
 		}
 		return totalCampaigns;
 	}
@@ -382,10 +387,11 @@ public class CampaignsModel {
 														1);
 					i++;
 				}
-				model.closeConnection();
 				return campaigns;
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				model.closeConnection();				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -408,23 +414,26 @@ public class CampaignsModel {
 			ResultSet result = model.select(table, new String[0], where, new String[0], new String[0], new double[] {1,0});
 			
 			try {
-				while (result.next()) {
-					this.setId(result.getInt("id"));
-					this.setName(result.getString("name"));
-					this.setFromName(result.getString("from_name"));
-					this.setFromEmail(result.getString("from_email"));
-					this.setSubject(result.getString("subject"));
-					this.setContent(result.getString("content"));
-					this.setCreatedAt(result.getDate("created_at"));
-					this.setScheduledAt(result.getDate("scheduled_at"));
-					this.setSentOn(result.getDate("sent_on"));
-					this.setListId(result.getInt("list"));
-					this.setOwner(result.getInt("owner"));
+				if (result != null) {
+					while (result.next()) {
+						this.setId(result.getInt("id"));
+						this.setName(result.getString("name"));
+						this.setFromName(result.getString("from_name"));
+						this.setFromEmail(result.getString("from_email"));
+						this.setSubject(result.getString("subject"));
+						this.setContent(result.getString("content"));
+						this.setCreatedAt(result.getDate("created_at"));
+						this.setScheduledAt(result.getDate("scheduled_at"));
+						this.setSentOn(result.getDate("sent_on"));
+						this.setListId(result.getInt("list"));
+						this.setOwner(result.getInt("owner"));
+					}
 				}
-				model.closeConnection();
 				return this;
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				model.closeConnection();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

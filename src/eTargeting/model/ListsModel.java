@@ -214,14 +214,17 @@ public class ListsModel {
 	 * @return totalLists Number of lists
 	 */
 	public int numberOfLists(int ownerId) {
-		Model model      = new Model();
-		String[] where = {"L.owner = \"" + ownerId + "\""};
-		ResultSet count  = model.select("lists L", new String[] {"COUNT(*) as totalLists"}, where, new String[0], new String[0], new double[2]);
 		int totalLists   = 0;
 		try {
-			while (count.next()) {
-				totalLists    = count.getInt("totalLists");
+			Model model      = new Model();
+			String[] where = {"L.owner = \"" + ownerId + "\""};
+			ResultSet count  = model.select("lists L", new String[] {"COUNT(*) as totalLists"}, where, new String[0], new String[0], new double[2]);
+			if (count != null) {
+				while (count.next()) {
+					totalLists    = count.getInt("totalLists");
+				}
 			}
+			model.closeConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

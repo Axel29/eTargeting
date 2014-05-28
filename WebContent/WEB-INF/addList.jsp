@@ -35,7 +35,7 @@
 					</div>
 				</div>
 				
-				<div class="clearfix"></div>
+				<br />
 				
 				<!-- Subscriber's list -->
 				<div class="row">
@@ -55,7 +55,7 @@
 							<div class="table-responsive">
 								<table id="subscribers-list" class="table table-striped table-bordered table-hover">
 									<thead>
-										<tr>
+										<tr class="tr-middle thead-bordered">
 											<th data-sorter="false"><input type="checkbox" id="checkall" /></th>
 											<th class="hidden">#</th>
 											<th>Email</th>
@@ -72,7 +72,7 @@
 											SubscribersModel subscriber = (SubscribersModel)request.getAttribute("subscriber-" + i);
 											String age = (subscriber.getAge() == 0) ? "N/A" : Integer.toString(subscriber.getAge());
 											%>
-											<tr>
+											<tr class="tr-middle">
 												<td class="col-md-1"><input type="checkbox" name="subscribersChecked[]" value="<% out.print(subscriber.getId()); %>" class="checkthis" /></td>
 												<td class="col-md-4"><input type="text" name="email" class="input-styleless" value="<% out.print(subscriber.getEmail()); %>" disabled="disabled" /></td>
 												<td class="col-md-2"><input type="text" name="first_name" class="input-styleless" value="<% out.print(subscriber.getFirstName()); %>" disabled="disabled" /></td>

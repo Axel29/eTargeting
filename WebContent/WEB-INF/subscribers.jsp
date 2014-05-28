@@ -89,7 +89,7 @@
 						<div class="table-responsive">
 							<table id="subscribers-table" class="table table-striped table-bordered table-hover">
 								<thead>
-									<tr>
+									<tr class="tr-middle thead-bordered">
 										<th class="hidden">#</th>
 										<th>Email</th>
 										<th>Prénom</th>
@@ -106,15 +106,15 @@
 									while(request.getAttribute("subscriber-" + i) != null) {
 										SubscribersModel subscriber = (SubscribersModel)request.getAttribute("subscriber-" + i);
 										String age = (subscriber.getAge() == 0) ? "N/A" : Integer.toString(subscriber.getAge());
-										out.println("<tr>");
+										out.println("<tr class=\"tr-middle\">");
 											out.println("<td class=\"table_user_id hidden\">" + subscriber.getId() + "</td>");
 											out.println("<td class=\"col-lg-4 table_user_email\">" + subscriber.getEmail() + "</td>");
 											out.println("<td class=\"col-lg-2 table_user_first_name\">" + subscriber.getFirstName() + "</td>");
 											out.println("<td class=\"col-lg-2 table_user_last_name\">" + subscriber.getLastName() + "</td>");
 											out.println("<td class=\"col-lg-1 table_user_age\">" + age + "</td>");
 											out.println("<td class=\"col-lg-1 table_user_gender\">" + subscriber.getGender() + "</td>");
-											out.println("<td class=\"col-lg-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
-											out.println("<td class=\"col-lg-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+											out.println("<td class=\"col-lg-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber href-glyphicon\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+											out.println("<td class=\"col-lg-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber href-glyphicon\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 										out.println("</tr>");
 										i++;
 									}
@@ -163,7 +163,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
+					<h4 class="modal-title custom_align" id="Heading">Editer les informations</h4>
 				</div>
 				<form action="Subscribers" method="post" id="update-subscriber">
 					<div class="modal-body">
@@ -215,8 +215,8 @@
 					</div>
 				</div>
 				<div class="modal-footer ">
-					<button type="button" id="confirm-deletion" class="btn btn-warning" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-					<button type="button" class="btn btn-warning" data-dismiss="modal" ><span class="glyphicon glyphicon-remove"></span> No</button>
+					<button type="button" id="confirm-deletion" class="btn btn-warning" ><span class="glyphicon glyphicon-ok-sign"></span> Oui</button>
+					<button type="button" class="btn btn-warning" data-dismiss="modal" ><span class="glyphicon glyphicon-remove"></span> Non</button>
 				</div>
 			</div> 
 		</div> 

@@ -23,9 +23,10 @@
 
 			<div class="row">
 				<div class="col-lg-12">
-					<a href="CreateCampaign">Créer une campagne</a>
+					<a href="CreateCampaign" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span>  Créer une campagne</a>
 				</div>
 			</div>
+			<br />
 
 			<!-- Campaigns' table -->
 			<%
@@ -59,10 +60,10 @@
 										int i = 0;
 										while(request.getAttribute("campaign-" + i) != null) {
 											CampaignsModel campaign = (CampaignsModel)request.getAttribute("campaign-" + i);
-											out.println("<tr>");
+											out.println("<tr class=\"thead-bordered\">");
 												out.println("<td class=\"hidden table_campaign_id\">" + campaign.getId() + "</td>");
 												out.println("<td class=\"col-md-10\">" + campaign.getName() + "</td>");
-												out.println("<td class=\"col-md-1\"><p><a href=\"Campaigns?id=" + campaign.getId() + "\" class=\"btn btn-primary btn-xs center-block see-campaign\" data-title=\"See again\" data-target=\"#see\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
+												out.println("<td class=\"col-md-1\"><p><a href=\"Campaigns?id=" + campaign.getId() + "\" class=\"btn btn-primary btn-xs center-block see-campaign href-glyphicon\" data-title=\"See again\" data-target=\"#see\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
 											out.println("</tr>");
 											i++;
 										}

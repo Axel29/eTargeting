@@ -194,7 +194,7 @@ public class ListsAjax extends HttpServlet {
 		StringBuilder html                = new StringBuilder();
 		for (int i = 0; i < subscribers.length; i++) {
 			String checked  = (idsList.contains(subscribers[i].getId())) ? "checked=\"checked\"" : "" ;
-			html.append("<tr>");
+			html.append("<tr class=\"tr-middle\">");
 				html.append("<td class=\"col-md-1\"><input type=\"checkbox\" name=\"subscribersChecked[]\" value=\"" + subscribers[i].getId() + "\" class=\"checkthis\" " + checked + " /></td>");
 				html.append("<td class=\"col-md-4\"><input type=\"text\" name=\"email\" class=\"input-styleless\" value=\"" + subscribers[i].getEmail() + "\" disabled=\"disabled\" /></td>");
 				html.append("<td class=\"col-md-2\"><input type=\"text\" name=\"first_name\" class=\"input-styleless\" value=\"" + subscribers[i].getFirstName() + "\" disabled=\"disabled\" /></td>");

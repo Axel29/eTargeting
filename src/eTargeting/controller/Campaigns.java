@@ -61,8 +61,10 @@ public class Campaigns extends HttpServlet {
 			
 			// Set every list object into request
 			CampaignsModel[] campaigns = campaignsModel.selectCampaigns(((UserModel)request.getAttribute("user")).getUserId(), page);
-			for (int i = 0; i < campaigns.length; i++) {
-				request.setAttribute("campaign-" + i, campaigns[i]);
+			if (campaigns != null) {
+				for (int i = 0; i < campaigns.length; i++) {
+					request.setAttribute("campaign-" + i, campaigns[i]);
+				}
 			}
 			request.getServletContext().getRequestDispatcher( "/WEB-INF/campaigns.jsp" ).forward(request, response);
 		}

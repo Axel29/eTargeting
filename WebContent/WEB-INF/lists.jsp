@@ -23,10 +23,11 @@
 
 			<div class="row">
 				<div class="col-lg-12">
-					<a href="AddList">Ajouter une liste</a>
+					<a href="AddList" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span>  Ajouter une liste</a>
 				</div>
 			</div>
 
+			<br />
 
 			<!-- Lists' table -->
 			<%
@@ -49,7 +50,7 @@
 							<div class="table-responsive">
 								<table id="lists-table" class="table table-striped table-bordered table-hover">
 									<thead>
-										<tr>
+										<tr class="tr-middle thead-bordered">
 											<th class="hidden">#</th>
 											<th>Nom</th>
 											<th>Editer</th>
@@ -61,11 +62,11 @@
 										int i = 0;
 										while(request.getAttribute("list-" + i) != null) {
 											ListsModel list = (ListsModel)request.getAttribute("list-" + i);
-											out.println("<tr>");
+											out.println("<tr class=\"tr-middle\">");
 												out.println("<td class=\"hidden table_list_id\">" + list.getId() + "</td>");
 												out.println("<td class=\"col-md-10\">" + list.getName() + "</td>");
-												out.println("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + list.getId() + "\" class=\"btn btn-primary btn-xs center-block update-list\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
-												out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+												out.println("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + list.getId() + "\" class=\"btn btn-primary btn-xs center-block update-list href-glyphicon\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
+												out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list href-glyphicon\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 											out.println("</tr>");
 											i++;
 										}

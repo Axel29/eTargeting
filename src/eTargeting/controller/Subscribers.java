@@ -147,15 +147,15 @@ public class Subscribers extends HttpServlet {
 		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(owner, page);
 		StringBuilder html                = new StringBuilder();
 		for (int i = 0; i < subscribers.length; i++) {
-			html.append("<tr>");
+			html.append("<tr class=\"tr-middle\">");
 				html.append("<td class=\"col-lg-1 table_user_id hidden\">" + subscribers[i].getId() + "</td>");
 				html.append("<td class=\"col-lg-4 table_user_email\">" + subscribers[i].getEmail() + "</td>");
 				html.append("<td class=\"col-lg-2 table_user_first_name\">" + subscribers[i].getFirstName() + "</td>");
 				html.append("<td class=\"col-lg-1 table_user_last_name\">" + subscribers[i].getLastName() + "</td>");
 				html.append((subscribers[i].getAge() == 0) ? "<td class=\"col-lg-1 table_user_age\">N/A</td>" : "<td class=\"col-lg-1 table_user_age\">" + subscribers[i].getAge() + "</td>");
 				html.append("<td class=\"col-lg-1 table_user_gender\">" + subscribers[i].getGender() + "</td>");
-				html.append("<td class=\"col-lg-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
-				html.append("<td class=\"col-lg-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
+				html.append("<td class=\"col-lg-1\"><p><button class=\"btn btn-primary btn-xs center-block update-subscriber href-glyphicon\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\"><span class=\"glyphicon glyphicon-pencil\"></span></button></p></td>");
+				html.append("<td class=\"col-lg-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-subscriber href-glyphicon\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 			html.append("</tr>");
 		}
 		return html;

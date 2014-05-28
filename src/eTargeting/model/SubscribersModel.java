@@ -315,12 +315,12 @@ public class SubscribersModel {
 	 * @return totalSubscribers Number of subscribers
 	 */
 	public int numberOfSubscribers(int ownerId) {
-		Model model      = new Model();
-		String table     = "subscribers S";
-		String[] where = {"S.owner = \"" + ownerId + "\""};
-		ResultSet count  = model.select(table, new String[] {"COUNT(*) as totalLists"}, where, new String[0], new String[0], new double[2]);
 		int totalSubscribers   = 0;
 		try {
+			Model model      = new Model();
+			String table     = "subscribers S";
+			String[] where = {"S.owner = \"" + ownerId + "\""};
+			ResultSet count  = model.select(table, new String[] {"COUNT(*) as totalLists"}, where, new String[0], new String[0], new double[2]);
 			if (count != null) {
 				while (count.next()) {
 					totalSubscribers    = count.getInt("totalLists");
