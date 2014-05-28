@@ -437,7 +437,7 @@ public class ListsModel {
 	 * @param ids Integer table containing every ids to user 
 	 * @return true | false if every subscribers checked belong to the user
 	 */
-	private boolean checkSubscribersBelonging(int[] ids) {
+	protected boolean checkSubscribersBelonging(int[] ids) {
 		SubscribersModel subscribersModel = new SubscribersModel();
 		SubscribersModel[] subscribers    = subscribersModel.selectSubscribers(this.getOwner(), 0);
 		
