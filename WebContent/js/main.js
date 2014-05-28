@@ -287,11 +287,13 @@ $(function(){
 			data:     "listId=" + listId
 		})
 		.done(function(datas) {
-			var ids = datas['subscriberIds'].split(",");
-			$.each(ids, function(i) {
-				subscriberIds.push(ids[i]);
-				$.unique(subscriberIds);
-			});
+			if (datas['subscriberIds'] != "") {
+				var ids = datas['subscriberIds'].split(",");
+				$.each(ids, function(i) {
+					subscriberIds.push(ids[i]);
+					$.unique(subscriberIds);
+				});
+			}
 		});
 	}
 	// Push every checkbox checked or remove them from the array on change
@@ -306,7 +308,7 @@ $(function(){
 				$.unique(subscriberIds);
 			});
 		} else if ($(e.target).attr("id") == "checkall" && !$(e.target).is(":checked")) {
-			// Remove every ids of curret page from the array
+			// Remove every ids of current page from the array
 			$('.checkthis').each(function() {
 				subscriberIds.splice($.inArray($(this).val(), subscriberIds), 1);
 			});

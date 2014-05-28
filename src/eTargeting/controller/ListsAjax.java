@@ -89,10 +89,11 @@ public class ListsAjax extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ListsModel listsModel = new ListsModel();
 		
-		// If the user just arrived to the EditList page, we set subscriberIds to session
+		// If the user checked a subscriber, we set subscriberIds to session  
 		if (request.getParameter("subscriberIds") != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("listSubscriberIds", request.getParameter("subscriberIds"));
+			System.out.println(request.getParameter("subscriberIds"));
 		}
 
 		JSONObject json = new JSONObject();

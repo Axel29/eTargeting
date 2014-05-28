@@ -34,12 +34,13 @@ public class EditList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int userId            = ((UserModel)request.getAttribute("user")).getUserId();
-		ListsModel listsModel = new ListsModel();
 		int id                = 0;
+		ListsModel listsModel = new ListsModel();
 		
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
 		
+			// Pagination
 			// Set number of page, current page, previous and next page's links into request
 			int page = 1;
 			if (request.getParameter("page") != null) {
@@ -48,15 +49,16 @@ public class EditList extends HttpServlet {
 				} catch (NumberFormatException nfe) {}
 			}
 			SubscribersModel subscribersModel = new SubscribersModel();
-			int numberOfSubscribers = subscribersModel.numberOfSubscribers(userId);
-			double numberOfPages    = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
-			String nextPage      = (page != numberOfPages) ? "EditList?id=" + id + "&page=" + Integer.toString(page + 1) : "#";
-			String prevPage      = (page != 1) ? "EditList?id=" + id + "&page=" + Integer.toString(page - 1) : "#";
+			int numberOfSubscribers           = subscribersModel.numberOfSubscribers(userId);
+			double numberOfPages              = Math.ceil(numberOfSubscribers/SubscribersModel.getLimit());
+			String nextPage = (page != numberOfPages) ? "EditList?id=" + id + "&page=" + Integer.toString(page + 1) : "#";
+			String prevPage = (page != 1) ? "EditList?id=" + id + "&page=" + Integer.toString(page - 1) : "#";
 			
 			request.setAttribute("numberOfPages", (int)numberOfPages);
 			request.setAttribute("currentPage", page);
 			request.setAttribute("prevPage", prevPage);
 			request.setAttribute("nextPage", nextPage);
+			// End of pagination
 			
 			// Set the ListsModel object to the request
 			ListsModel list = listsModel.selectListById(id, userId);
@@ -99,6 +101,7 @@ public class EditList extends HttpServlet {
 			String ids = null;
 			if (request.getParameter("subscriberIds") != null) {
 				ids = request.getParameter("subscriberIds");
+				System.out.println("ids: " + ids);
 			}
 			
 			UserModel user  = (UserModel)request.getAttribute("user");
