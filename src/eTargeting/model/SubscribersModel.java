@@ -564,6 +564,33 @@ public class SubscribersModel {
 		if (Arrays.binarySearch(allowedRequest, 0) < 0) {
 			Model model = new Model();
 			model.delete("subscribers", aIds);
+			
+			// Update lists to remove the ID
+			ListsModel listsModel = new ListsModel();
+			ListsModel[] lists    = listsModel.selectLists(owner, 0);
+			for (int i = 0; i < lists.length; i++) {
+				String[] subscriberIds = lists[i].getSubscriberIds().split(",");
+				StringBuilder ids      = new StringBuilder();
+				boolean shouldUpdate   = false;
+				// Run through every subscriber ID
+				for	(int j = 0; j < subscriberIds.length; j++) {
+					// If the ID passed matches the one deleted...
+					if ( !Integer.toString(aIds[0]).equals(subscriberIds[j]) ) {
+						// Remove subscriber ID from subscribers array
+						ids.append(subscriberIds[j]);
+						ids.append(",");
+					} else {
+						shouldUpdate = true;
+					}
+				}
+				
+				// If the id has been found for this list, we update it
+				if (shouldUpdate) {
+					lists[i].setSubscriberIds(ids.toString());
+					lists[i].updateList();
+				}
+			}
+			
 			return 1;
 		} else {
 			return 0;

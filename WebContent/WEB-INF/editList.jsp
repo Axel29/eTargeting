@@ -61,7 +61,7 @@
 							<div class="table-responsive">
 								<table id="subscribers-list" class="table table-striped table-bordered table-hover">
 									<thead>
-										<tr>
+										<tr class="thead-bordered">
 											<th data-sorter="false"><input type="checkbox" id="checkall" /></th>
 											<th>Email</th>
 											<th>Prénom</th>

@@ -75,14 +75,17 @@ $(function(){
 	// Insert subscriber
 	$('body.subscribers').on('submit', '#add-subscriber', function(e){
 		var form = $('#add-subscriber');
+		var page = 0;
 		// Prevent the form from reloading / changing the page
 		e.preventDefault();
-		
+		if (getURLParameter("page") != undefined) {
+			page = getURLParameter("page");
+		}
 		// Insert new subscriber into database and refresh table's content
 		$.ajax({
 			url:      form.attr('action'),
 			type:     form.attr('method'),
-			data:     form.serialize()
+			data:     form.serialize() + "&page=" + page
 		})
 		.done(function(data) {
 			// Replace table's body with new values if there was no error

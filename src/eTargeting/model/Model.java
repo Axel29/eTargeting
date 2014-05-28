@@ -209,7 +209,7 @@ public class Model {
 			}
 			
 			query += ";";
-			//System.out.println("query: " + query);
+			// System.out.println("query: " + query);
 			this.setResultSet(this.getStatement().executeQuery(query));
 			return this.getResultSet();
 		} catch (SQLException se) {

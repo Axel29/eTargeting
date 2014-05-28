@@ -45,7 +45,7 @@
 					<div class="intro-message">
 						<h1>Accès restreint</h1>
 						<hr class="intro-divider">
-						<p>
+						<p class="shadowed-p">
 							Oops ! Il semblerait que vous essayez d'accéder à une page interdite.
 							<br />
 							Si vous pensez qu'il s'agit d'une erreur, n'hésitez pas à nous contacter.

@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>eTargeting - 403 Forbidden</title>
+	<title>eTargeting - 404 Not Found</title>
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/landing-page.css" rel="stylesheet">
 	<link href="css/sb-admin.css" rel="stylesheet">
@@ -45,7 +45,7 @@
 					<div class="intro-message">
 						<h1>Page introuvable</h1>
 						<hr class="intro-divider">
-						<p>
+						<p class="shadowed-p">
 							Oops ! Une erreur s'est produite.
 							<br />
 							Il semblerait que la page à laquelle vous essayez d'accéder n'existe plus ou ait été déplacée.

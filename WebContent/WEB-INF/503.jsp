@@ -45,7 +45,7 @@
 					<div class="intro-message">
 						<h1>Erreur interne</h1>
 						<hr class="intro-divider">
-						<p>
+						<p class="shadowed-p">
 							Oops ! Une erreur est survenue. Veuillez réessayer ultérieurement.
 						</p>
 					</div>

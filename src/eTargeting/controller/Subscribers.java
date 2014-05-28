@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import eTargeting.model.SubscribersModel;
 import eTargeting.model.UserModel;
 
@@ -89,17 +91,27 @@ public class Subscribers extends HttpServlet {
 		
 		////// Insert new subscriber //////
 		if ("1".equals(insertSubscriber) && email != null) {
-			SubscribersModel subscribersModel = new SubscribersModel(0, first_name, last_name, email, age, gender, owner);
-			subscribersModel.insertSubscriber();
+			EmailValidator emailValidator = EmailValidator.getInstance();
+			if (emailValidator.isValid(email)) {
+				SubscribersModel subscribersModel = new SubscribersModel(0, first_name, last_name, email, age, gender, owner);
+				subscribersModel.insertSubscriber();
+			} else {
+				System.out.println("Email invalide");
+			}
 			
-			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
+			response.setContentType("text/html;charset=UTF-8");
 			out.print(this.getSubscriberListHtml(owner, page).toString());
 		}
 		///// Edit subscriber //////
 		else if ("1".equals(updateSubscriber) && email != null && !"".equals(subscriberId)) {
-			SubscribersModel subscribersModel = new SubscribersModel(Integer.parseInt(subscriberId), first_name, last_name, email, age, gender, owner);
-			subscribersModel.updateSubscriber();
+			EmailValidator emailValidator = EmailValidator.getInstance();
+			if (emailValidator.isValid(email)) {
+				SubscribersModel subscribersModel = new SubscribersModel(Integer.parseInt(subscriberId), first_name, last_name, email, age, gender, owner);
+				subscribersModel.updateSubscriber();
+			} else {
+				System.out.println("Email invalide");
+			}
 			
 			response.setContentType("text/html;charset=UTF-8");
 			// Adding subscriber's list to the response
