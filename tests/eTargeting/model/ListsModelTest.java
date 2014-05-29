@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class ListsModelTest {
 
-	protected ListsModel listsModel;
+	protected ListsModel listsModel = new ListsModel();
 	
 	@Before
 	public void setUp() throws Exception {
@@ -20,15 +20,12 @@ public class ListsModelTest {
 
 	@Test
 	public void testNumberOfLists() throws Exception {
-		listsModel = new ListsModel();
 		assertEquals(35, listsModel.numberOfLists(1));
 	}
 	
 	@Test
 	public void testCheckSubscribersBelonging() throws Exception {
-		listsModel = new ListsModel();
 		listsModel.setOwner(1);
 		assertEquals(true, listsModel.checkSubscribersBelonging(new int[]{1,2,3}));
 	}
-
 }
