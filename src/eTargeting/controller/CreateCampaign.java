@@ -20,6 +20,8 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 /**
  * Servlet implementation class CreateCampaign
  */
@@ -60,6 +62,10 @@ public class CreateCampaign extends HttpServlet {
 			}
 
 			if ( !"".equals(name) && !"".equals(fromName) && !"".equals(fromEmail) && !"".equals(subject) && !"".equals(listId) && !"".equals(content) ) {
+				EmailValidator emailValidator = EmailValidator.getInstance();
+				if (!emailValidator.isValid(fromEmail)) {
+					request.getServletContext().getRequestDispatcher( "/WEB-INF/createCampaign.jsp" ).forward(request, response);
+    			}
 				int list = Integer.parseInt(listId);
 				CampaignsModel campaignsModel = new CampaignsModel(0, name, fromName, fromEmail, subject, content, createdAt, scheduledAt, sentOn, list, owner, 0);
 				// Insert campaign into database and send mail
