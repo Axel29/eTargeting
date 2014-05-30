@@ -37,7 +37,7 @@
 						<input type="hidden" name="insertSubscriber" value="1" />
 						<div class="form-group">
 							<label class="sr-only" for="email">Adresse email</label>
-							<input type="email" id="email" name="email" class="form-control" placeholder="Adress email">
+							<input type="email" id="email" name="email" class="form-control" placeholder="Adress email" required="required">
 							<span class="required-entry">*</span>
 						</div>
 						<div class="form-group">

@@ -28,7 +28,7 @@
 							<div class="control-group">
 								<label class="control-label" for="name">Nom</label>
 								<div class="controls">
-									<input id="name" name="name" type="text" class="input-xlarge">
+									<input id="name" name="name" type="text" class="input-xlarge" required="required">
 								</div>
 							</div>
 						</fieldset>

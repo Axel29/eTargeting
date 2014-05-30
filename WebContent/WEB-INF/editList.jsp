@@ -29,7 +29,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="control-group pull-left">
-							<label class="control-label" for="name">Nom</label>
+							<label class="control-label" for="name" required="required">Nom</label>
 							<div class="controls">
 								<input id="name" name="name" type="text" class="input-xlarge" value="<% out.print(list.getName()); %>">
 							</div>

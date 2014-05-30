@@ -24,27 +24,27 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<label class="sr-only" for="campaign_name">Nom de la campagne</label>
-						<input type="texte" id="campaign_name" name="campaign_name" class="form-control" placeholder="Nom de la campagne">
+						<input type="texte" id="campaign_name" name="campaign_name" class="form-control" placeholder="Nom de la campagne" required="required">
 						
 						<br />
 						
 						<label class="sr-only" for="from_name">Nom de l'expéditeur</label>
-						<input type="text" id="from_name" name="from_name" class="form-control" placeholder="Nom de l'expéditeur">
+						<input type="text" id="from_name" name="from_name" class="form-control" placeholder="Nom de l'expéditeur" required="required">
 						
 						<br />
 						
 						<label class="sr-only" for="from_email">Email de l'expéditeur</label>
-						<input type="text" id="from_email" name="from_email" class="form-control input-xsmall" placeholder="Email de l'expéditeur">
+						<input type="text" id="from_email" name="from_email" class="form-control input-xsmall" placeholder="Email de l'expéditeur" required="required">
 						
 						<br />
 						
 						<label class="sr-only" for="email_subject">Sujet de l'email</label>
-						<input type="text" id="email_subject" name="email_subject" class="form-control" placeholder="Sujet de l'email">
+						<input type="text" id="email_subject" name="email_subject" class="form-control" placeholder="Sujet de l'email"required="required">
 						
 						<br />
 						
 						<label class="sr-only" for="list">Liste</label>
-						<select id="list" name="list" class="form-control">
+						<select id="list" name="list" class="form-control" required="required">
 							
 							<%
 							int i = 0;
@@ -59,7 +59,7 @@
 						<br />
 						
 						<label class="sr-only" for="email_content">Contenu de l'email</label>
-						<textarea rows="50" class="form-control" name="email_content">
+						<textarea rows="50" class="form-control" name="email_content" required="required">
 						</textarea>
 						
 						<br />
@@ -79,7 +79,7 @@
 	    selector: "textarea",
 	    language : 'fr_FR',
 	    plugins: "code,textcolor,spellchecker",
-	    toolbar: "undo redo | styleselect | bold italic underline strikethrough | link image | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | spellchecker",
+	    toolbar: "undo redo | styleselect | bold italic underline strikethrough | link image | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | spellchecker | code",
 	    //toolbar: "forecolor backcolor",
 	 });
 	</script>
