@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,11 +85,15 @@ public class ImportCsv extends HttpServlet {
 	    			
 		            while ((line = reader.readNext()) != null) {
 		            	i++;
+		            	EmailValidator emailValidator = EmailValidator.getInstance();
 		            	// Reject this line if there is no email address
 		            	if (line.length > index_email && line[index_email] == null) {
 		            		warnings.add("La ligne n°" + i + " n'a pas pu être importée. L'adresse email est obligatoire.");
 		            		continue;
-		            	}
+		            	} else if (!emailValidator.isValid(line[index_email])) {
+		            		warnings.add("La ligne n°" + i + " n'a pas pu être importée. L'adresse email n'est pas valide.");
+		            		continue;
+		    			}
 		            	
 		            	// Get informations from the line if they exist
 		            	String first_name = (line.length > index_first_name && line[index_first_name] != null) ? line[index_first_name] : "";
@@ -136,12 +141,12 @@ public class ImportCsv extends HttpServlet {
 							listsModel.setOwner(userId);
 							listsModel.updateList();
 		    			}
-		    			
-		            	if (warnings.size() != 0) {
-		            		json.put("warning", warnings.toString());
-		            	}
 		    			json.put("msg", "OK");
 		            }
+	    			
+	            	if (warnings.size() != 0) {
+	            		json.put("warning", warnings.toString());
+	            	}
 		            reader.close();
 				} catch (NumberFormatException nfe) {
 					json.put("msg", "L'identifiant de la liste et l'age doivent être numériques. Veuillez réessayer.");
