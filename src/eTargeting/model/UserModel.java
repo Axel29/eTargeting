@@ -305,7 +305,7 @@ public class UserModel {
 			model.closeConnection();
 			return user;
 		} catch (Exception e) {
-			System.out.println("Erreur lors de la connexion");
+			System.out.println("Erreur lors de la connexion.");
 			e.printStackTrace();
 		}
 		return user;
