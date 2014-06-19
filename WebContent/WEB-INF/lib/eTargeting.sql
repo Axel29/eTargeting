@@ -1,13 +1,12 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.1
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3306
--- Généré le :  Lun 26 Mai 2014 à 21:46
+-- Généré le :  Jeu 19 Juin 2014 à 02:32
 -- Version du serveur :  5.5.34
 -- Version de PHP :  5.5.10
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -20,6 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `eTargeting`
 --
+DROP DATABASE IF EXISTS `eTargeting`;
 CREATE DATABASE IF NOT EXISTS `eTargeting` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `eTargeting`;
 
@@ -31,7 +31,7 @@ USE `eTargeting`;
 
 DROP TABLE IF EXISTS `campaigns`;
 CREATE TABLE `campaigns` (
-`id` int(5) NOT NULL,
+  `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `from_name` varchar(255) NOT NULL,
   `from_email` varchar(255) NOT NULL,
@@ -41,8 +41,23 @@ CREATE TABLE `campaigns` (
   `scheduled_at` datetime DEFAULT NULL,
   `sent_on` datetime DEFAULT NULL,
   `list` int(5) NOT NULL,
-  `owner` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `owner` int(5) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `list` (`list`),
+  KEY `owner` (`owner`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Vider la table avant d'insérer `campaigns`
+--
+
+TRUNCATE TABLE `campaigns`;
+--
+-- Contenu de la table `campaigns`
+--
+
+INSERT INTO `campaigns` (`id`, `name`, `from_name`, `from_email`, `subject`, `content`, `created_at`, `scheduled_at`, `sent_on`, `list`, `owner`) VALUES
+(1, 'Newsletter', 'Axel Bouaziz', 'axel.bouaziz@hotmail.fr', 'Newsletter Juin 2014', '&lt;p&gt;&lt;span style=&quot;text-decoration: underline;&quot;&gt;Newsletter&lt;/span&gt; &lt;strong&gt;eTargeting&lt;/strong&gt; &lt;em&gt;17 Juin 2014&lt;/em&gt;.&lt;/p&gt;', '2014-06-17 12:19:40', '2014-06-17 14:19:40', '2014-06-17 14:19:40', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -52,18 +67,25 @@ CREATE TABLE `campaigns` (
 
 DROP TABLE IF EXISTS `lists`;
 CREATE TABLE `lists` (
-`id` int(5) NOT NULL,
+  `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `subscriber_ids` text,
-  `owner` int(5) NOT NULL
+  `owner` int(5) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner` (`owner`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=36 ;
 
+--
+-- Vider la table avant d'insérer `lists`
+--
+
+TRUNCATE TABLE `lists`;
 --
 -- Contenu de la table `lists`
 --
 
 INSERT INTO `lists` (`id`, `name`, `subscriber_ids`, `owner`) VALUES
-(1, 'Newsletter', '38,36', 1),
+(1, 'Newsletter', '36', 1),
 (2, 'Liste 2', '1,2,3,4,5', 1),
 (3, 'Liste 3', '', 1),
 (4, 'Liste 4', '1,2,3,4,5', 1),
@@ -107,12 +129,20 @@ INSERT INTO `lists` (`id`, `name`, `subscriber_ids`, `owner`) VALUES
 
 DROP TABLE IF EXISTS `reports`;
 CREATE TABLE `reports` (
-`id` int(5) NOT NULL,
+  `id` int(5) NOT NULL AUTO_INCREMENT,
   `campaign` int(5) NOT NULL,
   `subscriber_id` int(5) NOT NULL,
-  `opened` tinyint(1) NOT NULL DEFAULT '0'
+  `opened` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `campaign` (`campaign`,`subscriber_id`),
+  KEY `user_id` (`subscriber_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+--
+-- Vider la table avant d'insérer `reports`
+--
+
+TRUNCATE TABLE `reports`;
 -- --------------------------------------------------------
 
 --
@@ -121,15 +151,22 @@ CREATE TABLE `reports` (
 
 DROP TABLE IF EXISTS `subscribers`;
 CREATE TABLE `subscribers` (
-`id` int(5) NOT NULL,
+  `id` int(5) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `age` int(3) NOT NULL DEFAULT '0',
   `gender` varchar(255) DEFAULT NULL,
-  `owner` int(5) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=39 ;
+  `owner` int(5) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner` (`owner`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=38 ;
 
+--
+-- Vider la table avant d'insérer `subscribers`
+--
+
+TRUNCATE TABLE `subscribers`;
 --
 -- Contenu de la table `subscribers`
 --
@@ -171,8 +208,7 @@ INSERT INTO `subscribers` (`id`, `first_name`, `last_name`, `email`, `age`, `gen
 (34, 'Leah', 'Malone', 'tincidunt.tempus.risus@Cras.ca', 22, 'M', 1),
 (35, 'Stephanie', 'Monroe', 'orci.in.consequat@metusVivamuseuismod.ca', 24, 'F', 1),
 (36, 'Axel', 'Bouaziz', 'axel.bouaziz@calliweb.fr', 22, 'M', 1),
-(37, 'Axel', 'Bouaziz', 'axelll.bouaziz@hotmail.fr', 22, 'M', 1),
-(38, 'Axel', 'Bouaziz', 'axel.bouaziz29@gmail.com', 22, 'M', 1);
+(37, 'Axel', 'Bouaziz', 'axel.bouaziz29@gmail.com', 22, 'M', 1);
 
 -- --------------------------------------------------------
 
@@ -182,13 +218,20 @@ INSERT INTO `subscribers` (`id`, `first_name`, `last_name`, `email`, `age`, `gen
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-`id` int(5) NOT NULL,
+  `id` int(5) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL
+  `last_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
+--
+-- Vider la table avant d'insérer `users`
+--
+
+TRUNCATE TABLE `users`;
 --
 -- Contenu de la table `users`
 --
@@ -196,72 +239,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`) VALUES
 (1, 'axel.bouaziz@hotmail.fr', '0976bdd439161deff5797776ec6873ad', 'Axel', 'Bouaziz'),
 (2, 'phiphi.traing@gmail.com', 'ab4f63f9ac65152575886860dde480a1', 'Traing', 'Philippe'),
-(3, 'jose.albea@gmail.com', 'ab4f63f9ac65152575886860dde480a1', 'Jos&amp;Atilde;&amp;copy;', 'Albea'),
+(3, 'jose.albea@gmail.com', 'ab4f63f9ac65152575886860dde480a1', 'José', 'Albea'),
 (4, 'yohan.teisseire@gmail.com', 'ab4f63f9ac65152575886860dde480a1', 'Yohann', 'Teisseire');
 
---
--- Index pour les tables exportées
---
-
---
--- Index pour la table `campaigns`
---
-ALTER TABLE `campaigns`
- ADD PRIMARY KEY (`id`), ADD KEY `list` (`list`), ADD KEY `owner` (`owner`);
-
---
--- Index pour la table `lists`
---
-ALTER TABLE `lists`
- ADD PRIMARY KEY (`id`), ADD KEY `owner` (`owner`);
-
---
--- Index pour la table `reports`
---
-ALTER TABLE `reports`
- ADD PRIMARY KEY (`id`), ADD KEY `campaign` (`campaign`,`subscriber_id`), ADD KEY `user_id` (`subscriber_id`);
-
---
--- Index pour la table `subscribers`
---
-ALTER TABLE `subscribers`
- ADD PRIMARY KEY (`id`), ADD KEY `owner` (`owner`);
-
---
--- Index pour la table `users`
---
-ALTER TABLE `users`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT pour les tables exportées
---
-
---
--- AUTO_INCREMENT pour la table `campaigns`
---
-ALTER TABLE `campaigns`
-MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT pour la table `lists`
---
-ALTER TABLE `lists`
-MODIFY `id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=36;
---
--- AUTO_INCREMENT pour la table `reports`
---
-ALTER TABLE `reports`
-MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT pour la table `subscribers`
---
-ALTER TABLE `subscribers`
-MODIFY `id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
---
--- AUTO_INCREMENT pour la table `users`
---
-ALTER TABLE `users`
-MODIFY `id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- Contraintes pour les tables exportées
 --
@@ -270,28 +250,27 @@ MODIFY `id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- Contraintes pour la table `campaigns`
 --
 ALTER TABLE `campaigns`
-ADD CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`),
-ADD CONSTRAINT `FK_USER_ID` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `campaigns_ibfk_1` FOREIGN KEY (`list`) REFERENCES `lists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_USER_ID` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `lists`
 --
 ALTER TABLE `lists`
-ADD CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `reports`
 --
 ALTER TABLE `reports`
-ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`campaign`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`campaign`) REFERENCES `campaigns` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`subscriber_id`) REFERENCES `subscribers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `subscribers`
 --
 ALTER TABLE `subscribers`
-ADD CONSTRAINT `subscribers_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-SET FOREIGN_KEY_CHECKS=1;
+  ADD CONSTRAINT `subscribers_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

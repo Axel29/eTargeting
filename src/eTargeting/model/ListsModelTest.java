@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class ListsModelTest {
 
-	protected ListsModel listsModel = new ListsModel();
+protected ListsModel listsModel = new ListsModel();
 	
 	@Before
 	public void setUp() throws Exception {
@@ -28,4 +28,5 @@ public class ListsModelTest {
 		listsModel.setOwner(1);
 		assertEquals(true, listsModel.checkSubscribersBelonging(new int[]{1,2,3}));
 	}
+
 }
