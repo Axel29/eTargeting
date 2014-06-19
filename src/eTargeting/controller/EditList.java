@@ -86,9 +86,9 @@ public class EditList extends HttpServlet {
 			}
 			this.getServletContext().getRequestDispatcher("/WEB-INF/editList.jsp").forward(request, response);
 		} catch (NumberFormatException nfe) {
-			response.sendRedirect("/eTargeting/Lists");
+			response.sendRedirect(request.getContextPath() + "/Lists");
 		} catch (Exception e) {
-			response.sendRedirect("/eTargeting/Lists");
+			response.sendRedirect(request.getContextPath() + "/Lists");
 		}
 	}
 

@@ -31,11 +31,11 @@ public class Login extends HttpServlet {
 		// If the user tries to lougout
 		if (request.getParameter("logout") != null) {
 			UserModel.logout(request, response);
-		    response.sendRedirect("/eTargeting/Index");
+		    response.sendRedirect(request.getContextPath() + "/Index");
 		    return;
 		} else {
 			if (((UserModel)request.getAttribute("user")).getUserId() != 0) {
-				response.sendRedirect("/eTargeting/Dashboard");
+				response.sendRedirect(request.getContextPath() + "/Dashboard");
 			} else {
 				request.setAttribute("user", ((UserModel)request.getAttribute("user")));
 				request.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
@@ -61,11 +61,11 @@ public class Login extends HttpServlet {
 			else {
 				user.saveUserSession(request);
 			}
-			response.sendRedirect("/eTargeting/Dashboard");
+			response.sendRedirect(request.getContextPath() + "/Dashboard");
 		}
 		// Otherwise we redirect him back to login's page
 		else {
-			response.sendRedirect("/eTargeting/Login");
+			response.sendRedirect(request.getContextPath() + "/Login");
 		}
 	}
 }

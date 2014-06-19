@@ -106,6 +106,6 @@ public class CreateCampaign extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		response.sendRedirect("/eTargeting/Campaigns");
+		response.sendRedirect(request.getContextPath() + "/Campaigns");
 	}
 }

@@ -31,7 +31,7 @@ public class Registration extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Checking that the user is logged in
 		if (((UserModel)request.getAttribute("user")).getUserId() != 0) {
-			response.sendRedirect("/eTargeting/Dashboard");
+			response.sendRedirect(request.getContextPath() + "/Dashboard");
 		} else {
 			request.setAttribute("user", (UserModel)request.getAttribute("user"));
 			request.getServletContext().getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);
@@ -60,18 +60,18 @@ public class Registration extends HttpServlet {
 				UserModel user      = new UserModel(0, email, password, lastName, firstName);
 				// Redirect the user to the registration page if the email already exists
 				if (user.userExists(email)) {
-					response.sendRedirect("/eTargeting/Registration");
+					response.sendRedirect(request.getContextPath() + "/Registration");
 				} else {
 					int userId = user.insertUser();
 					user       = UserModel.getUserById(userId);
 					user.saveUserSession(request);
-					response.sendRedirect("/eTargeting/Dashboard");
+					response.sendRedirect(request.getContextPath() + "/Dashboard");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}else{
-			response.sendRedirect("/eTargeting/Registration");
+			response.sendRedirect(request.getContextPath() + "/Registration");
 		}
 		
 	}
