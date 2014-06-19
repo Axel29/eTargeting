@@ -6,8 +6,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>eTargeting - Inscription</title>
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<link href="css/bootstrap.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
+	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet">
 </head>
 <body class="inscription">
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">

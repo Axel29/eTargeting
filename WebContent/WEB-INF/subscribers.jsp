@@ -6,9 +6,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>eTargeting - Abonnés</title>
-	<link href="css/bootstrap.css" rel="stylesheet">
-	<link href="css/sb-admin.css" rel="stylesheet">
-	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/font-awesome/css/font-awesome.min.css">
 </head>
 <body class="subscribers">
     <div id="wrapper">
@@ -222,10 +222,10 @@
 		</div> 
 	</div>
 	
-	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
-	<script type="text/javascript" src="js/bootstrap.js"></script>
-	<script type="text/javascript" src="js/tablesorter/jquery.tablesorter.js"></script>
-	<script type="text/javascript" src="js/tablesorter/tables.js"></script>
-	<script type="text/javascript" type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/tablesorter/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/tablesorter/tables.js"></script>
+	<script type="text/javascript" type="text/javascript" src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>

@@ -6,10 +6,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>eTargeting - 500 Internal server error</title>
-	<link href="css/bootstrap.css" rel="stylesheet">
-	<link href="css/landing-page.css" rel="stylesheet">
-	<link href="css/sb-admin.css" rel="stylesheet">
-	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/landing-page.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/font-awesome/css/font-awesome.min.css">
 </head>
 <body>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -21,7 +21,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/eTargeting/Index">E-targeting</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}//Index">E-targeting</a>
 			</div>
 			<div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
 				<ul class="nav navbar-nav">

@@ -6,9 +6,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>eTargeting - Import depuis CSV</title>
-	<link href="css/bootstrap.css" rel="stylesheet">
-	<link href="css/sb-admin.css" rel="stylesheet">
-	<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/font-awesome/css/font-awesome.min.css">
 </head>
 <body class="importcsv">
     <div id="wrapper">
@@ -88,8 +88,8 @@
 			</div>
 		</div>
 	</div>	
-	<script src="js/jquery-1.10.2.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<script src="js/importcsv.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+	<script src="${pageContext.request.contextPath}/js/importcsv.js"></script>
 </body>
 </html>

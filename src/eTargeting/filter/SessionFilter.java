@@ -61,7 +61,7 @@ public class SessionFilter implements Filter {
 				
 				if (!allowedRequest) {
 					HttpSession session = req.getSession(false);
-					if (null == session && user.getLoggedUser(req).getUserId() == 0) {
+					if (null == session.getAttribute("email") && user.getLoggedUser(req).getUserId() == 0) {
 						res.sendRedirect("/eTargeting/Login");
 						return;
 					}
