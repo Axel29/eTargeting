@@ -108,7 +108,6 @@ public class FileUploader extends HttpServlet {
 		                	i++;
 		                }
 		                reader.close();
-						System.out.println("Uploaded Filename: " + fileName + " in " + file.getAbsolutePath());
 		                // Send ajax response in JSON format
 						json.put("msg", "OK");
 						json.put("headers", headers);

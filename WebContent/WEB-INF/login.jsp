@@ -37,7 +37,6 @@
 	</nav>
 	<div class="post background">
 		<h1 class="title">Connexion</h1>
-		<p class="infos">Se connecter : </p>
 		<form action="Login" method="post">
 			<input class="form-control" type="text" id="user_email" name="user_email" placeholder="Email"> 
 			<input class="form-control" type="password" id="user_password" name="user_password" placeholder="Mot de passe">

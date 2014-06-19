@@ -98,7 +98,7 @@
 					</p>
 				</div>
 				<div class="col-lg-5 col-sm-pull-6  col-sm-6">
-					<img class="img-responsive" src="img/doge.png" alt="">
+					<img class="img-responsive" src="http://lorempixel.com/458/354/technics/" alt="">
 				</div>
 			</div>
 		</div>
@@ -111,13 +111,13 @@
 					<div class="clearfix"></div>
 					<h2 class="section-heading">Support Client</h2>
 					<p class="lead">
-						SimpleMail est présent à vos côtés pour l'utilisation de la plateforme. 
+						eTargeting est présent à vos côtés pour l'utilisation de la plateforme. 
 						Vous disposez d'un accès illimité et gratuit à une équipe dédiée au support client et à notre 
 						blog pour vous aider et vous accompagner.
 					</p>
 				</div>
 				<div class="col-lg-5 col-lg-offset-2 col-sm-6">
-					<img class="img-responsive" src="img/phones.png" alt="">
+					<img class="img-responsive" src="http://lorempixel.com/458/302/technics/" alt="">
 				</div>
 			</div>
 		</div>

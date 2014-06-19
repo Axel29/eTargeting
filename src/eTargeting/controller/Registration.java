@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import eTargeting.model.MD5;
 import eTargeting.model.UserModel;
@@ -48,6 +49,13 @@ public class Registration extends HttpServlet {
 		
 		if(!email.isEmpty() && !password.isEmpty() && !lastName.isEmpty() && !firstName.isEmpty()){
 			try {
+				// Check that the email is valid, otherwise, we redirect the user to the registration page
+				// @TODO Add error message
+				EmailValidator emailValidator = EmailValidator.getInstance();
+				if (!emailValidator.isValid(email)) {
+					request.getServletContext().getRequestDispatcher( "/WEB-INF/registration.jsp" ).forward(request, response);
+    			}
+				
 				// Insert user into database
 				UserModel user      = new UserModel(0, email, password, lastName, firstName);
 				// Redirect the user to the registration page if the email already exists

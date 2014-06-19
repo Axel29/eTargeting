@@ -101,7 +101,6 @@ public class EditList extends HttpServlet {
 			String ids = null;
 			if (request.getParameter("subscriberIds") != null) {
 				ids = request.getParameter("subscriberIds");
-				System.out.println("ids: " + ids);
 			}
 			
 			UserModel user  = (UserModel)request.getAttribute("user");
