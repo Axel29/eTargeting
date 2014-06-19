@@ -320,7 +320,7 @@ public class CampaignsModel {
 		int totalCampaigns = 0;
 		Model model        = new Model();
 		try {
-			String[] where     = {"C.owner = \"" + ownerId + "\""};
+			String[] where  = {"C.owner = \"" + ownerId + "\""};
 			ResultSet count = model.select("campaigns C", new String[] {"COUNT(*) as totalCampaigns"}, where, new String[0], new String[0], new double[2]);
 			if (count != null) {
 				while (count.next()) {
