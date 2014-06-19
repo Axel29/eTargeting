@@ -24,6 +24,7 @@ public class Campaigns extends HttpServlet {
 		CampaignsModel campaignsModel = new CampaignsModel();
 		ListsModel listsModel         = new ListsModel();
 		int userId                    = ((UserModel)request.getAttribute("user")).getUserId();
+		// Specific campaign page 
 		if (request.getParameter("id") != null) {
 			try {
 				int id                  = Integer.parseInt(request.getParameter("id"));
@@ -41,7 +42,9 @@ public class Campaigns extends HttpServlet {
 			} catch (NumberFormatException nfe) {
 				response.sendRedirect("eTargeting/Campaigns");
 			}
-		} else {
+		}
+		// Campaigns list
+		else {
 			// Set number of page, current page, previous and next page's links into request
 			int page = 1;
 			if (request.getParameter("page") != null) {
