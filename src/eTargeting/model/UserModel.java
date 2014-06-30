@@ -202,7 +202,7 @@ public class UserModel {
 			}
 			model.closeConnection();
 		} catch (Exception e) {
-			System.out.println("Erreur lors de la v�rification");
+			System.out.println("Erreur lors de la vérification");
 			e.printStackTrace();
 		}
 		return user;
@@ -224,8 +224,8 @@ public class UserModel {
 				{
 					if ("user".equals(cookies[i].getName())) {
 						// Getting user id from cookies' CSV
-						StringReader stringReder = new StringReader(cookies[i].getValue());
-						CSVReader csvReader      = new CSVReader(stringReder);
+						StringReader stringReader = new StringReader(cookies[i].getValue());
+						CSVReader csvReader      = new CSVReader(stringReader);
 						String[] userValues      = csvReader.readNext();
 						// Setting user's values to the current object
 						this.userId    = Integer.parseInt(userValues[0]);
@@ -274,7 +274,7 @@ public class UserModel {
 				return true;
 			}
 		} catch (Exception e) {
-			System.out.println("Erreur lors de la v�rification");
+			System.out.println("Erreur lors de la vérification");
 			e.printStackTrace();
 		}
 		return false;
@@ -357,11 +357,9 @@ public class UserModel {
 			StringWriter stringWriter = new StringWriter();
 			CSVWriter csvWriter       = new CSVWriter(stringWriter);
 			String[] userValues       = {Integer.toString(this.getUserId()), this.getEmail(), this.getLastName(), this.getFirstName()};
-			System.out.println("email: " + this.getEmail() + "... - firstName: " + this.getFirstName() + "... - lastName: " + this.getLastName() + "...");
 			// Writing into the string writer
 			csvWriter.writeNext(userValues);
 			csvWriter.close();
-			System.out.println("stringWriter.toString(): " + stringWriter.toString() + "...");
 			Cookie cookie = new Cookie("user", stringWriter.toString());
 			// Setting expire date for cookies to current day + 30 days
 			cookie.setMaxAge(60*60*24*30);

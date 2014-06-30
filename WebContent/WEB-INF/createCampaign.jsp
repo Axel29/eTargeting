@@ -24,7 +24,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<label class="sr-only" for="campaign_name">Nom de la campagne</label>
-						<input type="texte" id="campaign_name" name="campaign_name" class="form-control" placeholder="Nom de la campagne" required="required">
+						<input type="text" id="campaign_name" name="campaign_name" class="form-control" placeholder="Nom de la campagne" required="required">
 						
 						<br />
 						

@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang3.StringEscapeUtils"%>
 <%@ page import="eTargeting.model.ListsModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
@@ -64,7 +65,7 @@
 											ListsModel list = (ListsModel)request.getAttribute("list-" + i);
 											out.println("<tr class=\"tr-middle\">");
 												out.println("<td class=\"hidden table_list_id\">" + list.getId() + "</td>");
-												out.println("<td class=\"col-md-10\">" + list.getName() + "</td>");
+												out.println("<td class=\"col-md-10\">" + StringEscapeUtils.unescapeHtml4(list.getName()) + "</td>");
 												out.println("<td class=\"col-md-1\"><p><a href=\"EditList?id=" + list.getId() + "\" class=\"btn btn-primary btn-xs center-block update-list href-glyphicon\" data-title=\"Edit\" data-target=\"#edit\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
 												out.println("<td class=\"col-md-1\"><p><button class=\"btn btn-danger btn-xs center-block delete-list href-glyphicon\" data-title=\"Delete\" data-target=\"#delete\" data-placement=\"top\"><span class=\"glyphicon glyphicon-trash\"></span></button></p></td>");
 											out.println("</tr>");

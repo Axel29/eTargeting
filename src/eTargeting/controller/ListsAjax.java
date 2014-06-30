@@ -93,7 +93,6 @@ public class ListsAjax extends HttpServlet {
 		if (request.getParameter("subscriberIds") != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("listSubscriberIds", request.getParameter("subscriberIds"));
-			System.out.println(request.getParameter("subscriberIds"));
 		}
 
 		JSONObject json = new JSONObject();

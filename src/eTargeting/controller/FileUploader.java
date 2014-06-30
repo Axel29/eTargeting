@@ -69,8 +69,8 @@ public class FileUploader extends HttpServlet {
 			File repository               = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
 			String filePath               = getServletContext().getInitParameter("uploads-directory");
 
-			// Set factory constraints (max memory limit 4Mo and secure repository)
-			factory.setSizeThreshold(4 * 1024);
+			// Set factory constraints (max memory limit 128Mo and secure repository)
+			factory.setSizeThreshold(128 * 1024);
 			factory.setRepository(repository);
 
 			// Create a new file upload handler
@@ -89,30 +89,36 @@ public class FileUploader extends HttpServlet {
 					// Check that the field is a file
 					if (!item.isFormField()) {
 						// Get the uploaded file parameters
-						String fileName    = item.getName();
-						// Write the file
-						File file = new File(filePath + dateFormat.format(date) + "-" + fileName);
-						item.write(file) ;
-		
-						// Parse the CSV file
-		                String [] line;
-		                CSVReader reader                    = new CSVReader(new FileReader(file));
-		                String[] headers                    = reader.readNext();
-		                ArrayList<String[]> contentExamples = new ArrayList<String[]>();
-		                int i                               = 1;
-		                while ((line = reader.readNext()) != null) {
-		                	// Stop parsing the CSV if we reach the 10th line
-		                	if (i == 10) { break; }
-		                	// Add the examples to the ArrayList
-		                	contentExamples.add(line);
-		                	i++;
-		                }
-		                reader.close();
-		                // Send ajax response in JSON format
-						json.put("msg", "OK");
-						json.put("headers", headers);
-						json.put("contentExamples", prepareContentExamples(headers, contentExamples));
-						json.put("file", fileName);
+						String fileName  = item.getName();
+						// Check that the extension is CSV
+						String extension = fileName.substring(fileName.lastIndexOf("."));
+						if (!".csv".equals(extension)) {
+							json.put("msg", "Seuls les fichiers CSV sont autorisés.");
+						} else {
+							// Write the file
+							File file = new File(filePath + dateFormat.format(date) + "-" + fileName);
+							item.write(file) ;
+			
+							// Parse the CSV file
+			                String [] line;
+			                CSVReader reader                    = new CSVReader(new FileReader(file));
+			                String[] headers                    = reader.readNext();
+			                ArrayList<String[]> contentExamples = new ArrayList<String[]>();
+			                int i                               = 1;
+			                while ((line = reader.readNext()) != null) {
+			                	// Stop parsing the CSV if we reach the 10th line
+			                	if (i == 10) { break; }
+			                	// Add the examples to the ArrayList
+			                	contentExamples.add(line);
+			                	i++;
+			                }
+			                reader.close();
+			                // Send ajax response in JSON format
+							json.put("msg", "OK");
+							json.put("headers", headers);
+							json.put("contentExamples", prepareContentExamples(headers, contentExamples));
+							json.put("file", fileName);
+						}
 					} else {
 						json.put("msg", "Une erreur s'est produite. Veuillez réessayer.");
 					}

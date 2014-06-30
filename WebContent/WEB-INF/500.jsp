@@ -27,12 +27,14 @@
 				<ul class="nav navbar-nav">
 					<%
 					UserModel user = (UserModel)request.getAttribute("user");
-					if (user.getLoggedUser(request).getUserId() == 0) {
-					%>
-						<li><a href="Login">Connexion</a></li>
-						<li><a href="Registration">Inscription</a></li>
-					<% } else { %>
-						<li><a href="Dashboard">Dashboard</a></li>
+					if (user != null) {
+						if (user.getLoggedUser(request).getUserId() == 0) {
+						%>
+							<li><a href="Login">Connexion</a></li>
+							<li><a href="Registration">Inscription</a></li>
+						<% } else { %>
+							<li><a href="Dashboard">Dashboard</a></li>
+						<% } %>
 					<% } %>
 				</ul>
 			</div>

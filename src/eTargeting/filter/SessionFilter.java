@@ -33,45 +33,52 @@ public class SessionFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest req  = (HttpServletRequest) request;
-		HttpServletResponse res = (HttpServletResponse) response;
-		String url              = req.getServletPath();
-		String uri              = req.getRequestURI();
-		boolean allowedRequest  = false;
-		UserModel user          = new UserModel();
-		
-		// Exclude css, javascript, images and fonts from redirecting.
-		if (uri.indexOf("css") > 0) {
-			chain.doFilter(request, response);
-		} else if (uri.indexOf("img") > 0) {
-			chain.doFilter(request, response);
-		} else if (uri.indexOf("js") > 0) {
-			chain.doFilter(request, response);
-		} else if (uri.indexOf("font-awesome") > 0) {
-			chain.doFilter(request, response);
-		} else if (uri.indexOf("fonts") > 0) {
-			chain.doFilter(request, response);
-		}
-		// Redirecting the user to the login page if he's not logged-in
-		else {
-			if (urlList != null) {
-				if (urlList.contains(url) || "".equals(url)) {
-					allowedRequest = true;
-				}
-				
-				if (!allowedRequest) {
-					HttpSession session = req.getSession(false);
-					if (null == session.getAttribute("email") && user.getLoggedUser(req).getUserId() == 0) {
-						res.sendRedirect(req.getContextPath() + "/Login");
-						return;
+		try {
+			HttpServletRequest req  = (HttpServletRequest) request;
+			HttpServletResponse res = (HttpServletResponse) response;
+			// Set default charset encoding to UTF-8 to avoid bugs with forms and other things
+			req.setCharacterEncoding("UTF-8");
+			String url              = req.getServletPath();
+			String uri              = req.getRequestURI();
+			boolean allowedRequest  = false;
+			UserModel user          = new UserModel();
+			
+			// Exclude css, javascript, images and fonts from redirecting.
+			if (uri.indexOf("css") > 0) {
+				chain.doFilter(request, response);
+			} else if (uri.indexOf("img") > 0) {
+				chain.doFilter(request, response);
+			} else if (uri.indexOf("js") > 0) {
+				chain.doFilter(request, response);
+			} else if (uri.indexOf("font-awesome") > 0) {
+				chain.doFilter(request, response);
+			} else if (uri.indexOf("fonts") > 0) {
+				chain.doFilter(request, response);
+			}
+			// Redirecting the user to the login page if he's not logged-in
+			else {
+				if (urlList != null) {
+					if (urlList.contains(url) || "".equals(url)) {
+						allowedRequest = true;
+					}
+					
+					if (!allowedRequest) {
+						HttpSession session = req.getSession(false);
+						if (null == session.getAttribute("email") && user.getLoggedUser(req).getUserId() == 0) {
+							res.sendRedirect(req.getContextPath() + "/Login");
+							return;
+						}
 					}
 				}
 			}
+			
+			// Setting the user's object to the request in order to use it's information in every JSP
+			request.setAttribute("user", user.getLoggedUser(req));
+			chain.doFilter(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			chain.doFilter(request, response);
 		}
-		
-		// Setting the user's object to the request in order to use it's information in every JSP
-		request.setAttribute("user", user.getLoggedUser(req));
-		chain.doFilter(request, response);
 	}
 
 	/**

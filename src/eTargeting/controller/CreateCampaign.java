@@ -82,22 +82,24 @@ public class CreateCampaign extends HttpServlet {
 					Session session = Session.getInstance(properties);
 					SubscribersModel subscribersModel = new SubscribersModel();
 					for (int i = 0; i < subscribers.length; i++) {
-						try{
-							SubscribersModel subscriber = subscribersModel.selectSubscriberById(Integer.parseInt(subscribers[i]), owner);
-							MimeMessage message         = new MimeMessage(session);
-							message.setFrom(new InternetAddress(fromEmail, fromName));
-							message.addRecipient(Message.RecipientType.TO, new InternetAddress(subscriber.getEmail()));
-							message.setSubject(subject);
-							message.setContent(content, "text/html");
-						
-							// Send message
-							Transport.send(message);
-							System.out.println("Mail envoyé");
-					 	} catch (MessagingException mex) {
-					 		mex.printStackTrace();
-					 	} catch (Exception e) {
-					 		e.printStackTrace();
-					 	}
+						if (!"".equals(subscribers[i])) {
+							try{
+								SubscribersModel subscriber = subscribersModel.selectSubscriberById(Integer.parseInt(subscribers[i]), owner);
+								MimeMessage message         = new MimeMessage(session);
+								message.setFrom(new InternetAddress(fromEmail, fromName));
+								message.addRecipient(Message.RecipientType.TO, new InternetAddress(subscriber.getEmail()));
+								message.setSubject(subject);
+								message.setContent(content, "text/html");
+							
+								// Send message
+								Transport.send(message);
+								System.out.println("Mail envoyé");
+						 	} catch (MessagingException mex) {
+						 		mex.printStackTrace();
+						 	} catch (Exception e) {
+						 		e.printStackTrace();
+						 	}
+						}
 					}
 				}
 			}

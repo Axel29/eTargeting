@@ -29,7 +29,7 @@
     <location>/WEB-INF/502.jsp</location>
   </error-page>
   <error-page>
-    <error-code>500</error-code>
+    <error-code>503</error-code>
     <location>/WEB-INF/503.jsp</location>
   </error-page>
   <context-param>

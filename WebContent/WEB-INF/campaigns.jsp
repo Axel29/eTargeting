@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang3.StringEscapeUtils"%>
 <%@ page import="eTargeting.model.CampaignsModel" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
@@ -62,7 +63,9 @@
 											CampaignsModel campaign = (CampaignsModel)request.getAttribute("campaign-" + i);
 											out.println("<tr class=\"thead-bordered\">");
 												out.println("<td class=\"hidden table_campaign_id\">" + campaign.getId() + "</td>");
-												out.println("<td class=\"col-md-10\">" + campaign.getName() + "</td>");
+												System.out.println("name normal: " + campaign.getName());
+												System.out.println("name unescaped: " + StringEscapeUtils.unescapeHtml4(campaign.getName()));
+												out.println("<td class=\"col-md-10\">" + StringEscapeUtils.unescapeHtml4(campaign.getName()) + "</td>");
 												out.println("<td class=\"col-md-1\"><p><a href=\"Campaigns?id=" + campaign.getId() + "\" class=\"btn btn-primary btn-xs center-block see-campaign href-glyphicon\" data-title=\"See again\" data-target=\"#see\" data-placement=\"top\" rel=\"tooltip\"><span class=\"glyphicon glyphicon-pencil\"></span></a></p></td>");
 											out.println("</tr>");
 											i++;

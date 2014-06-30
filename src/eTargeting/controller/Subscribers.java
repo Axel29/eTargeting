@@ -82,7 +82,12 @@ public class Subscribers extends HttpServlet {
 			}
 		}
 		if ( request.getParameter("age") != null && !"".equals(request.getParameter("age")) ) {
-			age = Integer.parseInt(request.getParameter("age"));
+			// Try to convert the age to an int. If it fails, we fill the field with "N/A" (done with the model)
+			try {
+				age = Integer.parseInt(request.getParameter("age"));
+			} catch (NumberFormatException nfe) {
+				age = 0;
+			}
 		}
 		String subscriberId  = "";
 		if ( request.getParameter("subscriberId") != null && !"".equals(request.getParameter("subscriberId")) ) {

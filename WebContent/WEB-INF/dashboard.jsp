@@ -43,7 +43,7 @@
 						<div class="panel-heading">
 							<h3 class="panel-title">
 								<i class="fa fa-long-arrow-right"></i> 
-								Ouverture Newsletters du 1er Octobre 2013 - 31 Octobre 2013
+								Ouverture Newsletters du 1er Octobre 2013 au 31 Octobre 2013
 							</h3>
 						</div>
 						<div class="panel-body">
@@ -57,7 +57,7 @@
 				<div class="col-lg-4">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fa fa-clock-o"></i> Recent Activity</h3>
+							<h3 class="panel-title"><i class="fa fa-clock-o"></i> Activité récente</h3>
 						</div>
 						<div class="panel-body">
 							<div class="list-group">
